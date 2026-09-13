@@ -77,6 +77,13 @@ workbook/
 *.msg
 *.eml
 
+# Narrow exception: the synthetic market-update decks behind the RSM picker.
+# These are generated single-slide fixtures with no data in them (see
+# config/ and the catalog at data/rsm_market_db.json) and they are what makes
+# the deck-assembly path runnable from a clean clone. This re-include is
+# deliberately scoped to that one directory — every other .pptx stays denied.
+!data/rsm_market_slides/*.pptx
+
 # Secrets.
 .env
 .env.*
