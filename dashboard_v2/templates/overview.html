@@ -49,7 +49,7 @@
         <div class="client-row-name">{{ r.client_name }}</div>
         {% if r.secondary_note %}<div class="client-row-sub">{{ r.secondary_note }}</div>{% endif %}
       </div>
-      <div><span class="stage-pill">{{ r.current_stage }}</span></div>
+      <div class="client-row-stage"><span class="stage-pill">{{ r.current_stage }}</span></div>
       <div>
         <div class="mini-progress"><span style="width: {{ r.pct_complete }}%;"></span></div>
         <div class="mini-progress-label">{{ r.pct_complete }}% complete</div>

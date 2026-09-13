@@ -84,7 +84,13 @@ body { min-height: 100vh; }
 .studio-linkline { margin-top: 18px; color: var(--portal-color); font-weight: 600; font-size: 14px; }
 .split-layout { display: grid; grid-template-columns: 1.55fr .95fr; gap: 18px; }
 .client-list, .assistant-stack, .portal-thread-list, .task-stream { margin-top: 14px; display: flex; flex-direction: column; gap: 12px; }
-.client-row-card { display: grid; grid-template-columns: 1.2fr auto 120px 1fr; gap: 14px; align-items: center; background: color-mix(in srgb, var(--stage-color, #98a0b3) 5%, var(--canvas)); border: none; border-left: 3px solid var(--stage-color, var(--line-soft)); border-bottom: 1px solid var(--line-soft); padding: 16px 32px; }
+/* Each row is its own grid container, so an `auto` column is sized by that row's
+   own content — "Post Binding" made the stage column wide and "Bind" made it
+   narrow, staggering the progress bar and meta columns from row to row. The
+   stage column is therefore fixed at the width of the longest stage name. */
+.client-row-card { display: grid; grid-template-columns: 1.2fr 168px 128px 1fr; gap: 14px; align-items: center; background: color-mix(in srgb, var(--stage-color, #98a0b3) 5%, var(--canvas)); border: none; border-left: 3px solid var(--stage-color, var(--line-soft)); border-bottom: 1px solid var(--line-soft); padding: 16px 32px; }
+/* Keep the pill visually centred in that fixed column, as it was before. */
+.client-row-stage { display: flex; justify-content: center; }
 .client-row-card:hover { background: color-mix(in srgb, var(--stage-color, #98a0b3) 10%, white); }
 .client-row-name, .workflow-account-name { font-size: 16px; font-weight: 700; color: var(--text-strong); }
 .client-row-sub { margin-top: 4px; font-size: 12px; color: var(--text-soft); }
