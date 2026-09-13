@@ -58,10 +58,12 @@ from .base import SkillResult
 _HERE = Path(__file__).parent
 _ROOT = _HERE.parent
 _CARRIERS_DB      = _ROOT / "data"   / "loss_run_carriers.json"
+_CARRIERS_DB_EXAMPLE = _ROOT / "data" / "loss_run_carriers.example.json"
 _CLIENTS_PATH     = _ROOT / "config" / "clients.json"
 _COV_ALIASES_PATH = _ROOT / "config" / "coverage_aliases.json"
 _COMPANYMAP_PATH  = _ROOT / "docs" / "Skills" / "companymap.md"
 _EMAILMAP_PATH    = _ROOT / "docs" / "Skills" / "emailmap.md"
+_EMAILMAP_EXAMPLE = _ROOT / "docs" / "Skills" / "emailmap.example.md"
 _COVERAGES_MD_PATH = _ROOT / "docs" / "Skills" / "coverages.md"
 
 # ---------------------------------------------------------------------------
@@ -233,9 +235,19 @@ _APPROVED_COVERAGE_CATEGORIES = set(_COVERAGE_MAP.values())
 # ---------------------------------------------------------------------------
 
 def _load_carrier_db() -> dict:
-    if not _CARRIERS_DB.exists():
+    """Carrier routing table.
+
+    The real table is gitignored (it holds named claims contacts), so fall back
+    to the committed sample. Without this a fresh clone has no routing at all and
+    every row lands in the same no-contact bucket.
+    """
+    path = _CARRIERS_DB if _CARRIERS_DB.exists() else _CARRIERS_DB_EXAMPLE
+    if not path.exists():
         return {"carriers": {}, "aliases": {}}
-    return json.loads(_CARRIERS_DB.read_text(encoding="utf-8"))
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {"carriers": {}, "aliases": {}}
 
 
 # ---------------------------------------------------------------------------
@@ -296,8 +308,11 @@ def _load_emailmap() -> dict:
         return _emailmap_cache
 
     mapping: dict[str, str] = {}
-    if _EMAILMAP_PATH.exists():
-        for raw_line in _EMAILMAP_PATH.read_text(encoding='utf-8').splitlines():
+    # The real map holds named carrier claims contacts and is gitignored, so a
+    # clone falls back to the committed synthetic one.
+    path = _EMAILMAP_PATH if _EMAILMAP_PATH.exists() else _EMAILMAP_EXAMPLE
+    if path.exists():
+        for raw_line in path.read_text(encoding='utf-8').splitlines():
             line = raw_line.strip()
             if not line.startswith('- ') or ':' not in line:
                 continue
@@ -2590,7 +2605,12 @@ def build_draft_batch(
     for row in confirmed_rows:
         primary  = _clean(row.get("primary_email", ""))
         portal   = _clean(row.get("portal_link", ""))
-        recipient_key = primary or portal or "__no_contact__"
+        carrier  = _clean(row.get("carrier_group", row.get("carrier", "")))
+        # Rows with no contact still have to separate by carrier. Bucketing them
+        # all under one key merged unrelated carriers into a single draft, which
+        # then took its name from whichever row happened to come first — so an
+        # Everest policy could appear in a draft addressed to Arch.
+        recipient_key = primary or portal or f"__no_contact__:{carrier.lower()}"
 
         if recipient_key not in groups:
             groups[recipient_key] = {

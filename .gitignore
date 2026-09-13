@@ -113,3 +113,10 @@ desktop.ini
 
 # Working file for the public-release prep. Not for publication.
 SANITIZATION.md
+
+# Carrier claims contacts. The .example.md version is the committed synthetic one.
+docs/Skills/emailmap.md
+
+# Screenshots of the running app, used in the README and docs. Narrowly scoped:
+# .png stays denied everywhere else.
+!docs/screenshots/*.png

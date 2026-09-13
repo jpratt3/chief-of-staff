@@ -57,6 +57,86 @@
           "portal_link": ""
         }
       ]
+    },
+    "Arch": {
+      "group_company": "Arch",
+      "sub_companies": [
+        "Arch Specialty Insurance Company"
+      ],
+      "contacts": [
+        {
+          "sub_company": "Arch Specialty Insurance Company",
+          "coverage": "All",
+          "office": "National",
+          "primary_email": "lossruns@arch.example.com",
+          "secondary_email": "",
+          "portal_link": ""
+        }
+      ]
+    },
+    "Everest": {
+      "group_company": "Everest",
+      "sub_companies": [
+        "Everest National Insurance Company"
+      ],
+      "contacts": [
+        {
+          "sub_company": "Everest National Insurance Company",
+          "coverage": "All",
+          "office": "National",
+          "primary_email": "lossruns@everest.example.com",
+          "secondary_email": "",
+          "portal_link": ""
+        }
+      ]
+    },
+    "Travelers": {
+      "group_company": "Travelers",
+      "sub_companies": [
+        "Travelers Property Casualty Company of America"
+      ],
+      "contacts": [
+        {
+          "sub_company": "Travelers Property Casualty Company of America",
+          "coverage": "All",
+          "office": "National",
+          "primary_email": "lossruns@travelers.example.com",
+          "secondary_email": "",
+          "portal_link": ""
+        }
+      ]
+    },
+    "Chubb": {
+      "group_company": "Chubb",
+      "sub_companies": [
+        "Chubb Custom Insurance Company"
+      ],
+      "contacts": [
+        {
+          "sub_company": "Chubb Custom Insurance Company",
+          "coverage": "All",
+          "office": "National",
+          "primary_email": "lossruns@chubb.example.com",
+          "secondary_email": "",
+          "portal_link": ""
+        }
+      ]
+    },
+    "QBE": {
+      "group_company": "QBE",
+      "sub_companies": [
+        "QBE Specialty Insurance Company"
+      ],
+      "contacts": [
+        {
+          "sub_company": "QBE Specialty Insurance Company",
+          "coverage": "All",
+          "office": "National",
+          "primary_email": "",
+          "secondary_email": "",
+          "portal_link": "https://portal.qbe.example.com/lossruns"
+        }
+      ]
     }
   }
 }

@@ -1,0 +1,618 @@
+# Carrier loss-run email map
+
+Maps a canonical carrier group to the mailbox that services loss-run requests.
+`engine/loss_run.py` parses any line of the form `- <Carrier Group>: <email>`.
+
+Every address here is synthetic and points at example.com. Copy this file to
+`emailmap.md` in the same directory and replace it with your own routing; that
+filename is gitignored so real claims contacts are never committed.
+
+- Admiral Insurance: lossruns@admiralinsurance.example.com
+- AEGIS: lossruns@aegis.example.com
+- AFM: lossruns@afm.example.com
+- Affiliated FM: lossruns@affiliatedfm.example.com
+- AIG: lossruns@aig.example.com
+- Lexington: lossruns@lexington.example.com
+- American International Group, Inc.: lossruns@americaninternationalgro.example.com
+- National Union: lossruns@nationalunion.example.com
+- Insurance Company of the State of PA: lossruns@insurancecompanyofthesta.example.com
+- Hamilton Specialty Insurance Company: lossruns@hamiltonspecialtyinsuran.example.com
+- American Home Assurance Company: lossruns@americanhomeassurancecom.example.com
+- CHARTIS: lossruns@chartis.example.com
+- Alaska National: lossruns@alaskanational.example.com
+- Alea North: lossruns@aleanorth.example.com
+- All Risks: lossruns@allrisks.example.com
+- All Risks of California now RT Specialty: lossruns@allrisksofcalifornianowr.example.com
+- Allianz: lossruns@allianz.example.com
+- Allianz (AGCS): lossruns@allianzagcs.example.com
+- Fireman's Fund (Allianz): lossruns@firemansfundallianz.example.com
+- Euler Hermes North America Insurance Company - Allianz: lossruns@eulerhermesnorthamericai.example.com
+- Interstate Fire & Casualty Company: lossruns@interstatefirecasualtyco.example.com
+- Interstate FIRE: lossruns@interstatefire.example.com
+- Allied World Assurance Company: lossruns@alliedworldassurancecomp.example.com
+- Allied World Assurance Company - 'AWAC': lossruns@alliedworldassurancecomp.example.com
+- American Safety Insurance: lossruns@americansafetyinsurance.example.com
+- American Specialty: lossruns@americanspecialty.example.com
+- Amerisure: lossruns@amerisure.example.com
+- AmRisc Wholesaler: lossruns@amriscwholesaler.example.com
+- Amtrust: lossruns@amtrust.example.com
+- AmTrust Financial AKA Technolgy Ins Company/Wesco/Republic Vanguard/Associated Industries Insurance: lossruns@amtrustfinancialakatechn.example.com
+- AMWINS: lossruns@amwins.example.com
+- AMWINS - All Loss Run Requests: lossruns@amwinsalllossrunrequests.example.com
+- Applied Underwriters: lossruns@appliedunderwriters.example.com
+- Applied Underwriters - MGA: lossruns@appliedunderwritersmga.example.com
+- Arch: lossruns@arch.example.com
+- Argonaut: lossruns@argonaut.example.com
+- Argonaut/Argo Re Ltd. - Now part of Colony Insurance: lossruns@argonautargoreltdnowpart.example.com
+- Argonaut - Pinnacol Policies: lossruns@argonautpinnacolpolicies.example.com
+- Arrowhead: lossruns@arrowhead.example.com
+- Arrowhead General Insurance Agency: lossruns@arrowheadgeneralinsuranc.example.com
+- Ascot Insurance Group: lossruns@ascotinsurancegroup.example.com
+- Aspen Specialty: lossruns@aspenspecialty.example.com
+- Atain Insurance Companies: lossruns@ataininsurancecompanies.example.com
+- Athens Administrators: lossruns@athensadministrators.example.com
+- Athens Administrators - TPA: lossruns@athensadministratorstpa.example.com
+- Atlas General Insurance Agency: lossruns@atlasgeneralinsuranceage.example.com
+- Auto Owners Insurance: lossruns@autoownersinsurance.example.com
+- AWAC: lossruns@awac.example.com
+- Darwin: lossruns@darwin.example.com
+- AXA: lossruns@axa.example.com
+- XL Insurance: lossruns@xlinsurance.example.com
+- XL Catlin: lossruns@xlcatlin.example.com
+- Catlin Specialty: lossruns@catlinspecialty.example.com
+- Indian Harbor: lossruns@indianharbor.example.com
+- XL Insurance/Catlin - LIVESTOCK: lossruns@xlinsurancecatlinlivesto.example.com
+- A X A: lossruns@axa.example.com
+- Axis: lossruns@axis.example.com
+- Beazley: lossruns@beazley.example.com
+- Beazley Insurance: lossruns@beazleyinsurance.example.com
+- Sapphire Insurance: lossruns@sapphireinsurance.example.com
+- Berkley: lossruns@berkley.example.com
+- Berkley Technology Underwriters: lossruns@berkleytechnologyunderwr.example.com
+- Berkley Aviation: lossruns@berkleyaviation.example.com
+- Berkley Key Risk: lossruns@berkleykeyrisk.example.com
+- Berkley Insurance: lossruns@berkleyinsurance.example.com
+- Berkley Life Sciences - Berkley Human Services: lossruns@berkleylifesciencesberkl.example.com
+- Berkley Pro: lossruns@berkleypro.example.com
+- Berkley Oil & Gas Specialty Services: lossruns@berkleyoilgasspecialtyse.example.com
+- FinSecure (Berkley): lossruns@finsecureberkley.example.com
+- Berkley Fire & Marine Underwriters: lossruns@berkleyfiremarineunderwr.example.com
+- Berkley Select: lossruns@berkleyselect.example.com
+- StarNet Insurance Company: lossruns@starnetinsurancecompany.example.com
+- Vela Insurance Services (a W. R. Berkley Company): lossruns@velainsuranceservicesawr.example.com
+- Preferred Employers Insurance Company (W. R. Berkley): lossruns@preferredemployersinsura.example.com
+- Berkley Environmental: lossruns@berkleyenvironmental.example.com
+- Berkley Human Services: lossruns@berkleyhumanservices.example.com
+- Berkshire Hathaway: lossruns@berkshirehathaway.example.com
+- Berkshire Hathaway Homestate Companies: lossruns@berkshirehathawayhomesta.example.com
+- National Fire & Marine Insurance Company (Berkshire Hathaway Inc.): lossruns@nationalfiremarineinsura.example.com
+- American Mining - Berkshire Industry Company: lossruns@americanminingberkshirei.example.com
+- Berkshire Hathaway Specialty: lossruns@berkshirehathawayspecial.example.com
+- Bermuda: lossruns@bermuda.example.com
+- Hamilton Re, Ltd - BERMUDA: lossruns@hamiltonreltdbermuda.example.com
+- Bermuda Requests: lossruns@bermudarequests.example.com
+- Brickstreet: lossruns@brickstreet.example.com
+- Brickstreet/Encova: lossruns@brickstreetencova.example.com
+- Bridgefield - Summit Holdings: lossruns@bridgefieldsummitholding.example.com
+- Brit Insurance: lossruns@britinsurance.example.com
+- Brit Insurance - Brit Global: lossruns@britinsurancebritglobal.example.com
+- Broadspire: lossruns@broadspire.example.com
+- Broadspire - TPA: lossruns@broadspiretpa.example.com
+- Brotherhood Mutual Insurance Company: lossruns@brotherhoodmutualinsuran.example.com
+- Burlington: lossruns@burlington.example.com
+- Burlington - IFG Companies: lossruns@burlingtonifgcompanies.example.com
+- C.V. Starr: lossruns@cvstarr.example.com
+- C.V. Starr - All Other Divisions - not written by Charlie D. Kaz: lossruns@cvstarrallotherdivisions.example.com
+- Canal Insurance: lossruns@canalinsurance.example.com
+- Canopius: lossruns@canopius.example.com
+- Canopius Underwriting Agency, Inc: lossruns@canopiusunderwritingagen.example.com
+- Capital Insurance Group: lossruns@capitalinsurancegroup.example.com
+- Capitol Indemnity: lossruns@capitolindemnity.example.com
+- Carl Warren: lossruns@carlwarren.example.com
+- Carl Warren - TPA: lossruns@carlwarrentpa.example.com
+- Carolina Casualty: lossruns@carolinacasualty.example.com
+- Catalytic: lossruns@catalytic.example.com
+- Catalytic - MGA: lossruns@catalyticmga.example.com
+- Century Insurance Group: lossruns@centuryinsurancegroup.example.com
+- Chubb: lossruns@chubb.example.com
+- Vigilant Insurance: lossruns@vigilantinsurance.example.com
+- CHUBB: lossruns@chubb.example.com
+- Illinois National: lossruns@illinoisnational.example.com
+- Federal Insurance: lossruns@federalinsurance.example.com
+- Chubb - Agribusiness: lossruns@chubbagribusiness.example.com
+- ACE: lossruns@ace.example.com
+- Church Mutual: lossruns@churchmutual.example.com
+- CM Vantage Specialty Insurance Company (Church Mutual): lossruns@cmvantagespecialtyinsura.example.com
+- Church Mutual Insurance Company: lossruns@churchmutualinsurancecom.example.com
+- CIBA Insurance Services: lossruns@cibainsuranceservices.example.com
+- Cincinnati Insurance Company: lossruns@cincinnatiinsurancecompa.example.com
+- Clarendon National: lossruns@clarendonnational.example.com
+- Clear Blue Insurance: lossruns@clearblueinsurance.example.com
+- CNA: lossruns@cna.example.com
+- C.N.A: lossruns@cna.example.com
+- C.N.A - C.N.A Passport Unit: lossruns@cnacnapassportunit.example.com
+- Coaction: lossruns@coaction.example.com
+- Coalition: lossruns@coalition.example.com
+- Colony Insurance: lossruns@colonyinsurance.example.com
+- Colorado Casualty: lossruns@coloradocasualty.example.com
+- Combined Group Ins Services Inc: lossruns@combinedgroupinsservices.example.com
+- Commonwealth Insurance: lossruns@commonwealthinsurance.example.com
+- Companion Commercial: lossruns@companioncommercial.example.com
+- Companion P&C: lossruns@companionpc.example.com
+- Compsource OK: lossruns@compsourceok.example.com
+- Continental Underwriters: lossruns@continentalunderwriters.example.com
+- Continental Western: lossruns@continentalwestern.example.com
+- Copperpoint: lossruns@copperpoint.example.com
+- CorePointe Insurance Company: lossruns@corepointeinsurancecompa.example.com
+- CorRisk Sollutions: lossruns@corrisksollutions.example.com
+- CorRisk Sollutions - MGA: lossruns@corrisksollutionsmga.example.com
+- CorVel: lossruns@corvel.example.com
+- Cover X: lossruns@coverx.example.com
+- Cover X - MGA: lossruns@coverxmga.example.com
+- Coverys: lossruns@coverys.example.com
+- Coverys Specialty Insurance Company: lossruns@coverysspecialtyinsuranc.example.com
+- CRC: lossruns@crc.example.com
+- Crouse & Associates: lossruns@crouseassociates.example.com
+- Crum & Forster: lossruns@crumforster.example.com
+- North River Insurance Company (Crum & Forster): lossruns@northriverinsurancecompa.example.com
+- Cuna Mutual Group: lossruns@cunamutualgroup.example.com
+- Cuna Mutual Group - Secure Email Password: lossruns@cunamutualgroupsecureema.example.com
+- Dallas National Insurance Company: lossruns@dallasnationalinsurancec.example.com
+- Dallas National Insurance Company (Now Freesteone Insurance): lossruns@dallasnationalinsurancec.example.com
+- Deep South: lossruns@deepsouth.example.com
+- Deep South - Redlands Ins: lossruns@deepsouthredlandsins.example.com
+- Discover Re - VENTURE PROGRAM: lossruns@discoverreventureprogram.example.com
+- Distinguished Programs: lossruns@distinguishedprograms.example.com
+- Fulcrum: lossruns@fulcrum.example.com
+- Doctor's Credentials: lossruns@doctorscredentials.example.com
+- Doctor's Credentials and Loss Run Requests - LDSC does not process: lossruns@doctorscredentialsandlos.example.com
+- DTRIC: lossruns@dtric.example.com
+- DTRIC Insurance (Hawaii): lossruns@dtricinsurancehawaii.example.com
+- EBI - Entertainment Brokers, Inc: lossruns@ebientertainmentbrokersi.example.com
+- EMC Insurance: lossruns@emcinsurance.example.com
+- Employers Compensation Insurance Company: lossruns@employerscompensationins.example.com
+- Employers Reinsurance: lossruns@employersreinsurance.example.com
+- Encore/Elucid: lossruns@encoreelucid.example.com
+- Euclid/Encore: lossruns@euclidencore.example.com
+- Enstar: lossruns@enstar.example.com
+- Starstone: lossruns@starstone.example.com
+- Erie Insurance: lossruns@erieinsurance.example.com
+- ESIS: lossruns@esis.example.com
+- ESIS - Ace TPA: lossruns@esisacetpa.example.com
+- Everest: lossruns@everest.example.com
+- Everest National: lossruns@everestnational.example.com
+- Fairmont Specialty: lossruns@fairmontspecialty.example.com
+- FALVEY CARGO: lossruns@falveycargo.example.com
+- FARMERS: lossruns@farmers.example.com
+- FARMERS - HAWAII - CLOSED OFFICE: lossruns@farmershawaiiclosedoffic.example.com
+- Farmers Insurance: lossruns@farmersinsurance.example.com
+- FCCI Insurance Co.: lossruns@fcciinsuranceco.example.com
+- Federated Mutual Insurance Company: lossruns@federatedmutualinsurance.example.com
+- FICOH: lossruns@ficoh.example.com
+- First Insurance of Hawaii (FICOH): lossruns@firstinsuranceofhawaiifi.example.com
+- Fidelis Continental LLC: lossruns@fideliscontinentalllc.example.com
+- Fidelity Security Life Insurance Company: lossruns@fidelitysecuritylifeinsu.example.com
+- First Mercury Insurance: lossruns@firstmercuryinsurance.example.com
+- First Security of Hawaii: lossruns@firstsecurityofhawaii.example.com
+- First Security of Hawaii - see First Insurance of Hawaii (FICOH): lossruns@firstsecurityofhawaiisee.example.com
+- First State Insurance: lossruns@firststateinsurance.example.com
+- First State Insurance - Loss Run Requests: lossruns@firststateinsurancelossr.example.com
+- Flood Requests: lossruns@floodrequests.example.com
+- FM Global: lossruns@fmglobal.example.com
+- FM Global - Rhode Island: lossruns@fmglobalrhodeisland.example.com
+- Foremost Insurance Group: lossruns@foremostinsurancegroup.example.com
+- Frankenmuth Insurance: lossruns@frankenmuthinsurance.example.com
+- Gallagher Bassett: lossruns@gallagherbassett.example.com
+- Gallagher Bassett - TPA: lossruns@gallagherbassetttpa.example.com
+- Gapris: lossruns@gapris.example.com
+- Gapris - PRB Risk: lossruns@gaprisprbrisk.example.com
+- Gemini: lossruns@gemini.example.com
+- General Security Indemnity Company of Arizona: lossruns@generalsecurityindemnity.example.com
+- General Star: lossruns@generalstar.example.com
+- Generali US: lossruns@generalius.example.com
+- Genesis Insurance: lossruns@genesisinsurance.example.com
+- Glatfelter Insurance Group: lossruns@glatfelterinsurancegroup.example.com
+- Glatfelter Program Managers: lossruns@glatfelterprogrammanager.example.com
+- Global Aerospace: lossruns@globalaerospace.example.com
+- GNY Insurance: lossruns@gnyinsurance.example.com
+- Grange Insurance: lossruns@grangeinsurance.example.com
+- Great American: lossruns@greatamerican.example.com
+- Great American - Loss Run Mailbox: lossruns@greatamericanlossrunmail.example.com
+- Great American - General Mailbox: lossruns@greatamericangeneralmail.example.com
+- Great Midwest Insurance Company: lossruns@greatmidwestinsurancecom.example.com
+- Guarantee Insurance Co (Patriot National): lossruns@guaranteeinsurancecopatr.example.com
+- GuideOne Insurance: lossruns@guideoneinsurance.example.com
+- Gulf Insurance: lossruns@gulfinsurance.example.com
+- Hallmark: lossruns@hallmark.example.com
+- Hallmark Specialty Insurance Company: lossruns@hallmarkspecialtyinsuran.example.com
+- Hanover: lossruns@hanover.example.com
+- Hanover Insurance: lossruns@hanoverinsurance.example.com
+- Hamilton Resources: lossruns@hamiltonresources.example.com
+- Verlan Fire Insurance Company: lossruns@verlanfireinsurancecompa.example.com
+- Inter Insurance Company of Hannover: lossruns@interinsurancecompanyofh.example.com
+- Hartford: lossruns@hartford.example.com
+- Nutmeg Insurance: lossruns@nutmeginsurance.example.com
+- Hartford Steam Boiler: lossruns@hartfordsteamboiler.example.com
+- National Fire Insurance Of Hartford: lossruns@nationalfireinsuranceofh.example.com
+- Twin City Fire Ins Co: lossruns@twincityfireinsco.example.com
+- Maxum: lossruns@maxum.example.com
+- Trumbull: lossruns@trumbull.example.com
+- Texcap Insurance: lossruns@texcapinsurance.example.com
+- HCC Specialty: lossruns@hccspecialty.example.com
+- HCC Specialty - casualty lines: lossruns@hccspecialtycasualtyline.example.com
+- HDI: lossruns@hdi.example.com
+- Gerling America: lossruns@gerlingamerica.example.com
+- HEMIC: lossruns@hemic.example.com
+- HEMIC - Hawaiian Employers Mutual: lossruns@hemichawaiianemployersmu.example.com
+- Highmark Cas. Co.: lossruns@highmarkcasco.example.com
+- Highmark Cas. WC ONLY: lossruns@highmarkcaswconly.example.com
+- Highmark Cas. - Goes to Brickstreet: lossruns@highmarkcasgoestobrickst.example.com
+- HIIG: lossruns@hiig.example.com
+- HIIG - Houston International Insurance Company: lossruns@hiighoustoninternational.example.com
+- Hiscox: lossruns@hiscox.example.com
+- Homeland: lossruns@homeland.example.com
+- Homeland Ins Co of NY: lossruns@homelandinscoofny.example.com
+- Homesite: lossruns@homesite.example.com
+- Houston Casualty Company: lossruns@houstoncasualtycompany.example.com
+- HCC- Houston Casualty Company: lossruns@hcchoustoncasualtycompan.example.com
+- Hudson: lossruns@hudson.example.com
+- Hudson Insurance: lossruns@hudsoninsurance.example.com
+- Hudson - Medical Lines - HCF: lossruns@hudsonmedicallineshcf.example.com
+- Ian: lossruns@ian.example.com
+- Ian H. Graham Insurance: lossruns@ianhgrahaminsurance.example.com
+- IFG Companies: lossruns@ifgcompanies.example.com
+- Indiana: lossruns@indiana.example.com
+- Indiana Insurance: lossruns@indianainsurance.example.com
+- Indiana Lumbermens Mutual Insurance Company: lossruns@indianalumbermensmutuali.example.com
+- Insurance: lossruns@insurance.example.com
+- Insurance Company of the West (ICW Group): lossruns@insurancecompanyofthewes.example.com
+- Insurance Company of the West: lossruns@insurancecompanyofthewes.example.com
+- International Catastrophe Insurance Managers (icat): lossruns@internationalcatastrophe.example.com
+- INTERNATIONAL FACILITIES: lossruns@internationalfacilities.example.com
+- INTERNATIONAL FACILITIES - CA MGA/Wholesale Broker: lossruns@internationalfacilitiesc.example.com
+- INTERNATIONAL FACILITIES - MGA/Wholesale Broker: lossruns@internationalfacilitiesm.example.com
+- IRI - Industrial Risk: lossruns@iriindustrialrisk.example.com
+- Iron: lossruns@iron.example.com
+- Iron-Starr Excess Agency Ltd.: lossruns@ironstarrexcessagencyltd.example.com
+- Ironshore: lossruns@ironshore.example.com
+- Ironshore Specialty: lossruns@ironshorespecialty.example.com
+- Irwin: lossruns@irwin.example.com
+- Irwin Siegel Agency, Inc.: lossruns@irwinsiegelagencyinc.example.com
+- James: lossruns@james.example.com
+- James River Insurance Company james: lossruns@jamesriverinsurancecompa.example.com
+- K and K Insurance: lossruns@kandkinsurance.example.com
+- K and K Insurance (KKO numbers): lossruns@kandkinsurancekkonumbers.example.com
+- KEMI: lossruns@kemi.example.com
+- KEMI - Kentucky Employer's Mutual Insurance: lossruns@kemikentuckyemployersmut.example.com
+- Kemper - Lumbermans Mutual: lossruns@kemperlumbermansmutual.example.com
+- Kerwick: lossruns@kerwick.example.com
+- Kerwick & Curran Wholesaler: lossruns@kerwickcurranwholesaler.example.com
+- Kinsale: lossruns@kinsale.example.com
+- Kinsale Insurance Company: lossruns@kinsaleinsurancecompany.example.com
+- Landmark: lossruns@landmark.example.com
+- Landmark American Insurance (RSUI): lossruns@landmarkamericaninsuranc.example.com
+- Legion Insurance: lossruns@legioninsurance.example.com
+- Legion Insurance - See LDSC Site (IN LIQUIDATION, CHARGE FOR REPORTS): lossruns@legioninsuranceseeldscsi.example.com
+- Liberty Mutual: lossruns@libertymutual.example.com
+- Ohio Casualty: lossruns@ohiocasualty.example.com
+- Wausau (See also Liberty Mutual): lossruns@wausauseealsolibertymutu.example.com
+- Liberty Mutual - Assigned Risk WC Policies: lossruns@libertymutualassignedris.example.com
+- Liberty Surplus: lossruns@libertysurplus.example.com
+- LIG: lossruns@lig.example.com
+- LIG Marine Managers: lossruns@ligmarinemanagers.example.com
+- Lincoln: lossruns@lincoln.example.com
+- Lincoln General: lossruns@lincolngeneral.example.com
+- Lloyds of London: lossruns@lloydsoflondon.example.com
+- Lousiana: lossruns@lousiana.example.com
+- Lousiana Citizens Property Insurance Corporation: lossruns@lousianacitizensproperty.example.com
+- LWCC: lossruns@lwcc.example.com
+- LWCC - Louisiana Workers' Compensation Corporation: lossruns@lwcclouisianaworkerscomp.example.com
+- Maiden: lossruns@maiden.example.com
+- Maiden Specialty Insurance Company: lossruns@maidenspecialtyinsurance.example.com
+- Manufacturing Technology Mutual Ins. Co (MTM): lossruns@manufacturingtechnologym.example.com
+- Mapfre Insurance: lossruns@mapfreinsurance.example.com
+- Markel: lossruns@markel.example.com
+- Essex Insurance: lossruns@essexinsurance.example.com
+- Evanston Insurance - Markel Group: lossruns@evanstoninsurancemarkelg.example.com
+- Markel Corporation: lossruns@markelcorporation.example.com
+- State National Insurance - Part of Markel Insurance: lossruns@statenationalinsurancepa.example.com
+- Alterra: lossruns@alterra.example.com
+- Matrixx: lossruns@matrixx.example.com
+- Max: lossruns@max.example.com
+- Max Specialty Now Known as Alterra: lossruns@maxspecialtynowknownasal.example.com
+- Medical: lossruns@medical.example.com
+- Medical Protective Company (MedPro): lossruns@medicalprotectivecompany.example.com
+- Medical Credentialing: lossruns@medicalcredentialing.example.com
+- Medmarc: lossruns@medmarc.example.com
+- MedPro: lossruns@medpro.example.com
+- MEMIC: lossruns@memic.example.com
+- Mental: lossruns@mental.example.com
+- Mental Health Risk Retention: lossruns@mentalhealthriskretentio.example.com
+- Mercury: lossruns@mercury.example.com
+- Mercury Insurance: lossruns@mercuryinsurance.example.com
+- Mid Continent: lossruns@midcontinent.example.com
+- Mid Continent - MGA online portal access: lossruns@midcontinentmgaonlinepor.example.com
+- Middle: lossruns@middle.example.com
+- Middle Oak: lossruns@middleoak.example.com
+- Midlands: lossruns@midlands.example.com
+- Midwest: lossruns@midwest.example.com
+- Midwest Employers: lossruns@midwestemployers.example.com
+- Missouri: lossruns@missouri.example.com
+- Missouri Employers Mutual Ins. Co.: lossruns@missouriemployersmutuali.example.com
+- Mitsui: lossruns@mitsui.example.com
+- Mitsui Sumitomo: lossruns@mitsuisumitomo.example.com
+- MLMIC: lossruns@mlmic.example.com
+- MLMIC - Medical Liability Mutual Insurance Company: lossruns@mlmicmedicalliabilitymut.example.com
+- MMIC: lossruns@mmic.example.com
+- MMIC Insurance, Inc.: lossruns@mmicinsuranceinc.example.com
+- Monitor Liability Managers: lossruns@monitorliabilitymanagers.example.com
+- Monitor Liability Managers - MGA/Wholesale Broker: lossruns@monitorliabilitymanagers.example.com
+- Montpelier: lossruns@montpelier.example.com
+- Montpelier US Insurance: lossruns@montpelierusinsurance.example.com
+- Motorists: lossruns@motorists.example.com
+- Motorists Mutual Insurance Company: lossruns@motoristsmutualinsurance.example.com
+- Mt Vernon Fire Ins: lossruns@mtvernonfireins.example.com
+- MunichRe: lossruns@munichre.example.com
+- American Alternative: lossruns@americanalternative.example.com
+- N2G: lossruns@n2g.example.com
+- NAS Insurance: lossruns@nasinsurance.example.com
+- NAS Insurance - WHOLESALE BROKER: lossruns@nasinsurancewholesalebro.example.com
+- National: lossruns@national.example.com
+- National Indemnity: lossruns@nationalindemnity.example.com
+- National Liability & Fire: lossruns@nationalliabilityfire.example.com
+- National Hangar Insurance Program: lossruns@nationalhangarinsurancep.example.com
+- National Interstate: lossruns@nationalinterstate.example.com
+- National Liability: lossruns@nationalliability.example.com
+- National Sepcialty Underwriters: lossruns@nationalsepcialtyunderwr.example.com
+- National Sepcialty Underwriters - Distinguished: lossruns@nationalsepcialtyunderwr.example.com
+- Nationwide: lossruns@nationwide.example.com
+- Harleysville Insurance Co (Nationwide): lossruns@harleysvilleinsurancecon.example.com
+- Freedom Specialty Insurance Company - Nationwide: lossruns@freedomspecialtyinsuranc.example.com
+- Nautilus: lossruns@nautilus.example.com
+- Navigators: lossruns@navigators.example.com
+- Navigators Insurance: lossruns@navigatorsinsurance.example.com
+- NBIS: lossruns@nbis.example.com
+- New: lossruns@new.example.com
+- New Jersey Manufacturing: lossruns@newjerseymanufacturing.example.com
+- New World Casualty (Wholesale Brokers): lossruns@newworldcasualtywholesal.example.com
+- Nexus: lossruns@nexus.example.com
+- Nexus - MGA: lossruns@nexusmga.example.com
+- NFIP: lossruns@nfip.example.com
+- NFIP - National Flood: lossruns@nfipnationalflood.example.com
+- North: lossruns@north.example.com
+- North American Risk Services TPA: lossruns@northamericanriskservice.example.com
+- Oklahoma: lossruns@oklahoma.example.com
+- Oklahoma Specialty Insurance Company: lossruns@oklahomaspecialtyinsuran.example.com
+- Old: lossruns@old.example.com
+- Old Dominion Insurance Company: lossruns@olddominioninsurancecomp.example.com
+- Old Republic: lossruns@oldrepublic.example.com
+- Old Republic Management: lossruns@oldrepublicmanagement.example.com
+- One Beacon: lossruns@onebeacon.example.com
+- One Beacon / Intact: lossruns@onebeaconintact.example.com
+- Atlantic Specialty/Atlantic Mutual- ONE BEACON POLICIES: lossruns@atlanticspecialtyatlanti.example.com
+- Onpoint Underwriting: lossruns@onpointunderwriting.example.com
+- Onpoint Underwriting - Program for Sovereign Indian Nations: lossruns@onpointunderwritingprogr.example.com
+- OUTLOOK: lossruns@outlook.example.com
+- OUTLOOK - FAXING FORMAT: lossruns@outlookfaxingformat.example.com
+- PartnerRe: lossruns@partnerre.example.com
+- PartnerRe Insurance Company of New York: lossruns@partnerreinsurancecompan.example.com
+- Peerless: lossruns@peerless.example.com
+- Peerless Insurance: lossruns@peerlessinsurance.example.com
+- Penn: lossruns@penn.example.com
+- Penn National: lossruns@pennnational.example.com
+- Pennsylvainia: lossruns@pennsylvainia.example.com
+- Pennsylvainia Lumbermens: lossruns@pennsylvainialumbermens.example.com
+- PerSe: lossruns@perse.example.com
+- PerSe Energy Risk: lossruns@perseenergyrisk.example.com
+- Pharmacists: lossruns@pharmacists.example.com
+- Pharmacists Mutual Insurance Company: lossruns@pharmacistsmutualinsuran.example.com
+- Phico - In Liquidation: lossruns@phicoinliquidation.example.com
+- Philadelphia: lossruns@philadelphia.example.com
+- Philadelphia Ins Co - Office Contacts: lossruns@philadelphiainscoofficec.example.com
+- Philadelphia Insurance: lossruns@philadelphiainsurance.example.com
+- Phoenix: lossruns@phoenix.example.com
+- Phoenix Aviation Underwriters: lossruns@phoenixaviationunderwrit.example.com
+- Physicians: lossruns@physicians.example.com
+- Physicians Insurance: lossruns@physiciansinsurance.example.com
+- PIB Adjusters: lossruns@pibadjusters.example.com
+- PIB Adjusters - TPA: lossruns@pibadjusterstpa.example.com
+- Pinnacol: lossruns@pinnacol.example.com
+- Pinnacol Assurance: lossruns@pinnacolassurance.example.com
+- PMA: lossruns@pma.example.com
+- PMA Group: lossruns@pmagroup.example.com
+- PMA Group - EXCEL REPORTS: lossruns@pmagroupexcelreports.example.com
+- POINTSURE: lossruns@pointsure.example.com
+- Praetorian: lossruns@praetorian.example.com
+- Praetorian Insurance: lossruns@praetorianinsurance.example.com
+- Preferred: lossruns@preferred.example.com
+- Preferred Concepts MGA: lossruns@preferredconceptsmga.example.com
+- PRIMA: lossruns@prima.example.com
+- Medmal - PRIMA: lossruns@medmalprima.example.com
+- Princeton: lossruns@princeton.example.com
+- Princeton Excess: lossruns@princetonexcess.example.com
+- PRMS - MGA for Hospital Programs: lossruns@prmsmgaforhospitalprogra.example.com
+- ProAssurance: lossruns@proassurance.example.com
+- ProCentury: lossruns@procentury.example.com
+- ProCentury Insurance: lossruns@procenturyinsurance.example.com
+- Progressive: lossruns@progressive.example.com
+- Progressive Insurance: lossruns@progressiveinsurance.example.com
+- Prosight Specialty: lossruns@prosightspecialty.example.com
+- Protective: lossruns@protective.example.com
+- Protective Specialty Insurance (Baldwin & Lyons): lossruns@protectivespecialtyinsur.example.com
+- PSM: lossruns@psm.example.com
+- PSM Insurance Companies (Magna Carta): lossruns@psminsurancecompaniesmag.example.com
+- QBE Insurance Corporation: lossruns@qbeinsurancecorporation.example.com
+- Redlands Insurance Company - Look Under QBE Insurance Corporation: lossruns@redlandsinsurancecompany.example.com
+- QBE Insurance Corporation - Main: lossruns@qbeinsurancecorporationm.example.com
+- QBE Insurance Corporation - Unigard/General Casualty Div: lossruns@qbeinsurancecorporationu.example.com
+- Quanta: lossruns@quanta.example.com
+- Redwood: lossruns@redwood.example.com
+- Redwood Fire & Insurance Co: lossruns@redwoodfireinsuranceco.example.com
+- Reliance: lossruns@reliance.example.com
+- Republic Identity: lossruns@republicidentity.example.com
+- Republic Identity - General Mailbox: lossruns@republicidentitygeneralm.example.com
+- Republic Indemnity: lossruns@republicindemnity.example.com
+- Republic Indemnity - Underwriting office: lossruns@republicindemnityunderwr.example.com
+- RLI: lossruns@rli.example.com
+- Mt. Hawley - RLI Insurance Corp: lossruns@mthawleyrliinsurancecorp.example.com
+- Rockhill: lossruns@rockhill.example.com
+- Rockhill Insurance Group: lossruns@rockhillinsurancegroup.example.com
+- Royal: lossruns@royal.example.com
+- Royal (2003 and Prior): lossruns@royal2003andprior.example.com
+- Royal - Royal Surplus Lines: lossruns@royalroyalsurpluslines.example.com
+- Royal - Landmark Policies: lossruns@royallandmarkpolicies.example.com
+- Royal & Sunalliance: lossruns@royalsunalliance.example.com
+- Royal & Sunalliance - RSA: lossruns@royalsunalliancersa.example.com
+- RSUI: lossruns@rsui.example.com
+- RT: lossruns@rt.example.com
+- RT Speciality: lossruns@rtspeciality.example.com
+- Safe Harbor Pollution Insurance: lossruns@safeharborpollutioninsur.example.com
+- SAFE Unit: lossruns@safeunit.example.com
+- Safeco: lossruns@safeco.example.com
+- Safeco - Commercial Assist Team: lossruns@safecocommercialassistte.example.com
+- SAFECO: lossruns@safeco.example.com
+- Golden Eagle Insurance: lossruns@goldeneagleinsurance.example.com
+- Safehold: lossruns@safehold.example.com
+- Safehold - Wholesale Broker: lossruns@safeholdwholesalebroker.example.com
+- Safeshore: lossruns@safeshore.example.com
+- Safeshore - MGA: lossruns@safeshoremga.example.com
+- Safety National: lossruns@safetynational.example.com
+- Safety National - ORDER FROM TPA (not carrier): lossruns@safetynationalorderfromt.example.com
+- SAIF: lossruns@saif.example.com
+- SAIF - Oregon Work Comp: lossruns@saiforegonworkcomp.example.com
+- Samsung: lossruns@samsung.example.com
+- School Board Insurance of PA: lossruns@schoolboardinsuranceofpa.example.com
+- SCOR: lossruns@scor.example.com
+- Scottsdale Insurance: lossruns@scottsdaleinsurance.example.com
+- SCU Houston: lossruns@scuhouston.example.com
+- SDAO - Special Districts Assocation of Oregon: lossruns@sdaospecialdistrictsasso.example.com
+- Seabright Insurance: lossruns@seabrightinsurance.example.com
+- Secura: lossruns@secura.example.com
+- Sedgwick: lossruns@sedgwick.example.com
+- Sedgwick CMS: lossruns@sedgwickcms.example.com
+- Sedgwick CMS - MGA: lossruns@sedgwickcmsmga.example.com
+- Selective Insurance: lossruns@selectiveinsurance.example.com
+- Seneca: lossruns@seneca.example.com
+- Sentry: lossruns@sentry.example.com
+- Sentry Insurance: lossruns@sentryinsurance.example.com
+- SFM Risk Solutions: lossruns@sfmrisksolutions.example.com
+- SOCIETY INSURANCE: lossruns@societyinsurance.example.com
+- SOCIETY INSURANCE, a mutual company: lossruns@societyinsuranceamutualc.example.com
+- Sompo: lossruns@sompo.example.com
+- Sompo Japan: lossruns@sompojapan.example.com
+- Endurance America: lossruns@enduranceamerica.example.com
+- Sparta: lossruns@sparta.example.com
+- Springfield Insurance: lossruns@springfieldinsurance.example.com
+- Star Insurance: lossruns@starinsurance.example.com
+- Star Insurance - Part of Meadowbrook Insurance: lossruns@starinsurancepartofmeado.example.com
+- Starr: lossruns@starr.example.com
+- STARR COMPANIES: lossruns@starrcompanies.example.com
+- CV STARR COMPANY: lossruns@cvstarrcompany.example.com
+- STARR: lossruns@starr.example.com
+- Starr Indemnity (other than CV Starr): lossruns@starrindemnityotherthanc.example.com
+- Starr - Architects & Engineer: lossruns@starrarchitectsengineer.example.com
+- Starr - Financial Lines and Professional Liability: lossruns@starrfinanciallinesandpr.example.com
+- State Auto: lossruns@stateauto.example.com
+- State Automobile Mutual Insurance Company: lossruns@stateautomobilemutualins.example.com
+- State Comp. Ins. Fund: lossruns@statecompinsfund.example.com
+- State Mutual Fund: lossruns@statemutualfund.example.com
+- State National Insurance Company, Inc.: lossruns@statenationalinsuranceco.example.com
+- States Side Underwriting: lossruns@statessideunderwriting.example.com
+- Stonewood Insurance Company: lossruns@stonewoodinsurancecompan.example.com
+- Stonington: lossruns@stonington.example.com
+- Stonington - part of Tomco: lossruns@stoningtonpartoftomco.example.com
+- Summit Holdings: lossruns@summitholdings.example.com
+- Summit Holdings - MGA: lossruns@summitholdingsmga.example.com
+- Swett: lossruns@swett.example.com
+- Swett - Houston (JH Blades): lossruns@swetthoustonjhblades.example.com
+- Swett & Crawford: lossruns@swettcrawford.example.com
+- Swett & Crawford - CRC Swett: lossruns@swettcrawfordcrcswett.example.com
+- Swiss Re: lossruns@swissre.example.com
+- Coregis (Swiss Re): lossruns@coregisswissre.example.com
+- Westport (SwissRe): lossruns@westportswissre.example.com
+- First Specialty - Also Swiss Re: lossruns@firstspecialtyalsoswissr.example.com
+- North American Elite Insurance Company - SWISS RE: lossruns@northamericaneliteinsura.example.com
+- North American Capacity (Swiss Re): lossruns@northamericancapacityswi.example.com
+- Swiss RE: lossruns@swissre.example.com
+- T.H.E. Insurance Company: lossruns@theinsurancecompany.example.com
+- Tank: lossruns@tank.example.com
+- Tank Owners Members Ins. Co.: lossruns@tankownersmembersinsco.example.com
+- TDC: lossruns@tdc.example.com
+- TDC Specialty Underwriters: lossruns@tdcspecialtyunderwriters.example.com
+- Technology: lossruns@technology.example.com
+- Technology Ins Co. (AMTRUST): lossruns@technologyinscoamtrust.example.com
+- Texas: lossruns@texas.example.com
+- Texas Mutual: lossruns@texasmutual.example.com
+- Texas Specialty Risk Programs, Inc.: lossruns@texasspecialtyriskprogra.example.com
+- The: lossruns@the.example.com
+- The Mechanic Group: lossruns@themechanicgroup.example.com
+- The Doctors: lossruns@thedoctors.example.com
+- The Doctors - TDC Specialty: lossruns@thedoctorstdcspecialty.example.com
+- ThinkRisk: lossruns@thinkrisk.example.com
+- ThinkRisk Underwriting Agency: lossruns@thinkriskunderwritingage.example.com
+- Thomas Miller - TT Club: lossruns@thomasmillerttclub.example.com
+- TIG: lossruns@tig.example.com
+- TIG Specialty: lossruns@tigspecialty.example.com
+- Tokio Marine: lossruns@tokiomarine.example.com
+- Tokio Marine - HCC Global: lossruns@tokiomarinehccglobal.example.com
+- Torus: lossruns@torus.example.com
+- Torus Specialty: lossruns@torusspecialty.example.com
+- Tower: lossruns@tower.example.com
+- Tower Group Companies: lossruns@towergroupcompanies.example.com
+- Tradesman Program: lossruns@tradesmanprogram.example.com
+- Tradesman Program - TPA: lossruns@tradesmanprogramtpa.example.com
+- Travelers: lossruns@travelers.example.com
+- USF&G - Part of St. Paul Travelers: lossruns@usfgpartofstpaultraveler.example.com
+- St Paul Insurance: lossruns@stpaulinsurance.example.com
+- Northfield Insurance - Northland Insurance - Part of TRAVELERS - TRANSPORTATION & Specialty GL: lossruns@northfieldinsurancenorth.example.com
+- Travelers - RMIS - Ecarma 3.0 - Risk Management Reports ONLY: lossruns@travelersrmisecarma30ris.example.com
+- Northland Insurance (Part of Travelers): lossruns@northlandinsurancepartof.example.com
+- Tristar: lossruns@tristar.example.com
+- Tristar - TPA: lossruns@tristartpa.example.com
+- Trumbull Insurance Company: lossruns@trumbullinsurancecompany.example.com
+- Tudor: lossruns@tudor.example.com
+- Tudor Insurance Agency: lossruns@tudorinsuranceagency.example.com
+- Twin City Fire Ins.: lossruns@twincityfireins.example.com
+- Unigard: lossruns@unigard.example.com
+- Union: lossruns@union.example.com
+- Union Standard Insurance Group: lossruns@unionstandardinsurancegr.example.com
+- United: lossruns@united.example.com
+- United National Insurance Co: lossruns@unitednationalinsurancec.example.com
+- United Educators: lossruns@unitededucators.example.com
+- United Heartland: lossruns@unitedheartland.example.com
+- United Fire Group, Inc.: lossruns@unitedfiregroupinc.example.com
+- United Wisconsin Insurance Company: lossruns@unitedwisconsininsurance.example.com
+- United Specialty Insurance: lossruns@unitedspecialtyinsurance.example.com
+- United States Aircraft Insurance Group: lossruns@unitedstatesaircraftinsu.example.com
+- United States Aircraft Insurance Group - USAIG: lossruns@unitedstatesaircraftinsu.example.com
+- US Specialty Insurance - USSIC: lossruns@usspecialtyinsuranceussi.example.com
+- USLI - United States Liability Insurance: lossruns@usliunitedstatesliabilit.example.com
+- Utica: lossruns@utica.example.com
+- Utica National: lossruns@uticanational.example.com
+- Velocity Risk: lossruns@velocityrisk.example.com
+- Velocity Risk - MGA: lossruns@velocityriskmga.example.com
+- Venture Program: lossruns@ventureprogram.example.com
+- VFIS: lossruns@vfis.example.com
+- Villanova: lossruns@villanova.example.com
+- Villanova - See LDSC Site (IN LIQUIDATION, CHARGE FOR REPORTS): lossruns@villanovaseeldscsiteinli.example.com
+- Virginia Surety: lossruns@virginiasurety.example.com
+- VOSCO: lossruns@vosco.example.com
+- Victor Oschinnerer AKA VOSCO - All Loss Run Requests: lossruns@victoroschinnererakavosc.example.com
+- Victor OSchinnerer AKA VOSCO: lossruns@victoroschinnererakavosc.example.com
+- Victor O Schinnerer AKA VOSCO: lossruns@victoroschinnererakavosc.example.com
+- Victor Insurance - VOSCO - MGA: lossruns@victorinsurancevoscomga.example.com
+- Walterry Insurance Brokers: lossruns@walterryinsurancebrokers.example.com
+- Westchester: lossruns@westchester.example.com
+- Western World: lossruns@westernworld.example.com
+- WesternRE Insurance: lossruns@westernreinsurance.example.com
+- Westfield Insurance: lossruns@westfieldinsurance.example.com
+- Wilshire Insurance Company - IAT Insurance Group: lossruns@wilshireinsurancecompany.example.com
+- Winterthur Insurance: lossruns@winterthurinsurance.example.com
+- Worldwide Facilities, Inc.: lossruns@worldwidefacilitiesinc.example.com
+- Wright Risk Management: lossruns@wrightriskmanagement.example.com
+- Wright Specialty Insurance: lossruns@wrightspecialtyinsurance.example.com
+- Greenwich Insurance Company: lossruns@greenwichinsurancecompan.example.com
+- Zenith: lossruns@zenith.example.com
+- Zurich: lossruns@zurich.example.com
+- Empire Indemnity: lossruns@empireindemnity.example.com
+- QBE: lossruns@qbe.example.com
