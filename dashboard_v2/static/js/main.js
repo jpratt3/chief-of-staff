@@ -165,3 +165,93 @@ async function runScheduler() {
   document.getElementById('invite_draft').value = d.invite_draft;
   showResult(); showMiniToast('Done');
 }
+
+// ── Ask bar ──────────────────────────────────────────────────────────────
+// Streams /api/ask over SSE. The endpoint reports its own failures as `error`
+// events, so there is no non-200 path to handle here.
+(function () {
+  const form  = document.getElementById('askForm');
+  if (!form) return;                       // not the overview page
+  const input = document.getElementById('askInput');
+  const go    = document.getElementById('askGo');
+  const panel = document.getElementById('askAnswer');
+  const label = document.getElementById('askLabel');
+  const body  = document.getElementById('askBody');
+  const close = document.getElementById('askClose');
+  let busy = false;
+
+  close?.addEventListener('click', () => { panel.hidden = true; });
+
+  document.querySelectorAll('.ask-suggestion').forEach(chip => {
+    chip.addEventListener('click', () => {
+      input.value = chip.textContent.trim();
+      form.requestSubmit();
+    });
+  });
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const question = input.value.trim();
+    if (!question || busy) return;
+
+    busy = true;
+    go.disabled = true;
+    panel.hidden = false;
+    label.textContent = question;
+    body.textContent = '';
+    body.classList.add('is-waiting');
+
+    try {
+      const res = await fetch('/api/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question }),
+      });
+
+      if (!res.ok || !res.body) {
+        const d = await res.json().catch(() => ({}));
+        body.classList.remove('is-waiting');
+        body.textContent = d.error || 'The assistant is unavailable.';
+        return;
+      }
+
+      // Parse the SSE frames off the byte stream.
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        const frames = buffer.split('\n\n');
+        buffer = frames.pop();                       // keep the partial frame
+
+        for (const frame of frames) {
+          const evt = /^event: (.+)$/m.exec(frame)?.[1];
+          const raw = /^data: (.*)$/m.exec(frame)?.[1];
+          if (!evt || raw === undefined) continue;
+          let payload = '';
+          try { payload = JSON.parse(raw); } catch { continue; }
+
+          if (evt === 'delta') {
+            body.classList.remove('is-waiting');
+            body.textContent += payload;
+          } else if (evt === 'error') {
+            body.classList.remove('is-waiting');
+            body.classList.add('is-error');
+            body.textContent = payload;
+          }
+        }
+      }
+    } catch (err) {
+      body.classList.remove('is-waiting');
+      body.textContent = 'Could not reach the assistant.';
+    } finally {
+      body.classList.remove('is-waiting');
+      busy = false;
+      go.disabled = false;
+    }
+  });
+})();

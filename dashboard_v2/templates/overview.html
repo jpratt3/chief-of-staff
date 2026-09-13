@@ -8,16 +8,25 @@
       <h1>Chief of Staff</h1>
       <p class="hero-subtitle">Navigate by portal, launch live skills, and run the renewal cycle from one workspace.</p>
 
-      <div class="hero-commandbar">
-        <div class="commandbar-icon">Ask</div>
-        <div class="commandbar-text">Open a portal, review active stages, or launch a live skill</div>
-        <div class="commandbar-go">→</div>
+      <form class="hero-commandbar" id="askForm" autocomplete="off">
+        <label class="commandbar-icon" for="askInput">Ask</label>
+        <input class="commandbar-input" id="askInput" name="question" type="text"
+               placeholder="What's overdue? Who's in Bind? What's left on Meridian Freight?">
+        <button class="commandbar-go" id="askGo" type="submit" aria-label="Ask">→</button>
+      </form>
+
+      <div class="ask-answer" id="askAnswer" hidden>
+        <div class="ask-answer-head">
+          <span class="ask-answer-label" id="askLabel">Answer</span>
+          <button class="ask-answer-close" id="askClose" type="button" aria-label="Dismiss">×</button>
+        </div>
+        <div class="ask-answer-body" id="askBody"></div>
       </div>
 
       <div class="suggestion-chips">
-        <a class="suggestion-chip" href="{{ url_for('portal', slug=portal_to_slug('Renewal Pipeline')) }}">Open the Renewal Pipeline</a>
-        <a class="suggestion-chip" href="{{ url_for('portal', slug=portal_to_slug('Document Review')) }}">Review live document skills</a>
-        <a class="suggestion-chip" href="{{ url_for('portal', slug=portal_to_slug('Deck Builder')) }}">Build an RSM deck</a>
+        <button class="suggestion-chip ask-suggestion" type="button">Which renewals are overdue?</button>
+        <button class="suggestion-chip ask-suggestion" type="button">Who is furthest behind?</button>
+        <button class="suggestion-chip ask-suggestion" type="button">What is outstanding in Bind?</button>
         <a class="suggestion-chip" href="{{ url_for('matrix') }}">See the full skills registry</a>
       </div>
     </div>

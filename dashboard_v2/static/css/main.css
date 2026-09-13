@@ -265,3 +265,35 @@ body { min-height: 100vh; }
 .skill-email-card-header strong { color: var(--text-strong); font-size: 14px; }
 .skill-email-card textarea { width: 100%; }
 @media (max-width: 960px) { .skill-shell { grid-template-columns: 1fr; } }
+
+/* ── Ask bar ─────────────────────────────────────────────────────────────── */
+.commandbar-input { flex: 1; border: none; background: transparent; font-family: var(--font);
+             font-size: 14px; color: var(--text); padding: 0; min-width: 0; }
+.commandbar-input::placeholder { color: var(--text-soft); }
+.commandbar-input:focus { outline: none; }
+.hero-commandbar:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow); }
+button.commandbar-go { border: none; cursor: pointer; font-family: var(--font); font-size: 14px; transition: .15s; }
+button.commandbar-go:hover:not(:disabled) { filter: brightness(1.08); }
+button.commandbar-go:disabled { opacity: .5; cursor: default; }
+
+.ask-answer { margin: 18px auto 0; width: 100%; max-width: 680px; text-align: left;
+             background: white; border: 1px solid var(--line); border-radius: var(--radius-sm);
+             box-shadow: var(--shadow); overflow: hidden; }
+.ask-answer-head { display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+             border-bottom: 1px solid var(--line-soft); background: var(--panel); }
+.ask-answer-label { flex: 1; font-size: 12.5px; font-weight: 600; color: var(--muted);
+             overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ask-answer-close { border: none; background: none; cursor: pointer; font-size: 18px;
+             line-height: 1; color: var(--text-soft); padding: 0 2px; }
+.ask-answer-close:hover { color: var(--text); }
+.ask-answer-body { padding: 16px; font-size: 14px; line-height: 1.6; color: var(--text);
+             white-space: pre-wrap; min-height: 22px; }
+.ask-answer-body.is-error { color: var(--red); }
+
+/* Three dots while the first token is in flight. */
+.ask-answer-body.is-waiting::after { content: "···"; letter-spacing: 2px; color: var(--text-soft);
+             animation: ask-pulse 1.1s ease-in-out infinite; }
+@keyframes ask-pulse { 0%, 100% { opacity: .25; } 50% { opacity: .85; } }
+
+button.suggestion-chip { cursor: pointer; font-family: var(--font); }
+button.suggestion-chip:hover { background: rgba(255,255,255,0.65); }

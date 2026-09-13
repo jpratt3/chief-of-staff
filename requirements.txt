@@ -5,6 +5,10 @@
 # Web
 flask
 
+# Ask bar on the overview page. Optional: the dashboard runs without it,
+# and without ANTHROPIC_API_KEY the bar returns a setup hint instead of an answer.
+anthropic>=0.40
+
 # Data / workbook
 pandas
 openpyxl

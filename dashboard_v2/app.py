@@ -5,12 +5,14 @@ Dual navigation: by stage (row) and by portal (column).
 """
 from __future__ import annotations
 
+import json
+import os
 import sys
 import threading
 import webbrowser
 from pathlib import Path
 
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for, Response
 
 _V2_DIR = Path(__file__).parent
 _ROOT   = _V2_DIR.parent
@@ -23,6 +25,32 @@ if str(_V2_DIR) not in sys.path:
 # normally rather than through a file-path loader.
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
+
+
+def _load_dotenv() -> None:
+    """Read KEY=VALUE pairs from a local .env into the environment.
+
+    Deliberately dependency-free and non-overriding: anything already exported
+    in the shell wins, so a real environment is never clobbered by a stale file.
+    .env is gitignored; .env.example documents the keys.
+    """
+    path = _ROOT / ".env"
+    if not path.exists():
+        return
+    try:
+        for line in path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            key, value = key.strip(), value.strip().strip('"').strip("'")
+            if key and value and key not in os.environ:
+                os.environ[key] = value
+    except OSError:
+        pass
+
+
+_load_dotenv()
 
 from data_loader import (
     STAGES, PORTALS, PORTAL_META,
@@ -168,6 +196,50 @@ def api_stage_response():
         return jsonify({"ok": False, "error": "invalid fields"}), 400
     record_stage_response(client, selected)
     return jsonify({"ok": True, "selected_stage": selected})
+
+
+# ── Ask bar ───────────────────────────────────────────────────────────────────
+
+@app.route("/api/ask", methods=["POST"])
+def api_ask():
+    """Stream an answer about the current book back to the overview page.
+
+    Emits text/event-stream. Every failure path yields an `error` event rather
+    than a non-200, so the bar always has something to render — a clone with no
+    API credential configured gets a setup hint, not a stack trace.
+    """
+    import assistant
+
+    question = (request.get_json(silent=True) or {}).get("question", "").strip()
+    if not question:
+        return jsonify({"ok": False, "error": "Ask a question first."}), 400
+    if len(question) > 2000:
+        return jsonify({"ok": False, "error": "Question is too long."}), 400
+
+    def sse(event: str, data: str) -> str:
+        return f"event: {event}\ndata: {json.dumps(data)}\n\n"
+
+    def generate():
+        if not assistant.is_configured():
+            yield sse("error",
+                      "No Anthropic credential found. Set ANTHROPIC_API_KEY in your "
+                      "environment (see .env.example), then restart the dashboard.")
+            yield sse("done", "")
+            return
+        try:
+            for chunk in assistant.stream_answer(question):
+                yield sse("delta", chunk)
+        except Exception as exc:                      # noqa: BLE001
+            # Surface the failure type but never the message — an SDK error can
+            # echo request details, and this response goes to the browser.
+            yield sse("error", f"The assistant failed ({type(exc).__name__}).")
+        yield sse("done", "")
+
+    return Response(
+        generate(),
+        mimetype="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 @app.errorhandler(413)
