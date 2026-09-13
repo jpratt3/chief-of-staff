@@ -138,24 +138,6 @@
 
 </div>
 
-{# ── Stage modal (unchanged) ─────────────────────────────────────────── #}
-<div class="modal-backdrop hidden" id="stageModal">
-  <div class="stage-modal">
-    <div class="stage-modal-head">
-      <span id="modalAccountName" class="modal-account-name"></span>
-      <button class="modal-close-btn" onclick="document.getElementById('stageModal').classList.add('hidden')">Close</button>
-    </div>
-    <div class="stage-modal-body">
-      <p class="modal-help">Choose the correct current stage for this account.</p>
-      <div class="stage-option-grid">
-        {% for stage_name in STAGES %}
-        <button class="stage-option-btn" data-stage="{{ stage_name }}">{{ stage_name }}</button>
-        {% endfor %}
-      </div>
-      <div class="modal-status" id="modalStatus"></div>
-    </div>
-  </div>
-</div>
 {% endblock %}
 
 {% block scripts %}
