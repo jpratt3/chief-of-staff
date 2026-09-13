@@ -2,295 +2,137 @@
 {%- block title -%}RSM Deck Builder · CoS v2{%- endblock -%}
 {%- block head -%}
 <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: "Segoe UI", system-ui, sans-serif;
-      font-size: 13px;
-      background: #f0f2f7;
-      color: #1a1a2e;
-      min-height: 100vh;
-    }
-    /* ── Header ── */
-    .skill-header {
-      background: #1f3864;
-      color: #fff;
-      padding: 14px 28px;
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-    }
-    .skill-header h1 { font-size: 17px; font-weight: 700; }
-    .skill-header .back-link {
-      margin-left: auto;
-      color: rgba(255,255,255,.7);
-      font-size: 12px;
-      text-decoration: none;
-    }
-    .skill-header .back-link:hover { color: #fff; text-decoration: underline; }
+  /* Components this skill needs that the shared sheet does not have yet.
+     Built from the v2 tokens so it stays in step with the other skills. */
+  .rs-steps { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .rs-step { display: inline-flex; align-items: center; gap: 8px; padding: 7px 15px;
+             border-radius: 999px; font-size: 12px; font-weight: 600;
+             background: white; border: 1px solid var(--line); color: var(--muted); }
+  .rs-step .rs-step-num { width: 18px; height: 18px; border-radius: 50%; display: grid;
+             place-items: center; font-size: 11px; background: var(--line-soft); color: var(--text-soft); }
+  .rs-step.active { border-color: var(--accent); color: var(--accent); box-shadow: 0 1px 4px rgba(26,35,69,.07); }
+  .rs-step.active .rs-step-num { background: var(--accent); color: white; }
+  .rs-step.done { color: var(--green); border-color: #b7e4c7; }
+  .rs-step.done .rs-step-num { background: #d8f3dc; color: var(--green); }
 
-    /* ── Step tracker ── */
-    .step-bar {
-      display: flex;
-      gap: 0;
-      background: #16305a;
-      padding: 0 28px;
-    }
-    .step-item {
-      padding: 10px 20px;
-      font-size: 12px;
-      color: rgba(255,255,255,.5);
-      border-bottom: 3px solid transparent;
-      cursor: default;
-      white-space: nowrap;
-    }
-    .step-item.active {
-      color: #fff;
-      border-bottom-color: #5b9bd5;
-      font-weight: 600;
-    }
-    .step-item.done {
-      color: rgba(255,255,255,.75);
-    }
+  /* Panels */
+  .card { background: white; border: 1px solid var(--line); border-radius: var(--radius-sm);
+             box-shadow: var(--shadow); margin-bottom: 20px; overflow: hidden; }
+  .card-head { padding: 16px 20px 0; font-size: 11px; font-weight: 700; text-transform: uppercase;
+             letter-spacing: .06em; color: var(--muted); }
+  .card-body { padding: 16px 20px 20px; }
 
-    /* ── Cards ── */
-    .page { max-width: 860px; margin: 28px auto; padding: 0 20px 60px; }
-    .card {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 1px 4px rgba(0,0,0,.08);
-      margin-bottom: 20px;
-      overflow: hidden;
-    }
-    .card-head {
-      background: #2e5fa3;
-      color: #fff;
-      padding: 11px 18px;
-      font-weight: 700;
-      font-size: 12.5px;
-      letter-spacing: .3px;
-      text-transform: uppercase;
-    }
-    .card-body { padding: 18px; }
+  /* Form fields */
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .field-row.full { grid-template-columns: 1fr; }
+  .field label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase;
+             letter-spacing: .06em; color: var(--muted); margin-bottom: 6px; }
+  .field label .optional { font-weight: 500; color: var(--text-soft); text-transform: none; letter-spacing: 0; }
+  .field input[type="text"] { width: 100%; padding: 9px 12px; border: 1px solid var(--line);
+             border-radius: 8px; font-size: 13px; font-family: var(--font); color: var(--text);
+             background: var(--panel); }
+  .field input[type="text"]:focus { outline: none; border-color: var(--accent); }
+  .field-hint { font-size: 11.5px; color: var(--text-soft); margin-top: 5px; }
 
-    /* ── Form fields ── */
-    .field-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 14px;
-    }
-    .field-row.full { grid-template-columns: 1fr; }
-    .field label {
-      display: block;
-      font-size: 11.5px;
-      font-weight: 600;
-      color: #444;
-      margin-bottom: 4px;
-      text-transform: uppercase;
-      letter-spacing: .3px;
-    }
-    .field label .optional { font-weight: 400; color: #999; text-transform: none; }
-    .field input[type="text"],
-    .field input[type="file"] {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid #d0d4e0;
-      border-radius: 5px;
-      font-size: 13px;
-      font-family: inherit;
-      background: #fafbfd;
-      color: #1a1a2e;
-      transition: border-color .15s;
-    }
-    .field input:focus { outline: none; border-color: #2e5fa3; background: #fff; }
-    .field-hint { font-size: 11px; color: #888; margin-top: 3px; }
+  /* Drop zone - matches the loss-run / invoicing uploader */
+  .drop-zone { display: block; border: 2px dashed var(--line); border-radius: var(--radius-sm);
+             padding: 34px 20px; text-align: center; cursor: pointer; background: var(--panel);
+             transition: .15s; }
+  .drop-zone:hover, .drop-zone.drag-over { border-color: var(--accent); background: var(--accent-soft); }
+  .drop-zone input[type="file"] { display: none; }
+  .drop-label { font-size: 14px; font-weight: 700; color: var(--accent); }
+  .drop-label.has-file { color: var(--green); }
+  .drop-hint { font-size: 12px; color: var(--text-soft); margin-top: 5px; }
 
-    /* ── Drop zone ── */
-    .drop-zone {
-      border: 2px dashed #c0c8de;
-      border-radius: 7px;
-      padding: 20px;
-      text-align: center;
-      background: #f7f9ff;
-      cursor: pointer;
-      transition: border-color .2s, background .2s;
-    }
-    .drop-zone:hover, .drop-zone.drag-over {
-      border-color: #2e5fa3;
-      background: #eef3ff;
-    }
-    .drop-zone input[type="file"] {
-      display: none;
-    }
-    .drop-label { font-size: 13px; color: #555; }
-    .drop-label strong { color: #2e5fa3; }
-    .drop-label.has-file { color: #1a6630; font-weight: 600; }
-    .drop-hint { font-size: 11px; color: #999; margin-top: 4px; }
+  /* Market slide picker */
+  .market-category { margin-bottom: 18px; }
+  .market-category h4 { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase;
+             letter-spacing: .06em; margin: 0 0 9px; padding-bottom: 6px; border-bottom: 1px solid var(--line-soft); }
+  .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+  .market-check-label { display: flex; align-items: flex-start; gap: 8px; padding: 9px 12px;
+             border: 1px solid var(--line); border-radius: 10px; cursor: pointer; font-size: 12.5px;
+             background: var(--panel); color: var(--text); transition: .12s; }
+  .market-check-label:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .market-check-label input { margin-top: 2px; accent-color: var(--accent); width: 14px; height: 14px; }
+  .market-check-label .market-meta { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
 
-    /* ── Market slides checkboxes ── */
-    .market-category { margin-bottom: 16px; }
-    .market-category h4 {
-      font-size: 12px;
-      font-weight: 700;
-      color: #1f3864;
-      text-transform: uppercase;
-      letter-spacing: .4px;
-      margin-bottom: 8px;
-      padding-bottom: 4px;
-      border-bottom: 1px solid #eef0f5;
-    }
-    .market-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 6px;
-    }
-    .market-check-label {
-      display: flex;
-      align-items: flex-start;
-      gap: 7px;
-      padding: 7px 10px;
-      border: 1px solid #e0e4f0;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 12px;
-      background: #fafbfd;
-      transition: background .1s, border-color .1s;
-    }
-    .market-check-label:hover { background: #eef3ff; border-color: #aac0e8; }
-    .market-check-label input { margin-top: 2px; accent-color: #2e5fa3; }
-    .market-check-label .market-meta {
-      font-size: 10.5px;
-      color: #888;
-      margin-top: 1px;
-    }
+  /* Buttons */
+  .btn-row { display: flex; gap: 10px; align-items: center; margin-top: 20px; flex-wrap: wrap; }
+  .btn { padding: 11px 22px; border: none; border-radius: 10px; font-size: 13px; font-weight: 700;
+             font-family: var(--font); cursor: pointer; transition: .15s; }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { background: #4a63ef; }
+  .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-secondary { padding: 10px 18px; border: 1px solid var(--line); background: white;
+             color: var(--text-soft); font-weight: 600; }
+  .btn-secondary:hover { color: var(--accent); border-color: var(--accent); }
+  .btn-download { background: var(--green); color: white; text-decoration: none; display: inline-block; }
+  .btn-download:hover { background: #256d4a; }
 
-    /* ── Buttons ── */
-    .btn-row { display: flex; gap: 10px; align-items: center; margin-top: 18px; }
-    .btn {
-      padding: 9px 22px;
-      border: none;
-      border-radius: 5px;
-      font-size: 13px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      transition: background .15s, opacity .15s;
-    }
-    .btn-primary { background: #2e5fa3; color: #fff; }
-    .btn-primary:hover { background: #1f3864; }
-    .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
-    .btn-secondary { background: #e0e4f0; color: #333; }
-    .btn-secondary:hover { background: #c8cedf; }
-    .btn-download { background: #40916c; color: #fff; font-size: 14px; padding: 11px 28px; }
-    .btn-download:hover { background: #2d6a4f; }
+  /* Spinner */
+  .spinner-wrap { display: none; align-items: center; gap: 10px; color: var(--accent);
+             font-size: 13px; font-weight: 600; }
+  .spinner-wrap.visible { display: inline-flex; }
+  .spinner { width: 15px; height: 15px; border: 2px solid var(--accent-soft);
+             border-top-color: var(--accent); border-radius: 50%; animation: rsspin .7s linear infinite; }
+  @keyframes rsspin { to { transform: rotate(360deg); } }
 
-    /* ── Spinner ── */
-    .spinner-wrap {
-      display: none;
-      align-items: center;
-      gap: 10px;
-      color: #2e5fa3;
-      font-size: 13px;
-      font-weight: 500;
-    }
-    .spinner-wrap.visible { display: flex; }
-    .spinner {
-      width: 20px; height: 20px;
-      border: 3px solid #c0cde8;
-      border-top-color: #2e5fa3;
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+  /* Errors */
+  .error-box { display: none; border-radius: 10px; padding: 11px 14px; font-size: 12.5px;
+             margin-top: 14px; background: #fdf0f0; border: 1px solid #f0cccc; color: #8f3a3a; }
+  .error-box.visible { display: block; }
+  .error-box ul { margin: 4px 0 0 16px; }
 
-    /* ── Errors ── */
-    .error-box {
-      display: none;
-      background: #fff5f5;
-      border: 1px solid #f5c6cb;
-      border-radius: 5px;
-      padding: 12px 15px;
-      color: #842029;
-      font-size: 12.5px;
-      margin-top: 12px;
-    }
-    .error-box.visible { display: block; }
-    .error-box ul { margin-left: 16px; margin-top: 4px; }
+  /* Result */
+  .result-section { display: none; }
+  .result-section.visible { display: block; }
+  .result-banner { background: #d8f3dc; border: 1px solid #b7e4c7; border-radius: var(--radius-sm);
+             padding: 16px 18px; display: flex; align-items: center; justify-content: space-between;
+             gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .result-banner .result-info { font-size: 12.5px; color: #1a6630; }
+  .result-banner .result-info strong { font-size: 15px; display: block; margin-bottom: 3px; }
 
-    /* ── Result / slide log ── */
-    .result-section { display: none; }
-    .result-section.visible { display: block; }
-    .result-banner {
-      background: #d8f3dc;
-      border: 1px solid #b7e4c7;
-      border-radius: 6px;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    .result-banner .result-info { font-size: 13px; color: #1a6630; }
-    .result-banner .result-info strong { font-size: 15px; display: block; margin-bottom: 3px; }
+  .slide-log-wrap { margin-top: 8px; }
+  .slide-log-wrap summary { cursor: pointer; font-size: 12px; color: var(--accent);
+             font-weight: 700; user-select: none; }
+  .slide-log-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+  .slide-log-table th { background: var(--panel); color: var(--muted); padding: 7px 10px; text-align: left;
+             font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+             border-bottom: 1px solid var(--line); }
+  .slide-log-table td { padding: 7px 10px; border-bottom: 1px solid var(--line-soft); color: var(--text); }
+  .slide-log-table tr:last-child td { border-bottom: none; }
 
-    .slide-log-wrap { margin-top: 8px; }
-    .slide-log-wrap summary {
-      cursor: pointer;
-      font-size: 12px;
-      color: #2e5fa3;
-      font-weight: 600;
-      user-select: none;
-    }
-    .slide-log-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 8px;
-      font-size: 11.5px;
-    }
-    .slide-log-table th {
-      background: #f0f2f7;
-      color: #444;
-      padding: 5px 10px;
-      text-align: left;
-      border-bottom: 2px solid #dde1ec;
-    }
-    .slide-log-table td {
-      padding: 5px 10px;
-      border-bottom: 1px solid #eef0f5;
-      color: #333;
-    }
-    .slide-log-table tr:last-child td { border-bottom: none; }
-    .type-badge {
-      display: inline-block;
-      padding: 1px 7px;
-      border-radius: 9px;
-      font-size: 10px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    .type-diagram  { background: #dbeafe; color: #1e3a8a; }
-    .type-content  { background: #dcfce7; color: #14532d; }
-    .type-market   { background: #fef3c7; color: #78350f; }
-    .type-chrome   { background: #f3f4f6; color: #374151; }
-    .type-divider  { background: #e0e7ff; color: #3730a3; }
-    .type-error    { background: #fee2e2; color: #7f1d1d; }
+  .type-badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 999px;
+             font-size: 10.5px; font-weight: 700; white-space: nowrap; }
+  .type-diagram { background: #dbeafe; color: #1e3a8a; }
+  .type-content { background: #dcfce7; color: #14532d; }
+  .type-market  { background: #fef3c7; color: #78350f; }
+  .type-chrome  { background: #f3f4f6; color: #374151; }
+  .type-divider { background: #e0e7ff; color: #3730a3; }
+  .type-error   { background: #fee2e2; color: #7f1d1d; }
 </style>
 {%- endblock -%}
 {%- block content -%}
 
-<header class="skill-header">
-  <h1>&#9889; RSM Deck Builder</h1>
-  <a href="javascript:history.back()" class="back-link">← Back to Dashboard</a>
-</header>
+<div class="stage-page">
 
-<div class="step-bar">
-  <div class="step-item active" id="step1-tab">1 · Upload &amp; Configure</div>
-  <div class="step-item" id="step2-tab">2 · Select Market Slides</div>
-  <div class="step-item" id="step3-tab">3 · Build &amp; Download</div>
-</div>
+  <div class="stage-page-header">
+    <div class="stage-page-title">
+      <h1>RSM Deck Builder</h1>
+      <span class="stage-window-label">RSM &middot; Task #2</span>
+    </div>
+  </div>
+  <p style="color:var(--text-soft);margin:0 0 22px;font-size:14px;">
+    Upload last year&rsquo;s renewal strategy deck. The year is rolled forward, an optional program
+    graphic is injected as-is, and the market slides you pick are appended in order.
+  </p>
 
-<div class="page">
+  <div class="rs-steps">
+    <span class="rs-step active" id="step1-tab"><span class="rs-step-num">1</span>Upload &amp; configure</span>
+    <span class="rs-step" id="step2-tab"><span class="rs-step-num">2</span>Select market slides</span>
+    <span class="rs-step" id="step3-tab"><span class="rs-step-num">3</span>Build &amp; download</span>
+  </div>
+
 
   <form id="rsm-form" enctype="multipart/form-data">
 
