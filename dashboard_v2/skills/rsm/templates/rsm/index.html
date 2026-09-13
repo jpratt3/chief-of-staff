@@ -1,0 +1,611 @@
+{%- extends "base.html" -%}
+{%- block title -%}RSM Deck Builder · CoS v2{%- endblock -%}
+{%- block head -%}
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      font-size: 13px;
+      background: #f0f2f7;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+    /* ── Header ── */
+    .skill-header {
+      background: #1f3864;
+      color: #fff;
+      padding: 14px 28px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .skill-header h1 { font-size: 17px; font-weight: 700; }
+    .skill-header .back-link {
+      margin-left: auto;
+      color: rgba(255,255,255,.7);
+      font-size: 12px;
+      text-decoration: none;
+    }
+    .skill-header .back-link:hover { color: #fff; text-decoration: underline; }
+
+    /* ── Step tracker ── */
+    .step-bar {
+      display: flex;
+      gap: 0;
+      background: #16305a;
+      padding: 0 28px;
+    }
+    .step-item {
+      padding: 10px 20px;
+      font-size: 12px;
+      color: rgba(255,255,255,.5);
+      border-bottom: 3px solid transparent;
+      cursor: default;
+      white-space: nowrap;
+    }
+    .step-item.active {
+      color: #fff;
+      border-bottom-color: #5b9bd5;
+      font-weight: 600;
+    }
+    .step-item.done {
+      color: rgba(255,255,255,.75);
+    }
+
+    /* ── Cards ── */
+    .page { max-width: 860px; margin: 28px auto; padding: 0 20px 60px; }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .card-head {
+      background: #2e5fa3;
+      color: #fff;
+      padding: 11px 18px;
+      font-weight: 700;
+      font-size: 12.5px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+    .card-body { padding: 18px; }
+
+    /* ── Form fields ── */
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .field-row.full { grid-template-columns: 1fr; }
+    .field label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+    .field label .optional { font-weight: 400; color: #999; text-transform: none; }
+    .field input[type="text"],
+    .field input[type="file"] {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #d0d4e0;
+      border-radius: 5px;
+      font-size: 13px;
+      font-family: inherit;
+      background: #fafbfd;
+      color: #1a1a2e;
+      transition: border-color .15s;
+    }
+    .field input:focus { outline: none; border-color: #2e5fa3; background: #fff; }
+    .field-hint { font-size: 11px; color: #888; margin-top: 3px; }
+
+    /* ── Drop zone ── */
+    .drop-zone {
+      border: 2px dashed #c0c8de;
+      border-radius: 7px;
+      padding: 20px;
+      text-align: center;
+      background: #f7f9ff;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: #2e5fa3;
+      background: #eef3ff;
+    }
+    .drop-zone input[type="file"] {
+      display: none;
+    }
+    .drop-label { font-size: 13px; color: #555; }
+    .drop-label strong { color: #2e5fa3; }
+    .drop-label.has-file { color: #1a6630; font-weight: 600; }
+    .drop-hint { font-size: 11px; color: #999; margin-top: 4px; }
+
+    /* ── Market slides checkboxes ── */
+    .market-category { margin-bottom: 16px; }
+    .market-category h4 {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1f3864;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #eef0f5;
+    }
+    .market-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 6px;
+    }
+    .market-check-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      padding: 7px 10px;
+      border: 1px solid #e0e4f0;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+      background: #fafbfd;
+      transition: background .1s, border-color .1s;
+    }
+    .market-check-label:hover { background: #eef3ff; border-color: #aac0e8; }
+    .market-check-label input { margin-top: 2px; accent-color: #2e5fa3; }
+    .market-check-label .market-meta {
+      font-size: 10.5px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    /* ── Buttons ── */
+    .btn-row { display: flex; gap: 10px; align-items: center; margin-top: 18px; }
+    .btn {
+      padding: 9px 22px;
+      border: none;
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background .15s, opacity .15s;
+    }
+    .btn-primary { background: #2e5fa3; color: #fff; }
+    .btn-primary:hover { background: #1f3864; }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-secondary { background: #e0e4f0; color: #333; }
+    .btn-secondary:hover { background: #c8cedf; }
+    .btn-download { background: #40916c; color: #fff; font-size: 14px; padding: 11px 28px; }
+    .btn-download:hover { background: #2d6a4f; }
+
+    /* ── Spinner ── */
+    .spinner-wrap {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      color: #2e5fa3;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .spinner-wrap.visible { display: flex; }
+    .spinner {
+      width: 20px; height: 20px;
+      border: 3px solid #c0cde8;
+      border-top-color: #2e5fa3;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Errors ── */
+    .error-box {
+      display: none;
+      background: #fff5f5;
+      border: 1px solid #f5c6cb;
+      border-radius: 5px;
+      padding: 12px 15px;
+      color: #842029;
+      font-size: 12.5px;
+      margin-top: 12px;
+    }
+    .error-box.visible { display: block; }
+    .error-box ul { margin-left: 16px; margin-top: 4px; }
+
+    /* ── Result / slide log ── */
+    .result-section { display: none; }
+    .result-section.visible { display: block; }
+    .result-banner {
+      background: #d8f3dc;
+      border: 1px solid #b7e4c7;
+      border-radius: 6px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .result-banner .result-info { font-size: 13px; color: #1a6630; }
+    .result-banner .result-info strong { font-size: 15px; display: block; margin-bottom: 3px; }
+
+    .slide-log-wrap { margin-top: 8px; }
+    .slide-log-wrap summary {
+      cursor: pointer;
+      font-size: 12px;
+      color: #2e5fa3;
+      font-weight: 600;
+      user-select: none;
+    }
+    .slide-log-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 11.5px;
+    }
+    .slide-log-table th {
+      background: #f0f2f7;
+      color: #444;
+      padding: 5px 10px;
+      text-align: left;
+      border-bottom: 2px solid #dde1ec;
+    }
+    .slide-log-table td {
+      padding: 5px 10px;
+      border-bottom: 1px solid #eef0f5;
+      color: #333;
+    }
+    .slide-log-table tr:last-child td { border-bottom: none; }
+    .type-badge {
+      display: inline-block;
+      padding: 1px 7px;
+      border-radius: 9px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .type-diagram  { background: #dbeafe; color: #1e3a8a; }
+    .type-content  { background: #dcfce7; color: #14532d; }
+    .type-market   { background: #fef3c7; color: #78350f; }
+    .type-chrome   { background: #f3f4f6; color: #374151; }
+    .type-divider  { background: #e0e7ff; color: #3730a3; }
+    .type-error    { background: #fee2e2; color: #7f1d1d; }
+</style>
+{%- endblock -%}
+{%- block content -%}
+
+<header class="skill-header">
+  <h1>&#9889; RSM Deck Builder</h1>
+  <a href="javascript:history.back()" class="back-link">← Back to Dashboard</a>
+</header>
+
+<div class="step-bar">
+  <div class="step-item active" id="step1-tab">1 · Upload &amp; Configure</div>
+  <div class="step-item" id="step2-tab">2 · Select Market Slides</div>
+  <div class="step-item" id="step3-tab">3 · Build &amp; Download</div>
+</div>
+
+<div class="page">
+
+  <form id="rsm-form" enctype="multipart/form-data">
+
+    <!-- ── Step 1: Upload & Configure ── -->
+    <div id="step1" class="step-panel">
+      <div class="card">
+        <div class="card-head">Upload Decks</div>
+        <div class="card-body">
+
+          <div class="field field-row full" style="margin-bottom:16px">
+            <div class="field">
+              <label>Last Year's RSM Deck</label>
+              <div class="drop-zone" id="drop-old" onclick="document.getElementById('old_deck').click()">
+                <input type="file" id="old_deck" name="old_deck" accept=".pptx">
+                <div class="drop-label" id="old-label">
+                  <strong>Click to browse</strong> or drag &amp; drop<br>
+                </div>
+                <div class="drop-hint">.pptx only</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-row full" style="margin-bottom:0">
+            <div class="field">
+              <label>Program Graphic <span class="optional">(optional — from Post Binding task #4)</span></label>
+              <div class="drop-zone" id="drop-pg" onclick="document.getElementById('program_graphic').click()">
+                <input type="file" id="program_graphic" name="program_graphic" accept=".pptx">
+                <div class="drop-label" id="pg-label">
+                  <strong>Click to browse</strong> or drag &amp; drop<br>
+                </div>
+                <div class="drop-hint">.pptx — diagram slides only, injected as-is</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">Client Details</div>
+        <div class="card-body">
+          <div class="field-row">
+            <div class="field">
+              <label>Client Name</label>
+              <input type="text" name="client_name" id="client_name" placeholder="e.g. Vantage Technologies, LLC">
+            </div>
+            <div class="field">
+              <label>New Policy Year</label>
+              <input type="text" name="new_year" id="new_year" placeholder="e.g. 2026-27">
+              <div class="field-hint">Used for year substitutions throughout the deck.</div>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Previous Policy Year <span class="optional">(optional)</span></label>
+              <input type="text" name="old_year" id="old_year" placeholder="e.g. 2025-26">
+              <div class="field-hint">Old year to replace in copied slides.</div>
+            </div>
+            <div class="field"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" onclick="goStep2()">Next: Select Market Slides →</button>
+      </div>
+    </div>
+
+    <!-- ── Step 2: Market Slides ── -->
+    <div id="step2" class="step-panel" style="display:none">
+      <div class="card">
+        <div class="card-head">Select Market Condition Slides</div>
+        <div class="card-body">
+          <p style="font-size:12.5px; color:#555; margin-bottom:14px;">
+            Check the market slides you want to include in this deck.
+            These are pulled from the current slide database — select only slides relevant to this client's lines of coverage.
+          </p>
+
+          {% if categories %}
+            {% for cat, entries in categories.items() %}
+            <div class="market-category">
+              <h4>{{ cat }}</h4>
+              <div class="market-grid">
+                {% for entry in entries %}
+                <label class="market-check-label">
+                  <input type="checkbox" name="market_slides" value="{{ entry.id }}">
+                  <div>
+                    <div>{{ entry.title }}</div>
+                    <div class="market-meta">{{ entry.quarter }} · {{ entry.source }}</div>
+                  </div>
+                </label>
+                {% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <p style="color:#888; font-style:italic;">No market slides found in database. Add slides to data/rsm_market_slides/ to populate this list.</p>
+          {% endif %}
+
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn btn-secondary" onclick="goStep1()">← Back</button>
+        <button type="button" class="btn btn-primary" onclick="goStep3()">Next: Build Deck →</button>
+      </div>
+    </div>
+
+    <!-- ── Step 3: Build & Download ── -->
+    <div id="step3" class="step-panel" style="display:none">
+      <div class="card">
+        <div class="card-head">Build &amp; Download</div>
+        <div class="card-body">
+          <p style="font-size:12.5px; color:#555; margin-bottom:16px;">
+            Review your selections below, then click <strong>Build Deck</strong>.<br>
+            The server will extract and reassemble your RSM deck. This usually takes 5–15 seconds.
+          </p>
+
+          <div id="summary-box" style="background:#f7f9ff; border:1px solid #dde1ec; border-radius:6px; padding:14px; margin-bottom:16px; font-size:12.5px; color:#333;">
+            <div id="summary-text">Loading summary…</div>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-secondary" onclick="goStep2()">← Back</button>
+            <button type="button" class="btn btn-primary" id="build-btn" onclick="buildDeck()">Build Deck</button>
+            <div class="spinner-wrap" id="spinner">
+              <div class="spinner"></div>
+              <span>Building deck… this may take up to 30 seconds</span>
+            </div>
+          </div>
+
+          <div class="error-box" id="error-box"></div>
+
+          <!-- Result -->
+          <div class="result-section" id="result-section">
+            <div class="result-banner">
+              <div class="result-info">
+                <strong>&#10003; Deck built successfully!</strong>
+                <span id="result-meta"></span>
+              </div>
+              <a id="download-link" class="btn btn-download" href="#">&#8595; Download .pptx</a>
+            </div>
+
+            <div class="slide-log-wrap">
+              <details>
+                <summary>View slide log (<span id="slide-count">0</span> slides)</summary>
+                <table class="slide-log-table" id="slide-log-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Title</th>
+                      <th>Type</th>
+                      <th>Source</th>
+                    </tr>
+                  </thead>
+                  <tbody id="slide-log-body"></tbody>
+                </table>
+              </details>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script>
+// ── Step navigation ──────────────────────────────────────────────────────────
+
+function showStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('step'+i).style.display = (i===n) ? '' : 'none';
+    const tab = document.getElementById('step'+i+'-tab');
+    tab.classList.remove('active','done');
+    if (i===n) tab.classList.add('active');
+    else if (i<n) tab.classList.add('done');
+  });
+}
+
+function goStep1() { showStep(1); }
+function goStep2() {
+  const client = document.getElementById('client_name').value.trim();
+  const year   = document.getElementById('new_year').value.trim();
+  const oldDeck = document.getElementById('old_deck').files.length;
+  if (!client || !year || !oldDeck) {
+    alert('Please fill in Client Name, New Policy Year, and upload the old RSM deck before continuing.');
+    return;
+  }
+  showStep(2);
+}
+function goStep3() {
+  updateSummary();
+  showStep(3);
+}
+
+function updateSummary() {
+  const client = document.getElementById('client_name').value.trim();
+  const newYear = document.getElementById('new_year').value.trim();
+  const oldYear = document.getElementById('old_year').value.trim();
+  const oldFile = document.getElementById('old_deck').files[0];
+  const pgFile  = document.getElementById('program_graphic').files[0];
+  const checked = document.querySelectorAll('input[name="market_slides"]:checked').length;
+
+  document.getElementById('summary-text').innerHTML =
+    `<strong>Client:</strong> ${client}<br>` +
+    `<strong>New year:</strong> ${newYear}${oldYear ? ' (replacing '+oldYear+')' : ''}<br>` +
+    `<strong>Old deck:</strong> ${oldFile ? oldFile.name : '—'}<br>` +
+    `<strong>Program graphic:</strong> ${pgFile ? pgFile.name : 'none'}<br>` +
+    `<strong>Market slides selected:</strong> ${checked}`;
+}
+
+// ── File drop zones ──────────────────────────────────────────────────────────
+
+function setupDropZone(zoneId, inputId, labelId) {
+  const zone  = document.getElementById(zoneId);
+  const input = document.getElementById(inputId);
+  const label = document.getElementById(labelId);
+
+  input.addEventListener('change', () => {
+    if (input.files[0]) {
+      label.innerHTML = '<strong>✓ ' + input.files[0].name + '</strong>';
+      label.classList.add('has-file');
+    }
+  });
+
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', ()  => zone.classList.remove('drag-over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    const dt = e.dataTransfer;
+    if (dt.files.length) {
+      input.files = dt.files;
+      label.innerHTML = '<strong>✓ ' + dt.files[0].name + '</strong>';
+      label.classList.add('has-file');
+    }
+  });
+}
+
+setupDropZone('drop-old', 'old_deck', 'old-label');
+setupDropZone('drop-pg',  'program_graphic', 'pg-label');
+
+// ── Build ────────────────────────────────────────────────────────────────────
+
+async function buildDeck() {
+  const buildBtn = document.getElementById('build-btn');
+  const spinner  = document.getElementById('spinner');
+  const errorBox = document.getElementById('error-box');
+  const resultSection = document.getElementById('result-section');
+
+  buildBtn.disabled = true;
+  spinner.classList.add('visible');
+  errorBox.classList.remove('visible');
+  resultSection.classList.remove('visible');
+
+  const form = document.getElementById('rsm-form');
+  const fd   = new FormData(form);
+
+  try {
+    const res  = await fetch('/skills/rsm/build', { method: 'POST', body: fd });
+    if (res.status === 413) {
+      errorBox.innerHTML = '<strong>File too large.</strong> The .pptx exceeds the 64 MB upload limit.';
+      errorBox.classList.add('visible'); return;
+    }
+    if (!res.ok && res.status !== 400 && res.status !== 500) {
+      errorBox.textContent = 'Server error: HTTP ' + res.status;
+      errorBox.classList.add('visible'); return;
+    }
+    const data = await res.json();
+
+    if (!data.ok) {
+      errorBox.innerHTML = '<strong>Could not build deck:</strong><ul>' +
+        data.errors.map(e => `<li>${e}</li>`).join('') + '</ul>';
+      errorBox.classList.add('visible');
+      return;
+    }
+
+    // Populate result
+    document.getElementById('result-meta').textContent =
+      `${data.slide_count} slides · ${data.filename}`;
+
+    const url = `/skills/rsm/download?key=${data.download_key}&filename=${encodeURIComponent(data.filename)}`;
+    document.getElementById('download-link').href = url;
+    document.getElementById('download-link').download = data.filename;
+
+    // Slide log
+    document.getElementById('slide-count').textContent = data.slide_log.length;
+    const tbody = document.getElementById('slide-log-body');
+    tbody.innerHTML = '';
+    data.slide_log.forEach((row, i) => {
+      const typeClass = 'type-' + (row.type || 'content');
+      tbody.innerHTML +=
+        `<tr>
+          <td>${i+1}</td>
+          <td>${escHtml(row.title || '—')}</td>
+          <td><span class="type-badge ${typeClass}">${row.type || 'content'}</span></td>
+          <td>${escHtml(row.source || '')}</td>
+        </tr>`;
+    });
+
+    resultSection.classList.add('visible');
+
+  } catch (err) {
+    errorBox.textContent = 'Unexpected error: ' + err.message;
+    errorBox.classList.add('visible');
+  } finally {
+    buildBtn.disabled = false;
+    spinner.classList.remove('visible');
+  }
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+{%- endblock -%}

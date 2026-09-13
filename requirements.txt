@@ -1,0 +1,20 @@
+# Runtime dependencies, derived from the imports actually present in the tree.
+# research/loss-run-agent/ is a self-contained subproject with its own
+# requirements.txt — install that separately if you want to run the agent.
+
+# Web
+flask
+
+# Data / workbook
+pandas
+openpyxl
+
+# Document extraction
+pdfplumber          # layout-mode text — the basis of the extraction engine
+pypdf               # cheap first pass for page ranking
+python-docx         # .docx binders
+python-pptx         # RSM deck assembly
+lxml                # pptx XML rewriting
+
+# Windows / Outlook
+pywin32             # COM access to the desktop Outlook profile (src/ pipeline)

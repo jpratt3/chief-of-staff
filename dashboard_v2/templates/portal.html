@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}{{ data.portal }} Workspace · CoS v2{% endblock %}
+
+{% block content %}
+<div class="workspace-page portal-page">
+  <section class="workspace-header workspace-header-portal">
+    <div>
+      <div class="workspace-kicker">Portal workspace</div>
+      <h1>{{ data.portal }}</h1>
+      <p class="workspace-subtitle">Follow this portal vertically across the renewal cycle and launch the skill surfaces tied to each stage.</p>
+    </div>
+    <div class="workspace-aside-note">
+      <div class="aside-label">Active stages</div>
+      <div class="aside-value">{{ data.all_stages|length }}</div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="portal-focus-banner">
+      <div>
+        <div class="banner-label">Portal mission</div>
+        <div class="banner-title">A cleaner cross-stage thread for {{ data.portal }}</div>
+      </div>
+      <div class="banner-copy">Use this view to understand what the portal does at each stage, who is active there now, and where live skills already exist.</div>
+    </div>
+  </section>
+
+  <section class="page-section portal-thread-list">
+    {% for row in data.stage_rows %}
+    {% set s_slug = stage_to_slug(row.stage) %}
+    <article class="thread-card">
+      <div class="thread-stage-bar">
+        <div class="thread-stage-left">
+          <a href="{{ url_for('stage', slug=s_slug) }}" class="stage-pill {{ s_slug }}">{{ row.stage }}</a>
+          <span class="thread-window">{{ row.window }}</span>
+        </div>
+        <div class="thread-stage-right">{{ row.clients|length }} active client{% if row.clients|length != 1 %}s{% endif %}</div>
+      </div>
+      <div class="thread-grid">
+        <div class="thread-column">
+          
+          <div class="thread-column-label">Skills at this intersection</div>
+            <div class="skill-cluster">
+            {% if row.skills %}
+              {% for skill in row.skills %}
+                {% if skill.url %}
+                <a href="{{ skill.url }}" target="_blank" class="workspace-skill live">
+                  <span class="skill-state-dot"></span>
+                  <span>{{ skill.name }}</span>
+                  <span class="skill-state-text">Live</span>
+                </a>
+                {% else %}
+                <div class="workspace-skill planned">
+                  <span class="skill-state-dot"></span>
+                  <span>{{ skill.name }}</span>
+                  <span class="skill-state-text">Planned</span>
+                </div>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <div class="thread-empty">No skill defined for this portal-stage intersection yet.</div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="thread-column">
+          
+          <div class="thread-column-label">Accounts currently here</div>
+            <div class="chip-cloud">
+            {% if row.clients %}
+              {% for client_name in row.clients %}
+              <a href="{{ url_for('stage', slug=s_slug) }}" class="entity-chip">{{ client_name }}</a>
+              {% endfor %}
+            {% else %}
+              <div class="thread-empty">No active accounts are currently sitting in this stage.</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{%- extends "base.html" -%}
+{%- block title -%}ISM Deck Builder · CoS v2{%- endblock -%}
+{%- block content -%}
+<div class="stage-page">
+  <div class="stage-page-header">
+    <div class="stage-page-title">
+      <h1>ISM Deck Builder</h1>
+      <span class="stage-window-label">Deck Builder · Task #7</span>
+    </div>
+  </div>
+  <p style="color:var(--text-soft);margin:0 0 24px;font-size:14px;">Upload last year's Internal Strategy Meeting (ISM) deck. The skill updates the year and returns a prefilled .pptx ready to fine-tune.</p>
+
+  <div class="skill-shell">
+    <div class="skill-form-panel">
+      <div class="skill-field">
+        <label class="skill-label">Client Name</label>
+        <input id="client_name" type="text" class="skill-input" placeholder="e.g. Grand Galleria">
+      </div>
+      <div class="skill-field">
+        <label class="skill-label">New Policy Year</label>
+        <input id="new_year" type="text" class="skill-input" placeholder="e.g. 2026" style="width:120px;">
+      </div>
+      <div class="skill-field">
+        <label class="skill-label">Prior Policy Year (optional)</label>
+        <input id="old_year" type="text" class="skill-input" placeholder="e.g. 2025" style="width:120px;">
+      </div>
+      <div class="skill-field">
+        <label class="skill-label">Last Year's ISM Deck (.pptx)</label>
+        <input id="deck_file" type="file" accept=".pptx" class="skill-input">
+      </div>
+      <button class="skill-run-btn" onclick="runStrategyDeck()">Build Deck</button>
+    </div>
+    <div class="skill-result-panel" id="result" style="display:none;">
+      <div class="skill-result-header"><strong>Deck Ready</strong></div>
+      <div id="deck_info" class="skill-info-box"></div>
+      <a id="download_link" class="skill-run-btn" style="display:none;text-decoration:none;text-align:center;margin-top:12px;">Download .pptx</a>
+    </div>
+  </div>
+</div>
+<script>
+function copyText(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.value || el.innerText);
+  showMiniToast('Copied');
+}
+</script>
+{%- endblock -%}

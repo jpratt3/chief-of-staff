@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block title %}{{ data.stage }} · CoS v2{% endblock %}
+
+{% block content %}
+<div class="stage-page">
+
+  {# ── Page header ──────────────────────────────────────────────────────── #}
+  <div class="stage-page-header">
+    <div class="stage-page-title">
+      <h1>{{ data.stage }}</h1>
+      {% if data.window %}<span class="stage-window-label">{{ data.window }}</span>{% endif %}
+    </div>
+    <div class="stage-portal-links">
+      {% for p in PORTALS %}
+        {% set pmeta = PORTAL_META[p] %}
+        {% if data.stage in pmeta.stages %}
+          <a class="stage-portal-chip" href="{{ url_for('portal', slug=portal_to_slug(p)) }}" style="--portal-color: {{ pmeta.color }};">{{ p }}</a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  {# ── Stage Tasks ──────────────────────────────────────────────────────── #}
+  {% if data.tasks %}
+  <div class="stage-section">
+    <div class="stage-section-header">
+      <h2>Stage Tasks</h2>
+      <span class="stage-count-badge">{{ data.tasks|length }}</span>
+    </div>
+    <div class="stage-table-wrap">
+      <table class="stage-table">
+        <thead>
+          <tr>
+            <th class="col-num">#</th>
+            <th class="col-task">Task</th>
+            <th class="col-role">AE</th>
+            <th class="col-role">AAE</th>
+            <th class="col-role">AR</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in data.tasks %}
+          <tr class="stage-task-row">
+            <td class="col-num">
+              {{ t.num }}
+              {% if t.skill_url %}<a class="skill-launch-icon" href="{{ t.skill_url }}" title="Launch skill">⚡</a>{% endif %}
+            </td>
+            <td class="col-task {% if t.skill_url %}has-skill{% endif %}">{{ t.text }}</td>
+            <td class="col-role">{% if t.ae %}<span class="role-check">✓</span>{% endif %}</td>
+            <td class="col-role">{% if t.aae %}<span class="role-check">✓</span>{% endif %}</td>
+            <td class="col-role">{% if t.ar %}<span class="role-check">✓</span>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  {# ── Accounts in Stage ────────────────────────────────────────────────── #}
+  <div class="stage-section">
+    <div class="stage-section-header">
+      <h2>Accounts in This Stage</h2>
+      <span class="stage-count-badge">{{ data.accounts|length }}</span>
+    </div>
+
+    {% if data.accounts %}
+    <div class="stage-table-wrap">
+      <table class="stage-table accounts-table">
+        <thead>
+          <tr>
+            <th class="col-account">Account</th>
+            <th class="col-due">Due Date</th>
+            <th class="col-recorded">Recorded Stage</th>
+            <th class="col-progress">Progress</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in data.accounts %}
+          <tr class="stage-account-row">
+            <td class="col-account">
+              <div class="acct-name">{{ a.client_name }}</div>
+              {% if a.secondary_note %}<div class="acct-sub">{{ a.secondary_note }}</div>{% endif %}
+              <select class="stage-override-select" data-client="{{ a.client_name }}">
+                <option value="">Move to another stage…</option>
+                {% for s in STAGES %}
+                <option value="{{ s }}" {% if s == data.stage %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+              </select>
+            </td>
+            <td class="col-due">
+              <div class="due-date">{{ a.due_date or '—' }}</div>
+              {% if a.days_to_due != '' %}
+                <div class="due-sub {% if a.days_to_due < 0 %}overdue{% endif %}">
+                  {% if a.days_to_due < 0 %}{{ a.days_to_due|abs }}d overdue
+                  {% elif a.days_to_due == 0 %}due today
+                  {% else %}{{ a.days_to_due }}d
+                  {% endif %}
+                </div>
+              {% endif %}
+            </td>
+            <td class="col-recorded">{{ data.stage }}</td>
+            <td class="col-progress">
+              <div class="progress-row">
+                <div class="stage-progress-bar">
+                  <div class="stage-progress-fill" style="width: {{ a.pct_complete }}%;"></div>
+                </div>
+                <span class="progress-fraction">{{ a.completed_nums|length }} / {{ a.num_tasks }}</span>
+              </div>
+              {% if data.tasks %}
+              <div class="task-pill-row">
+                {% for t in data.tasks %}
+                <label class="task-pill-check {% if t.num in a.completed_nums %}done{% endif %}">
+                  <input type="checkbox" class="task-cb-client"
+                    data-client="{{ a.client_name }}"
+                    data-stage="{{ data.stage }}"
+                    data-task="{{ t.num }}"
+                    {% if t.num in a.completed_nums %}checked{% endif %}>
+                  {{ t.num }}
+                </label>
+                {% endfor %}
+              </div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% else %}
+    <div class="stage-empty">
+      <div class="stage-empty-icon">◎</div>
+      <div>No accounts are currently sitting in this stage.</div>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+
+{# ── Stage modal (unchanged) ─────────────────────────────────────────── #}
+<div class="modal-backdrop hidden" id="stageModal">
+  <div class="stage-modal">
+    <div class="stage-modal-head">
+      <span id="modalAccountName" class="modal-account-name"></span>
+      <button class="modal-close-btn" onclick="document.getElementById('stageModal').classList.add('hidden')">Close</button>
+    </div>
+    <div class="stage-modal-body">
+      <p class="modal-help">Choose the correct current stage for this account.</p>
+      <div class="stage-option-grid">
+        {% for stage_name in STAGES %}
+        <button class="stage-option-btn" data-stage="{{ stage_name }}">{{ stage_name }}</button>
+        {% endfor %}
+      </div>
+      <div class="modal-status" id="modalStatus"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll('.task-cb-client').forEach(cb => {
+  cb.addEventListener('change', async e => {
+    const el = e.target;
+    await postJson('/api/completion', {
+      client_name: el.dataset.client,
+      stage: el.dataset.stage,
+      task_num: el.dataset.task,
+      checked: el.checked,
+    });
+    showMiniToast('Task updated');
+  });
+});
+
+document.querySelectorAll('.stage-override-select').forEach(sel => {
+  sel.addEventListener('change', async e => {
+    const client = e.target.dataset.client;
+    const selected = e.target.value;
+    if (!selected) return;
+    const d = await postJson('/api/stage-response', { client_name: client, selected_stage: selected });
+    if (d.ok) { showMiniToast('Stage updated'); setTimeout(() => window.location.reload(), 350); }
+  });
+});
+</script>
+{% endblock %}

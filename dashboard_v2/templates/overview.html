@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Chief of Staff · CoS v2{% endblock %}
+
+{% block content %}
+<section class="workspace-page">
+  <section class="hero-panel">
+    <div class="hero-inner">
+      <h1>Chief of Staff</h1>
+      <p class="hero-subtitle">Navigate by portal, launch live skills, and run the renewal cycle from one workspace.</p>
+
+      <div class="hero-commandbar">
+        <div class="commandbar-icon">Ask</div>
+        <div class="commandbar-text">Open a portal, review active stages, or launch a live skill</div>
+        <div class="commandbar-go">→</div>
+      </div>
+
+      <div class="suggestion-chips">
+        <a class="suggestion-chip" href="{{ url_for('portal', slug=portal_to_slug('Renewal Pipeline')) }}">Open the Renewal Pipeline</a>
+        <a class="suggestion-chip" href="{{ url_for('portal', slug=portal_to_slug('Document Review')) }}">Review live document skills</a>
+        <a class="suggestion-chip" href="{{ url_for('portal', slug=portal_to_slug('Deck Builder')) }}">Build an RSM deck</a>
+        <a class="suggestion-chip" href="{{ url_for('matrix') }}">See the full skills registry</a>
+      </div>
+    </div>
+  </section>
+</section>
+{% endblock %}
+
+{% block bottom %}
+<section class="portfolio-strip">
+  <div class="portfolio-strip-header">
+    <div class="section-eyebrow">Client view</div>
+    <h2>Renewal portfolio</h2>
+  </div>
+  <div class="portfolio-client-list">
+    {% for r in rows %}
+    {% set s_slug = stage_to_slug(r.current_stage) %}
+    {% set s_color = STAGE_THEME[r.current_stage].color if r.current_stage in STAGE_THEME else '#98a0b3' %}
+    <a class="client-row-card" href="{{ url_for('stage', slug=s_slug) }}" style="--stage-color: {{ s_color }};">
+      <div>
+        <div class="client-row-name">{{ r.client_name }}</div>
+        {% if r.secondary_note %}<div class="client-row-sub">{{ r.secondary_note }}</div>{% endif %}
+      </div>
+      <div><span class="stage-pill">{{ r.current_stage }}</span></div>
+      <div>
+        <div class="mini-progress"><span style="width: {{ r.pct_complete }}%;"></span></div>
+        <div class="mini-progress-label">{{ r.pct_complete }}% complete</div>
+      </div>
+      <div class="client-row-meta">
+        <div class="meta-block"><span class="meta-label">Renewal</span><span class="meta-value">{{ r.renewal_date or '—' }}</span></div>
+        <div class="meta-block"><span class="meta-label">Next</span><span class="meta-value">{{ r.next_milestone }}</span></div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

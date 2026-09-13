@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Skills Registry · CoS v2{% endblock %}
+
+{% block content %}
+<div class="workspace-page matrix-page">
+  <section class="workspace-header">
+    <div>
+      <div class="workspace-kicker">Reference view</div>
+      <h1>Skills Registry</h1>
+      <p class="workspace-subtitle">A complete portal × stage map for coverage planning, backlog visibility, and live skill tracking.</p>
+    </div>
+    <div class="legend-box">
+      <div class="legend-item"><span class="legend-dot live"></span>Live</div>
+      <div class="legend-item"><span class="legend-dot planned"></span>Planned</div>
+      <div class="legend-item"><span class="legend-dot inactive"></span>Inactive</div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="panel-card matrix-panel">
+      <div class="panel-header">
+        <div>
+          <div class="section-eyebrow">Coverage matrix</div>
+          <h2>Portal by stage</h2>
+        </div>
+      </div>
+      <div class="registry-matrix-wrap">
+        <table class="registry-matrix">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Accounts</th>
+              {% for portal in PORTALS %}
+              {% set pmeta = PORTAL_META[portal] %}
+              <th style="color: {{ pmeta.color }}">{{ portal }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for stage in STAGES %}
+            {% set s_slug = stage_to_slug(stage) %}
+            <tr>
+              <td class="matrix-stage-cell"><a href="{{ url_for('stage', slug=s_slug) }}">{{ stage }}</a></td>
+              <td class="matrix-count-cell">{{ stage_counts.get(stage, 0) or '—' }}</td>
+              {% for portal in PORTALS %}
+              {% set pmeta = PORTAL_META[portal] %}
+              <td>
+                {% if stage in pmeta.stages %}
+                  {% set skills_here = portal_skills.get(portal, {}).get(stage, []) %}
+                  {% if skills_here %}
+                    <div class="matrix-skill-stack">
+                    {% for skill in skills_here %}
+                      {% if skill.url %}
+                        <a href="{{ skill.url }}" target="_blank" class="matrix-skill live">{{ skill.name }}</a>
+                      {% else %}
+                        <div class="matrix-skill planned">{{ skill.name }}</div>
+                      {% endif %}
+                    {% endfor %}
+                    </div>
+                  {% else %}
+                    <span class="matrix-inactive-mark">·</span>
+                  {% endif %}
+                {% else %}
+                  <span class="matrix-inactive-mark">—</span>
+                {% endif %}
+              </td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

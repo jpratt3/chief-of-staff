@@ -1,0 +1,62 @@
+{
+  "_meta": {
+    "description": "Carrier loss-run routing table. Maps a carrier group to the sub-companies that write under it, and each sub-company to the mailbox or portal that services loss-run requests. Copy to loss_run_carriers.json — the real file is gitignored because it holds several hundred named carrier claims contacts.",
+    "group_company": "The canonical carrier group. The extraction engine resolves whatever appears on a binder to one of these.",
+    "sub_companies": "Paper-writing entities that roll up to the group. A binder naming any of these resolves to the group.",
+    "coverage": "Which line this contact services, or 'All'.",
+    "primary_email": "Where the request goes. Empty when the carrier is portal-only.",
+    "portal_link": "Carrier portal, when one exists. The Loss Run skill surfaces this instead of drafting an email."
+  },
+  "carriers": {
+    "Example Mutual": {
+      "group_company": "Example Mutual",
+      "sub_companies": [
+        "Example Mutual Insurance Co",
+        "Example Mutual Specialty (Online Access)"
+      ],
+      "contacts": [
+        {
+          "sub_company": "Example Mutual Insurance Co",
+          "coverage": "All",
+          "office": "Chicago",
+          "primary_email": "lossruns@example-mutual.example.com",
+          "secondary_email": "claims@example-mutual.example.com",
+          "portal_link": ""
+        },
+        {
+          "sub_company": "Example Mutual Specialty (Online Access)",
+          "coverage": "All",
+          "office": "National",
+          "primary_email": "",
+          "secondary_email": "Check online first; email only if unavailable",
+          "portal_link": "https://portal.example-mutual.example.com"
+        }
+      ]
+    },
+    "Northgate Casualty": {
+      "group_company": "Northgate Casualty",
+      "sub_companies": [
+        "Northgate Casualty Company",
+        "Northgate Indemnity"
+      ],
+      "contacts": [
+        {
+          "sub_company": "Northgate Casualty Company",
+          "coverage": "Property",
+          "office": "Atlanta",
+          "primary_email": "property.lossruns@northgate.example.com",
+          "secondary_email": "",
+          "portal_link": ""
+        },
+        {
+          "sub_company": "Northgate Casualty Company",
+          "coverage": "Casualty",
+          "office": "Atlanta",
+          "primary_email": "casualty.lossruns@northgate.example.com",
+          "secondary_email": "",
+          "portal_link": ""
+        }
+      ]
+    }
+  }
+}

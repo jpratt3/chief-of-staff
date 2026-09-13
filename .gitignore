@@ -1,0 +1,108 @@
+# ---------------------------------------------------------------------------
+# ALLOWLIST .gitignore — denies everything by default.
+#
+# Nothing enters this repo unless a rule below explicitly re-includes it.
+# A denylist ("ignore these secrets") fails open: one unanticipated filename
+# walks straight through. This fails closed instead.
+#
+# To add a new file type, add a `!` rule. Always run `git status` and read it
+# before committing.
+# ---------------------------------------------------------------------------
+
+# Deny everything.
+*
+
+# Re-include directories so git can descend into them.
+!*/
+
+# --- Source ---
+!*.py
+!*.html
+!*.css
+!*.js
+
+# --- Docs ---
+!*.md
+
+# --- Config ---
+!*.json
+!.env.example
+
+# --- Project files ---
+!.gitignore
+!requirements.txt
+!*.bat
+!LICENSE
+
+# ---------------------------------------------------------------------------
+# Carve-outs: real data that must NEVER be committed, even though the
+# extension rules above would otherwise allow it.
+# ---------------------------------------------------------------------------
+
+# Real client book and settings. Only the *.example.json versions ship.
+config/clients.json
+config/settings.json
+data/loss_run_carriers.json
+
+# Any backup, anywhere.
+*.bak
+*.backup
+*.orig
+*~
+
+# Runtime state, scans, and generated output.
+data/state.json*
+data/latest_*.json
+data/scan_*.json
+data/completions.json
+data/stage_responses.json
+data/prev_work_items.json
+data/logs/
+data/outputs/
+outputs/
+uploads/
+binders/
+workbook/
+
+# Source documents of any kind.
+*.xlsx
+*.xlsm
+*.xls
+*.csv
+*.pdf
+*.docx
+*.doc
+*.pptx
+*.ppt
+*.msg
+*.eml
+
+# Secrets.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+token*.json
+credentials*.json
+
+# Python.
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+
+# Editors / OS.
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Working file for the public-release prep. Not for publication.
+SANITIZATION.md

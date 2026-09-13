@@ -1,0 +1,19 @@
+{
+  "Northbridge": {
+    "username": "meridian.svc",
+    "password": "nb-demo-7741",
+    "totp_secret": "JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP"
+  },
+  "Harborstone": {
+    "username": "meridian.svc",
+    "password": "hs-demo-2208"
+  },
+  "Bluehaven": {
+    "username": "meridian.svc",
+    "password": "bh-demo-5510"
+  },
+  "Redstone": {
+    "username": "meridian.svc",
+    "password": "rs-demo-9013"
+  }
+}

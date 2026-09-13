@@ -1,0 +1,20 @@
+{
+  "Renewal Preparation": {
+    "1": "/skills/header-updates",
+    "3": "/skills/ecp-reviewer",
+    "4": "/skills/home-state-assigner",
+    "5": "/skills/renewal-kickoff",
+    "6": "/skills/strategy-scheduler",
+    "7": "/skills/strategy-deck",
+    "8": "/skills/team-confirmer",
+    "9": "/skills/loss-run",
+    "10": "/skills/exposure-request",
+    "11": "/skills/exposure-request"
+  },
+  "RSM": {
+    "2": "/skills/rsm"
+  },
+  "Invoice": {
+    "3": "/skills/invoicing-assistant"
+  }
+}

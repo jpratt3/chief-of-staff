@@ -1,0 +1,45 @@
+{%- extends "base.html" -%}
+{%- block title -%}ECP Reviewer · CoS v2{%- endblock -%}
+{%- block content -%}
+<div class="stage-page">
+  <div class="stage-page-header">
+    <div class="stage-page-title">
+      <h1>ECP Reviewer</h1>
+      <span class="stage-window-label">Document Review · Task #3</span>
+    </div>
+  </div>
+  <p style="color:var(--text-soft);margin:0 0 24px;font-size:14px;">Upload the prior year ECP form. The skill extracts carrier and state info and generates an email bullet for the exposure request.</p>
+
+  <div class="skill-shell">
+    <div class="skill-form-panel">
+      <div class="skill-field">
+        <label class="skill-label">Client</label>
+        <select id="client_name" class="stage-override-select" style="width:100%;padding:10px;">
+          <option value="">— Select client —</option>
+          {% for c in clients %}<option>{{ c }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="skill-field">
+        <label class="skill-label">Prior Year ECP Form (PDF)</label>
+        <input id="ecp_file" type="file" accept=".pdf" class="skill-input">
+      </div>
+      <button class="skill-run-btn" onclick="runECP()">Review ECP</button>
+    </div>
+    <div class="skill-result-panel" id="result" style="display:none;">
+      <div class="skill-result-header">
+        <strong>ECP Review</strong>
+        <button class="skill-copy-btn" onclick="copyText('ecp_bullet')">Copy Bullet</button>
+      </div>
+      <div id="ecp_meta" class="skill-info-box"></div>
+      <textarea id="ecp_bullet" class="skill-draft-box" rows="4"></textarea>
+    </div>
+  </div>
+</div>
+<script>
+function copyText(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.value || el.innerText);
+  showMiniToast('Copied');
+}
+</script>
+{%- endblock -%}

@@ -1,0 +1,87 @@
+{
+  "_comment": "Stage keyword lists for inference_engine.py stage detection. Keys must match canonical stage names in client_resolver.py STAGE_HINT_PATTERNS and workbook_writes.py STANDARD_STAGE_ORDER. Values are scanned against email subject + body_preview and calendar event subject + body_preview. Keep conservative — only add a keyword if it is an unambiguous signal for that stage.",
+  "Renewal Preparation": [
+    "renewal prep",
+    "renewal preparation",
+    "kick off",
+    "kickoff",
+    "kicking off",
+    "exposure request",
+    "exposure spreadsheet",
+    "loss data",
+    "loss summary",
+    "work comp mod",
+    "ism",
+    "internal strategy meeting",
+    "submission header",
+    "ams",
+    "home state assignment",
+    "ecp form",
+    "surplus lines"
+  ],
+  "RSM": [
+    "rsm",
+    "renewal strategy meeting",
+    "placement strategy",
+    "placement strategy letter",
+    "psl",
+    "benchmarking",
+    "lpm",
+    "flood zone"
+  ],
+  "Submission": [
+    "submission",
+    "submit",
+    "marketplace",
+    "quote due date",
+    "vehicles schedule",
+    "auto id"
+  ],
+  "Proposal": [
+    "proposal",
+    "ccc",
+    "cost and coverage comparison",
+    "quotes",
+    "marketing summary",
+    "transparency",
+    "disclosure",
+    "t&d",
+    "pdm",
+    "concurrency review",
+    "premium financing",
+    "certificate report"
+  ],
+  "Bind": [
+    "bind order",
+    "bind",
+    "binding",
+    "binder",
+    "cbi",
+    "advise placement to bind",
+    "obtain bind",
+    "post bind update",
+    "post-bind update"
+  ],
+  "Invoice": [
+    "invoice",
+    "invoicing",
+    "premium allocation",
+    "premium invoice",
+    "finalize invoice"
+  ],
+  "Post Binding": [
+    "post bind",
+    "post-bind",
+    "post binding",
+    "certificate system",
+    "certificate",
+    "policy transmittal",
+    "ptl",
+    "subjectivit",
+    "deliver polic",
+    "policy review",
+    "endorsement",
+    "poi",
+    "point of insurance"
+  ]
+}

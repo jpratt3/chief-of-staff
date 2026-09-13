@@ -1,0 +1,204 @@
+{
+  "_meta": {
+    "description": "Chief of Staff client configuration. Single source of truth for client names, engagements, renewal schedules, and role assignments. Copy to clients.json and fill in with real values — clients.json is gitignored.",
+    "version": "1.0",
+    "user_email": "you@yourbrokerage.com",
+    "user_default_role": "AR",
+    "show_all_workflow_tasks": true,
+    "non_renewal_types": [
+      "COI / Certificate Request",
+      "Endorsement",
+      "Billing / Invoice",
+      "Claim",
+      "Audit",
+      "Policy Correction",
+      "Other"
+    ],
+    "inactive_folders": [
+      "Placeholder"
+    ],
+    "inactive_notes": "Folders listed here are excluded from all processing.",
+    "billing_ids": "Per-client billing identifiers used by the Invoicing Assistant. cn = client number, the string 'CN' plus 8 digits. rmb = list of billing IDs, each a 12-digit id held as a string so leading digits and length are preserved; an account can carry more than one.",
+    "roles": "ao_ce = Account Officer / Client Executive. ae = Account Executive. ar = Account Representative. Each carries a name and an email; the inference engine treats mail from these addresses as team-internal signal rather than client signal."
+  },
+  "clients": [
+    {
+      "folder_name": "Northwind",
+      "display_name": "Northwind Foods",
+      "cn": "CN00000001",
+      "rmb": [
+        "100000000001"
+      ],
+      "active": true,
+      "user_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "Single-track account — one engagement, one renewal date.",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Northwind Foods Inc a cooperative",
+          "project_name": "08/31/2026 Renewal",
+          "renewal_date": "08/31/2026",
+          "primary": true,
+          "stage_dates": {
+            "Renewal Preparation": "02/02/2026",
+            "RSM": "04/07/2026",
+            "Submission": "06/24/2026",
+            "Proposal": "07/22/2026",
+            "Bind": "08/31/2026",
+            "Invoice": "08/31/2026",
+            "Post Binding": "09/10/2026"
+          }
+        }
+      ],
+      "aliases": [
+        "Northwind",
+        "Northwind Foods",
+        "NWF"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "First Last",
+          "email": "first.last@yourbrokerage.com"
+        },
+        "ae": {
+          "name": "First Last",
+          "email": "first.last@yourbrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@yourbrokerage.com"
+        }
+      }
+    },
+    {
+      "folder_name": "Vantage",
+      "display_name": "Vantage",
+      "cn": "CN00000002",
+      "rmb": [
+        "200000000001",
+        "200000000002"
+      ],
+      "active": true,
+      "user_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "Parallel-track account. Three coverage programs on three different renewal dates — this is the shape a spreadsheet handles badly and the reason the tracker keys on engagement rather than client.",
+      "engagements": [
+        {
+          "label": "P&C",
+          "legal_name": "Vantage Technologies (P&C)",
+          "project_name": "12/18/2026 Renewal (P&C)",
+          "renewal_date": "12/18/2026",
+          "primary": true,
+          "stage_dates": {
+            "Renewal Preparation": "07/06/2026",
+            "RSM": "09/19/2026",
+            "Submission": "08/10/2026",
+            "Proposal": "12/04/2026",
+            "Bind": "12/18/2026",
+            "Invoice": "12/18/2026",
+            "Post Binding": "12/28/2026"
+          }
+        },
+        {
+          "label": "ML + Cyber",
+          "legal_name": "Vantage Technologies (ML + Cyber)",
+          "project_name": "01/13/2026 Renewal (ML + Cyber)",
+          "renewal_date": "01/13/2026",
+          "primary": false,
+          "stage_dates": {
+            "Renewal Preparation": "08/01/2025",
+            "RSM": "10/15/2025",
+            "Submission": "10/30/2025",
+            "Proposal": "12/30/2025",
+            "Bind": "01/13/2026",
+            "Invoice": "01/13/2026",
+            "Post Binding": "01/23/2026"
+          }
+        },
+        {
+          "label": "Intl",
+          "legal_name": "Vantage Technologies (Intl)",
+          "project_name": "08/17/2026 Renewal (Intl)",
+          "renewal_date": "08/17/2026",
+          "primary": false,
+          "stage_dates": {
+            "Renewal Preparation": "03/05/2026",
+            "RSM": "05/19/2026",
+            "Submission": "06/03/2026",
+            "Proposal": "08/03/2026",
+            "Bind": "08/17/2026",
+            "Invoice": "08/17/2026",
+            "Post Binding": "08/27/2026"
+          }
+        }
+      ],
+      "aliases": [
+        "Vantage"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "First Last",
+          "email": "first.last@yourbrokerage.com"
+        },
+        "ae": {
+          "name": "First Last",
+          "email": "first.last@yourbrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@yourbrokerage.com"
+        }
+      }
+    },
+    {
+      "folder_name": "Ironclad",
+      "display_name": "Ironclad",
+      "cn": "CN00000003",
+      "rmb": [
+        "300000000001"
+      ],
+      "active": true,
+      "user_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "Aliases matter: mail arrives under several trading entity names that all resolve to one client folder.",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Ironclad Trading LLC",
+          "project_name": "01/16/2026 Renewal",
+          "renewal_date": "01/16/2026",
+          "primary": true,
+          "stage_dates": {
+            "Renewal Preparation": "07/20/2025",
+            "RSM": "10/01/2025",
+            "Submission": "11/05/2025",
+            "Proposal": "12/19/2025",
+            "Bind": "01/16/2026",
+            "Invoice": "01/16/2026",
+            "Post Binding": "01/26/2026"
+          }
+        }
+      ],
+      "aliases": [
+        "Ironclad",
+        "Ironclad Trading",
+        "Ironclad Holdings"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "First Last",
+          "email": "first.last@yourbrokerage.com"
+        },
+        "ae": {
+          "name": "First Last",
+          "email": "first.last@yourbrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@yourbrokerage.com"
+        }
+      }
+    }
+  ]
+}

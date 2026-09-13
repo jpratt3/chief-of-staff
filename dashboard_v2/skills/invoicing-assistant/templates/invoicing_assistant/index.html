@@ -1,0 +1,633 @@
+{%- extends "base.html" -%}
+{%- block title -%}Invoicing Assistant · CoS v2{%- endblock -%}
+
+{%- block head -%}
+<style>
+  .iv-steps { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .iv-step { display: inline-flex; align-items: center; gap: 8px; padding: 7px 15px;
+             border-radius: 999px; font-size: 12px; font-weight: 600;
+             background: white; border: 1px solid var(--line); color: var(--muted); }
+  .iv-step .iv-step-num { width: 18px; height: 18px; border-radius: 50%; display: grid;
+             place-items: center; font-size: 11px; background: var(--line-soft); color: var(--text-soft); }
+  .iv-step.active { border-color: var(--accent); color: var(--accent); box-shadow: 0 1px 4px rgba(26,35,69,.07); }
+  .iv-step.active .iv-step-num { background: var(--accent); color: white; }
+  .iv-step.done { color: var(--green); border-color: #b7e4c7; }
+  .iv-step.done .iv-step-num { background: #d8f3dc; color: var(--green); }
+
+  .iv-drop { display: block; border: 2px dashed var(--line); border-radius: var(--radius-sm);
+             padding: 34px 20px; text-align: center; cursor: pointer; background: var(--panel);
+             transition: .15s; }
+  .iv-drop:hover, .iv-drop.drag-over { border-color: var(--accent); background: var(--accent-soft); }
+  .iv-drop input[type=file] { display: none; }
+  .iv-drop-title { font-size: 14px; font-weight: 700; color: var(--accent); }
+  .iv-drop-sub { font-size: 12px; color: var(--text-soft); margin-top: 5px; }
+
+  .iv-file-list { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+  .iv-file-row { display: flex; align-items: center; gap: 10px; padding: 7px 12px;
+             border-radius: 10px; background: var(--panel); border: 1px solid var(--line-soft); font-size: 12.5px; }
+  .iv-file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
+  .iv-file-remove { cursor: pointer; color: var(--red); font-weight: 700; font-size: 15px; line-height: 1;
+             background: none; border: none; padding: 0 2px; }
+
+  /* Client identity strip — CN and RMB ride along with every figure below. */
+  .iv-idbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
+  .iv-id { display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px; border-radius: 999px;
+             background: white; border: 1px solid var(--line); font-size: 12px; color: var(--text); }
+  .iv-id b { font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+  .iv-id.missing { background: #fdf6e7; border-color: #eddab0; color: #7a5b12; }
+
+  /* Per-binder card */
+  .iv-card { background: white; border: 1px solid var(--line); border-radius: var(--radius-sm);
+             padding: 18px 20px; margin-bottom: 14px; box-shadow: var(--shadow); }
+  .iv-card-head { display: flex; justify-content: space-between; align-items: flex-start;
+             gap: 14px; flex-wrap: wrap; margin-bottom: 12px; }
+  .iv-card-title { font-size: 14px; font-weight: 700; color: var(--text-strong); }
+  .iv-card-sub { font-size: 12px; color: var(--text-soft); margin-top: 3px; }
+  .iv-card-total { text-align: right; }
+  .iv-card-total .iv-amount { font-size: 19px; font-weight: 700; color: var(--text-strong); }
+  .iv-card-total .iv-amount-label { font-size: 10px; letter-spacing: .07em;
+             text-transform: uppercase; color: var(--muted); }
+
+  .iv-lines { width: 100%; border-collapse: collapse; }
+  .iv-lines th { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+             text-align: left; padding: 4px 8px; font-weight: 700; }
+  .iv-lines td { padding: 3px 8px; border-top: 1px solid var(--line-soft); }
+  .iv-lines tr.iv-sum td { border-top: 2px solid var(--line); font-weight: 700; }
+  .iv-in { width: 100%; padding: 5px 8px; border: 1px solid var(--line); border-radius: 7px;
+             font-size: 12.5px; font-family: var(--font); color: var(--text); background: white; }
+  .iv-in:focus { outline: none; border-color: var(--accent); }
+  .iv-in.extracted { background: var(--accent-soft); border-color: #d0d8f8; }
+  .iv-in.blank { background: #fdf6e7; border-color: #eddab0; }
+  .iv-in.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .iv-kind { font-size: 10px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+  .iv-line-remove { background: none; border: none; color: var(--red); cursor: pointer;
+             font-size: 15px; line-height: 1; padding: 0 4px; }
+
+  .iv-flag { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px;
+             font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .iv-flag.ok { background: #d8f3dc; color: #1a6630; }
+  .iv-flag.warn { background: #fdf6e7; color: #7a5b12; }
+  .iv-flag.bad { background: #fdf0f0; color: #8f3a3a; }
+  .iv-note-line { font-size: 11.5px; color: var(--text-soft); margin-top: 8px; line-height: 1.6; }
+
+  /* Placement totals */
+  .iv-totals { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
+  @media (max-width: 900px) { .iv-totals { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  .iv-total-card { background: white; border: 1px solid var(--line); border-radius: var(--radius-sm);
+             padding: 16px 18px; box-shadow: var(--shadow); }
+  .iv-total-label { font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+  .iv-total-value { font-size: 22px; font-weight: 700; color: var(--text-strong); margin-top: 5px;
+             font-variant-numeric: tabular-nums; }
+  .iv-total-sub { font-size: 11.5px; color: var(--text-soft); margin-top: 3px; }
+
+  .iv-btn-ghost { padding: 10px 18px; border: 1px solid var(--line); border-radius: 10px;
+             background: white; font-size: 13px; font-weight: 600; color: var(--text-soft);
+             cursor: pointer; font-family: var(--font); }
+  .iv-btn-ghost:hover { color: var(--accent); border-color: var(--accent); }
+  .iv-btn-mini { padding: 3px 10px; border: 1px solid var(--line); border-radius: 7px; background: white;
+             font-size: 11px; font-weight: 600; color: var(--text-soft); cursor: pointer; font-family: var(--font); }
+  .iv-btn-mini:hover { color: var(--accent); border-color: var(--accent); }
+  .iv-actions { display: flex; gap: 10px; align-items: center; margin: 20px 0; flex-wrap: wrap; }
+  .iv-actions .skill-run-btn { width: auto; margin-top: 0; padding: 11px 22px; }
+
+  .iv-note { border-radius: 10px; padding: 11px 14px; font-size: 12.5px; margin-bottom: 14px; display: none; }
+  .iv-note.visible { display: block; }
+  .iv-note.warn { background: #fdf6e7; border: 1px solid #eddab0; color: #7a5b12; }
+  .iv-note.error { background: #fdf0f0; border: 1px solid #f0cccc; color: #8f3a3a; }
+
+  .iv-spinner { display: none; align-items: center; gap: 10px; color: var(--accent);
+             font-size: 13px; font-weight: 600; }
+  .iv-spinner.visible { display: inline-flex; }
+  .iv-spinner i { width: 15px; height: 15px; border: 2px solid var(--accent-soft);
+             border-top-color: var(--accent); border-radius: 50%; animation: ivspin .7s linear infinite; }
+  @keyframes ivspin { to { transform: rotate(360deg); } }
+</style>
+{%- endblock -%}
+
+{%- block content -%}
+<div class="stage-page">
+
+  <div class="stage-page-header">
+    <div class="stage-page-title">
+      <h1>Invoicing Assistant</h1>
+      <span class="stage-window-label">Invoice · Tasks #1–#3</span>
+    </div>
+  </div>
+  <p style="color:var(--text-soft);margin:0 0 22px;font-size:14px;">
+    Drop in the bound binders for one client. Premium, commission and every tax, fee and
+    surcharge come back as individual lines per binder and as a placement total, with the
+    client's CN and RMB attached.
+  </p>
+
+  <div class="iv-steps">
+    <span class="iv-step active" id="iv-step1-tab"><span class="iv-step-num">1</span>Upload binders</span>
+    <span class="iv-step" id="iv-step2-tab"><span class="iv-step-num">2</span>Review amounts</span>
+  </div>
+
+  <!-- ══ STEP 1 ══════════════════════════════════════════════════════════ -->
+  <div id="iv-step1">
+    <div class="skill-shell">
+      <div class="skill-form-panel">
+        <div class="skill-field">
+          <label class="skill-label">Client</label>
+          <select id="iv-client" class="stage-override-select" style="width:100%;padding:10px;"
+                  onchange="ivClientChanged()">
+            <option value="">— Detect from binders —</option>
+            {% for c in clients %}
+            <option value="{{ c.folder_name }}" data-cn="{{ c.cn }}"
+                    data-rmbs="{{ c.rmb_options | tojson | forceescape }}"
+                    data-name="{{ c.display_name }}">
+              {{ c.display_name }}{% if c.cn %} - {{ c.cn }}{% endif %}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="skill-field">
+          <label class="skill-label">RMB Billing ID</label>
+          <select id="iv-rmb" class="stage-override-select" style="width:100%;padding:10px;"
+                  onchange="ivRmbChanged()">
+            <option value="">— Select a client first —</option>
+          </select>
+        </div>
+
+        <div class="skill-field">
+          <label class="skill-label">Binders</label>
+          <label class="iv-drop" id="iv-drop">
+            <input type="file" id="iv-file-input" multiple accept=".pdf,.PDF">
+            <div class="iv-drop-title">Drop binders here, or click to browse</div>
+            <div class="iv-drop-sub">PDF &middot; several at once</div>
+          </label>
+          <div class="iv-file-list" id="iv-file-list"></div>
+        </div>
+
+        <button class="skill-run-btn" id="iv-upload-btn" onclick="ivUpload()" disabled>
+          Extract Billing Detail
+        </button>
+        <div class="iv-spinner" id="iv-upload-spinner" style="margin-top:12px;">
+          <i></i> Reading binders&hellip;
+        </div>
+        <div class="iv-note error" id="iv-upload-error"></div>
+      </div>
+
+      <div class="skill-result-panel">
+        <div class="skill-result-header"><strong>How this works</strong></div>
+        <div class="skill-info-box">
+          Each binder is scanned for its <strong>billing block</strong> — the page carrying premium,
+          commission and charges — and read with layout preserved, so a label keeps the number
+          printed beside it even inside a column table.
+        </div>
+        <p style="font-size:13px;color:var(--text-soft);line-height:1.65;margin:0;">
+          Every figure is checked against the total the binder itself prints. A row that reconciles
+          is marked <span style="color:var(--green);font-weight:600;">green</span>; one that does not
+          says by how much it is out, rather than quietly balancing.
+        </p>
+        <p style="font-size:13px;color:var(--text-soft);line-height:1.65;margin:14px 0 0;">
+          Commission is taken as printed. Where only a rate is given, it is applied to the premium
+          and marked <em>computed</em>. Every cell is editable before you export.
+        </p>
+        <p style="font-size:13px;color:var(--text-soft);line-height:1.65;margin:14px 0 0;">
+          CN and RMB come from <strong>config/clients.json</strong>; a blank one is flagged amber so
+          it is fixed in config rather than typed into an invoice request.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 2 ══════════════════════════════════════════════════════════ -->
+  <div id="iv-step2" style="display:none;">
+    <div class="iv-note warn" id="iv-rejected-notice"></div>
+    <div class="iv-idbar" id="iv-idbar2"></div>
+
+    <div class="stage-section">
+      <div class="stage-section-header"><h2>Placement Total</h2></div>
+      <div class="iv-totals" id="iv-totals"></div>
+    </div>
+
+    <div class="stage-section">
+      <div class="stage-section-header">
+        <h2>Per Binder</h2>
+        <span class="stage-count-badge" id="iv-count-badge">0</span>
+      </div>
+      <div id="iv-cards"></div>
+    </div>
+
+    <div class="iv-actions">
+      <button class="skill-run-btn" onclick="ivCopySummary()">Copy Summary</button>
+      <button class="iv-btn-ghost" onclick="ivExport()">Export CSV</button>
+      <button class="iv-btn-ghost" onclick="ivReset()">Start Over</button>
+    </div>
+
+    <div class="stage-section" id="iv-summary-wrap" style="display:none;">
+      <div class="stage-section-header"><h2>Invoice Request Summary</h2></div>
+      <textarea class="skill-draft-box" id="iv-summary" rows="18"></textarea>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── State ─────────────────────────────────────────────────────────────────
+let ivFiles  = [];   // File objects the user picked
+let ivRows   = [];   // rows returned by /upload-batch, edited in place
+let ivClient = { client: '', cn: '', rmb: '', rmb_options: [], missing: ['CN', 'RMB'] };
+
+const ivEsc = s => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+const ivNum = v => { const n = parseFloat(String(v ?? '').replace(/[^0-9.\-]/g, '')); return isNaN(n) ? 0 : n; };
+const ivMoney = v => ivNum(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+function ivShortName(name) {
+  const base = (name || '').replace(/\.[^.]+$/, '');
+  return base.length > 54 ? base.slice(0, 52) + '…' : base;
+}
+
+function ivNote(id, message, visible) {
+  const el = document.getElementById(id);
+  el.textContent = message || '';
+  el.classList.toggle('visible', !!visible);
+}
+
+function ivSpin(id, on) { document.getElementById(id).classList.toggle('visible', on); }
+
+function ivSetStep(n) {
+  [1, 2].forEach(i => {
+    document.getElementById(`iv-step${i}`).style.display = i === n ? '' : 'none';
+    const tab = document.getElementById(`iv-step${i}-tab`);
+    tab.className = 'iv-step' + (i < n ? ' done' : i === n ? ' active' : '');
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Client identity ───────────────────────────────────────────────────────
+// The chips only exist on the review step: step 1 has the two dropdowns, which
+// already say the client, its CN and the chosen RMB.
+function ivRenderIds() {
+  const options = ivClient.rmb_options || [];
+  const head = `
+    <span class="iv-id"><b>Client</b> ${ivEsc(ivClient.client) || '—'}</span>
+    <span class="iv-id ${ivClient.cn ? '' : 'missing'}"><b>CN</b> ${ivEsc(ivClient.cn) || 'not in config'}</span>`;
+
+  // The picker travels with the chips — the client is often only resolved once
+  // the binders have been read.
+  document.getElementById('iv-idbar2').innerHTML = head + (options.length
+    ? `<span class="iv-id ${ivClient.rmb ? '' : 'missing'}"><b>RMB</b>
+         <select id="iv-rmb2" onchange="ivRmbChanged2()"
+                 style="border:none;background:none;font:inherit;color:inherit;cursor:pointer;">
+           ${options.length > 1 ? '<option value="">choose…</option>' : ''}
+           ${options.map(id => `<option value="${ivEsc(id)}"${id === ivClient.rmb ? ' selected' : ''}>${ivEsc(id)}</option>`).join('')}
+         </select></span>`
+    : `<span class="iv-id missing"><b>RMB</b> not in config</span>`);
+}
+
+function ivRmbChanged2() {
+  ivClient.rmb = document.getElementById('iv-rmb2').value;
+  const primary = document.getElementById('iv-rmb');
+  if (primary && !primary.disabled) primary.value = ivClient.rmb;
+  ivRenderIds();
+}
+
+function ivRenderRmbSelect() {
+  const sel = document.getElementById('iv-rmb');
+  const options = ivClient.rmb_options || [];
+  if (!options.length) {
+    sel.innerHTML = `<option value="">${ivClient.client ? '— None in config —' : '— Select a client first —'}</option>`;
+    sel.disabled = true;
+    return;
+  }
+  sel.disabled = false;
+  const head = options.length > 1 ? '<option value="">— Select RMB —</option>' : '';
+  sel.innerHTML = head + options.map(id =>
+    `<option value="${ivEsc(id)}">${ivEsc(id)}</option>`).join('');
+  sel.value = ivClient.rmb || (options.length === 1 ? options[0] : '');
+  ivClient.rmb = sel.value;
+}
+
+function ivClientChanged() {
+  const sel = document.getElementById('iv-client');
+  const opt = sel.selectedOptions[0];
+  if (!sel.value) {
+    ivClient = { client: '', cn: '', rmb: '', rmb_options: [], missing: ['CN', 'RMB'] };
+  } else {
+    let options = [];
+    try { options = JSON.parse(opt.dataset.rmbs || '[]'); } catch (e) { options = []; }
+    ivClient = {
+      client: opt.dataset.name || '', folder_name: sel.value,
+      cn: opt.dataset.cn || '',
+      rmb: options.length === 1 ? options[0] : '',
+      rmb_options: options,
+      missing: [!opt.dataset.cn && 'CN', !options.length && 'RMB'].filter(Boolean),
+    };
+  }
+  ivRenderRmbSelect();
+  ivRenderIds();
+}
+
+function ivRmbChanged() {
+  ivClient.rmb = document.getElementById('iv-rmb').value;
+  ivRenderIds();
+}
+
+// ── Step 1 · file selection ───────────────────────────────────────────────
+const ivDrop  = document.getElementById('iv-drop');
+const ivInput = document.getElementById('iv-file-input');
+
+ivInput.addEventListener('change', () => { ivAddFiles(Array.from(ivInput.files)); ivInput.value = ''; });
+ivDrop.addEventListener('dragover', e => { e.preventDefault(); ivDrop.classList.add('drag-over'); });
+ivDrop.addEventListener('dragleave', () => ivDrop.classList.remove('drag-over'));
+ivDrop.addEventListener('drop', e => {
+  e.preventDefault(); ivDrop.classList.remove('drag-over');
+  ivAddFiles(Array.from(e.dataTransfer.files));
+});
+
+function ivAddFiles(files) {
+  const seen = new Set(ivFiles.map(f => f.name));
+  files.forEach(f => { if (!seen.has(f.name)) ivFiles.push(f); });
+  ivRenderFiles();
+}
+
+function ivRemoveFile(i) { ivFiles.splice(i, 1); ivRenderFiles(); }
+
+function ivRenderFiles() {
+  const list = document.getElementById('iv-file-list');
+  document.getElementById('iv-upload-btn').disabled = ivFiles.length === 0;
+  list.innerHTML = ivFiles.map((f, i) => `
+    <div class="iv-file-row">
+      <span class="iv-file-name" title="${ivEsc(f.name)}">${ivEsc(f.name)}</span>
+      <button class="iv-file-remove" onclick="ivRemoveFile(${i})" title="Remove">&times;</button>
+    </div>`).join('');
+}
+
+// ── Step 1 → 2 · extract ──────────────────────────────────────────────────
+async function ivUpload() {
+  if (!ivFiles.length) return;
+  ivNote('iv-upload-error', '', false);
+  document.getElementById('iv-upload-btn').disabled = true;
+  ivSpin('iv-upload-spinner', true);
+
+  const form = new FormData();
+  ivFiles.forEach(f => form.append('binders', f));
+
+  try {
+    const data = await postForm('/skills/invoicing-assistant/upload-batch', form);
+    ivSpin('iv-upload-spinner', false);
+    if (!data.ok) {
+      ivNote('iv-upload-error', data.error || 'Extraction failed.', true);
+      document.getElementById('iv-upload-btn').disabled = false;
+      return;
+    }
+    ivRows = data.rows || [];
+    // A client picked by hand wins; otherwise take the one the binders resolved to.
+    if (!document.getElementById('iv-client').value && data.client && data.client.client) {
+      ivClient = data.client;
+      const sel = document.getElementById('iv-client');
+      const match = [...sel.options].find(o => o.dataset.name === data.client.client);
+      if (match) sel.value = match.value;
+      ivRenderRmbSelect();
+    }
+    ivRenderIds();
+    ivRender();
+    ivNote('iv-rejected-notice',
+           (data.rejected || []).length
+             ? `${data.rejected.length} file(s) skipped — binders must be PDF: ${data.rejected.join(', ')}`
+             : '',
+           (data.rejected || []).length > 0);
+    ivSetStep(2);
+    showMiniToast(`Read ${ivRows.length} binder${ivRows.length !== 1 ? 's' : ''}`);
+  } catch (err) {
+    ivSpin('iv-upload-spinner', false);
+    ivNote('iv-upload-error', 'Request failed: ' + err.message, true);
+    document.getElementById('iv-upload-btn').disabled = false;
+  }
+}
+
+// ── Step 2 · render ───────────────────────────────────────────────────────
+function ivFlag(r) {
+  if (r.error) return `<span class="iv-flag bad">${ivEsc(r.error)}</span>`;
+  const rec = r.reconciliation || '';
+  if (rec.startsWith('matches')) return `<span class="iv-flag ok">${ivEsc(rec)}</span>`;
+  if (rec.startsWith('off')) return `<span class="iv-flag bad">${ivEsc(rec)}</span>`;
+  return `<span class="iv-flag warn">${ivEsc(rec || 'no total printed')}</span>`;
+}
+
+function ivLineRow(i, j, line) {
+  return `
+    <tr>
+      <td style="width:44%">
+        <input class="iv-in extracted" value="${ivEsc(line.label)}"
+               oninput="ivEditLine(${i},${j},'label',this.value)"></td>
+      <td style="width:16%" class="iv-kind">${ivEsc(line.kind)}</td>
+      <td style="width:32%">
+        <input class="iv-in num extracted" value="${ivNum(line.amount).toFixed(2)}"
+               oninput="ivEditLine(${i},${j},'amount',this.value)"></td>
+      <td style="width:8%;text-align:right">
+        <button class="iv-line-remove" title="Remove line" onclick="ivRemoveLine(${i},${j})">&times;</button></td>
+    </tr>`;
+}
+
+function ivCardHtml(r, i) {
+  const carrier  = r.carrier_group || r.carrier_raw || '';
+  const coverage = r.coverage_category || '';
+  const bits = [coverage, carrier, r.policy_number, r.effective_date].filter(Boolean).map(ivEsc);
+  const premiumCls = r.premium === null || r.premium === undefined ? 'blank' : 'extracted';
+  const commCls = r.commission_amt === null || r.commission_amt === undefined ? 'blank' : 'extracted';
+
+  const notes = (r.notes || []).map(n => ivEsc(n)).join('<br>');
+  const printed = (r.printed_total !== null && r.printed_total !== undefined)
+    ? `Binder prints ${ivMoney(r.printed_total)}` : 'Binder prints no total';
+
+  return `
+  <div class="iv-card" id="iv-card-${i}">
+    <div class="iv-card-head">
+      <div>
+        <div class="iv-card-title">${ivEsc(ivShortName(r.filename))}</div>
+        <div class="iv-card-sub">${bits.join(' &middot; ') || 'identity not resolved'}</div>
+        <div style="margin-top:8px">${ivFlag(r)}</div>
+      </div>
+      <div class="iv-card-total">
+        <div class="iv-amount" id="iv-total-${i}">${ivMoney(r.total)}</div>
+        <div class="iv-amount-label">binder total</div>
+        <div class="iv-card-sub" style="margin-top:4px">${printed}</div>
+      </div>
+    </div>
+
+    <table class="iv-lines">
+      <thead><tr><th>Line</th><th>Type</th><th style="text-align:right">Amount</th><th></th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span style="font-size:12.5px;font-weight:600;color:var(--text-strong)">Premium</span>
+              <div class="iv-card-sub">${ivEsc(r.premium_basis || 'as printed')}</div></td>
+          <td class="iv-kind">premium</td>
+          <td><input class="iv-in num ${premiumCls}" value="${r.premium === null || r.premium === undefined ? '' : ivNum(r.premium).toFixed(2)}"
+                     oninput="ivEditRow(${i},'premium',this.value)"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><span style="font-size:12.5px;font-weight:600;color:var(--text-strong)">Commission</span>
+              <div class="iv-card-sub">${ivEsc(r.commission_basis || 'not stated')}</div></td>
+          <td><input class="iv-in num ${r.commission_pct === null ? 'blank' : 'extracted'}"
+                     style="width:74px" value="${r.commission_pct === null || r.commission_pct === undefined ? '' : r.commission_pct}"
+                     oninput="ivEditRow(${i},'commission_pct',this.value)"> <span class="iv-kind">%</span></td>
+          <td><input class="iv-in num ${commCls}" value="${r.commission_amt === null || r.commission_amt === undefined ? '' : ivNum(r.commission_amt).toFixed(2)}"
+                     oninput="ivEditRow(${i},'commission_amt',this.value)"></td>
+          <td></td>
+        </tr>
+        ${(r.charges || []).map((line, j) => ivLineRow(i, j, line)).join('')}
+        <tr class="iv-sum">
+          <td>Total billed</td><td class="iv-kind">premium + charges</td>
+          <td style="text-align:right;padding-right:8px;font-variant-numeric:tabular-nums"
+              id="iv-rowtotal-${i}">${ivMoney(r.total)}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top:10px">
+      <button class="iv-btn-mini" onclick="ivAddLine(${i})">+ Add line</button>
+    </div>
+    ${notes ? `<div class="iv-note-line">${notes}</div>` : ''}
+    ${(r.excluded || []).length ? `<div class="iv-note-line">Excluded as already inside the premium:
+        ${(r.excluded || []).map(x => ivEsc(x.label) + ' ' + ivMoney(x.amount)).join('; ')}</div>` : ''}
+  </div>`;
+}
+
+function ivRender() {
+  document.getElementById('iv-count-badge').textContent = ivRows.length;
+  document.getElementById('iv-cards').innerHTML = ivRows.map((r, i) => ivCardHtml(r, i)).join('');
+  ivRetotal();
+}
+
+function ivRetotal() {
+  let premium = 0, commission = 0, charges = 0, total = 0, flagged = 0;
+  ivRows.forEach((r, i) => {
+    const chg = (r.charges || []).reduce((sum, l) => sum + ivNum(l.amount), 0);
+    r.charges_total = Math.round(chg * 100) / 100;
+    r.total = Math.round((ivNum(r.premium) + chg) * 100) / 100;
+    premium    += ivNum(r.premium);
+    commission += ivNum(r.commission_amt);
+    charges    += chg;
+    total      += r.total;
+    if (r.error || r.premium === null || (r.reconciliation || '').startsWith('off')) flagged++;
+    const cell = document.getElementById(`iv-rowtotal-${i}`);
+    if (cell) cell.textContent = ivMoney(r.total);
+    const head = document.getElementById(`iv-total-${i}`);
+    if (head) head.textContent = ivMoney(r.total);
+  });
+
+  const pct = premium ? (commission / premium * 100) : 0;
+  document.getElementById('iv-totals').innerHTML = `
+    <div class="iv-total-card">
+      <div class="iv-total-label">Premium</div>
+      <div class="iv-total-value">${ivMoney(premium)}</div>
+      <div class="iv-total-sub">${ivRows.length} binder${ivRows.length !== 1 ? 's' : ''}</div>
+    </div>
+    <div class="iv-total-card">
+      <div class="iv-total-label">Commission</div>
+      <div class="iv-total-value">${ivMoney(commission)}</div>
+      <div class="iv-total-sub">${premium ? pct.toFixed(2) + '% of premium' : '—'}</div>
+    </div>
+    <div class="iv-total-card">
+      <div class="iv-total-label">Taxes, fees &amp; surcharges</div>
+      <div class="iv-total-value">${ivMoney(charges)}</div>
+      <div class="iv-total-sub">across all binders</div>
+    </div>
+    <div class="iv-total-card">
+      <div class="iv-total-label">Total billed</div>
+      <div class="iv-total-value">${ivMoney(total)}</div>
+      <div class="iv-total-sub">${flagged ? flagged + ' binder(s) need a look' : 'all binders reconcile'}</div>
+    </div>`;
+}
+
+// ── Step 2 · edits ────────────────────────────────────────────────────────
+function ivEditRow(i, field, value) {
+  const r = ivRows[i];
+  if (field === 'premium') {
+    r.premium = value === '' ? null : ivNum(value);
+    // A rate that came off the document still applies to the corrected premium.
+    if (r.commission_pct !== null && r.commission_pct !== undefined && r.commission_basis !== 'stated') {
+      r.commission_amt = Math.round(ivNum(r.premium) * ivNum(r.commission_pct)) / 100;
+      const el = document.querySelector(`#iv-card-${i} input[oninput*="commission_amt"]`);
+      if (el) el.value = ivNum(r.commission_amt).toFixed(2);
+    }
+  } else if (field === 'commission_pct') {
+    r.commission_pct = value === '' ? null : ivNum(value);
+    if (r.commission_pct !== null) {
+      r.commission_amt = Math.round(ivNum(r.premium) * r.commission_pct) / 100;
+      r.commission_basis = 'computed from rate';
+      const el = document.querySelector(`#iv-card-${i} input[oninput*="commission_amt"]`);
+      if (el) el.value = ivNum(r.commission_amt).toFixed(2);
+    }
+  } else if (field === 'commission_amt') {
+    r.commission_amt = value === '' ? null : ivNum(value);
+    r.commission_basis = 'entered by hand';
+  }
+  ivRetotal();
+}
+
+function ivEditLine(i, j, field, value) {
+  const line = ivRows[i].charges[j];
+  line[field] = field === 'amount' ? ivNum(value) : value;
+  ivRetotal();
+}
+
+function ivAddLine(i) {
+  ivRows[i].charges = ivRows[i].charges || [];
+  ivRows[i].charges.push({ label: '', kind: 'fee', amount: 0, page: -1, score: 0, raw: '' });
+  ivRender();
+}
+
+function ivRemoveLine(i, j) {
+  ivRows[i].charges.splice(j, 1);
+  ivRender();
+}
+
+// ── Step 2 · outputs ──────────────────────────────────────────────────────
+function ivPayload() {
+  return {
+    rows: ivRows,
+    client_key: document.getElementById('iv-client').value || ivClient.folder_name || '',
+    display_name: ivClient.client || '',
+    rmb: ivClient.rmb || '',
+  };
+}
+
+async function ivCopySummary() {
+  const data = await postJson('/skills/invoicing-assistant/recap', ivPayload());
+  if (!data.ok) { showMiniToast('Error: ' + data.error); return; }
+  document.getElementById('iv-summary-wrap').style.display = '';
+  const box = document.getElementById('iv-summary');
+  box.value = data.text;
+  box.select();
+  try { document.execCommand('copy'); showMiniToast('Summary copied'); }
+  catch (e) { showMiniToast('Summary ready below'); }
+}
+
+async function ivExport() {
+  const res = await fetch('/skills/invoicing-assistant/export', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(ivPayload()),
+  });
+  if (!res.ok) { showMiniToast('Export failed'); return; }
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = ((ivClient.client || 'placement').replace(/\s+/g, '_')) + '_invoicing.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  showMiniToast('CSV downloaded');
+}
+
+function ivReset() {
+  ivFiles = []; ivRows = [];
+  ivRenderFiles();
+  document.getElementById('iv-upload-btn').disabled = true;
+  document.getElementById('iv-summary-wrap').style.display = 'none';
+  ivNote('iv-rejected-notice', '', false);
+  ivSetStep(1);
+}
+
+ivRenderIds();
+</script>
+{%- endblock -%}

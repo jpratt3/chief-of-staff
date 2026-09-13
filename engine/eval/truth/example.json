@@ -1,0 +1,47 @@
+{
+  "_comment": [
+    "Ground-truth format for the loss-run extraction eval. The real truth sets",
+    "(set1.json, set2.json, set3.json — 80 binders, 400 graded cells) are",
+    "gitignored: their keys are client binder filenames and their values name",
+    "the insureds. This file shows the schema with fictional binders.",
+    "",
+    "Key   = the binder's filename, exactly as it sits in binders/.",
+    "Value = the five graded fields. Each is a LIST of acceptable answers,",
+    "        because some binders genuinely carry more than one defensible one",
+    "        — a package policy naming four policy numbers, a blended",
+    "        D&O/EPL/Fiduciary form, an excess layer where either the fronting",
+    "        carrier or the syndicate is a fair answer.",
+    "",
+    "  insured : matched against insured_resolved",
+    "  policy  : compared ignoring case and punctuation",
+    "  carrier : matched against carrier_group",
+    "  eff     : normalised to MM/DD/YYYY before comparison",
+    "  cov     : exact canonical category",
+    "",
+    "null means 'the binder does not state one', which the engine is expected",
+    "to reproduce rather than invent.",
+    "",
+    "Add a binder here whenever a format breaks, so the fix stays fixed."
+  ],
+  "01.16.2026-27 Ironclad Trading FI Bond Binder.pdf": {
+    "insured": ["Ironclad"],
+    "policy": ["FS F230625 08"],
+    "carrier": ["Great American"],
+    "eff": ["01/16/2026"],
+    "cov": ["Crime"]
+  },
+  "01.31.2026 Primary IMI Binder.pdf": {
+    "insured": ["Ironclad"],
+    "policy": ["01-421-25-43"],
+    "carrier": ["Chubb", "AIG"],
+    "eff": ["01/31/2026"],
+    "cov": ["Professional Liability", "Directors & Officers"]
+  },
+  "D&O 04 $2.5M x $12.5M Excess - Vantage 2025 - Policy Contract.pdf": {
+    "insured": ["Vantage"],
+    "policy": ["NHS902847"],
+    "carrier": ["Lloyds of London", "Starr"],
+    "eff": ["02/09/2025"],
+    "cov": ["Directors & Officers"]
+  }
+}

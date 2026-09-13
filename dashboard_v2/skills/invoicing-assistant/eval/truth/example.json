@@ -1,0 +1,38 @@
+{
+  "_comment": [
+    "Ground-truth format for the Invoicing Assistant's money extraction. The",
+    "real truth set (set1.json, 15 binders) is gitignored — its keys are client",
+    "binder filenames. This file shows the schema with fictional binders.",
+    "",
+    "Four graded numbers per binder:",
+    "  premium        : the stated annual premium",
+    "  commission_pct : broker commission as a percentage, 0 when fee-based",
+    "  charges_total  : taxes + fees + surcharges, summed",
+    "  total          : the total billed amount on the binder",
+    "",
+    "null means 'the binder does not state one', which the engine is expected",
+    "to reproduce rather than invent. A binder that states a total which does",
+    "not equal premium + charges is kept as stated — reconciling it is the",
+    "reviewer's call, not the extractor's.",
+    "",
+    "Add a binder here whenever a format breaks, so the fix stays fixed."
+  ],
+  "2026 Northwind Foods - Property Binder.pdf": {
+    "premium": 84000,
+    "commission_pct": 0,
+    "charges_total": 0,
+    "total": 84000
+  },
+  "2026 Vantage - Cyber Binder.pdf": {
+    "premium": 127500,
+    "commission_pct": 12.5,
+    "charges_total": 3187.5,
+    "total": 130687.5
+  },
+  "2026 Ironclad - Excess Casualty Binder.pdf": {
+    "premium": 245000,
+    "commission_pct": 10,
+    "charges_total": null,
+    "total": 245000
+  }
+}

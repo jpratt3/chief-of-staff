@@ -1,0 +1,54 @@
+{%- extends "base.html" -%}
+{%- block title -%}Header Updates · CoS v2{%- endblock -%}
+{%- block content -%}
+<div class="stage-page">
+  <div class="stage-page-header">
+    <div class="stage-page-title">
+      <h1>Header Updates</h1>
+      <span class="stage-window-label">System Updates · Task #1</span>
+    </div>
+  </div>
+  <p style="color:var(--text-soft);margin:0 0 24px;font-size:14px;">Select the coverage lines renewing this year to generate an AMS header update checklist.</p>
+
+  <div class="skill-shell">
+    <div class="skill-form-panel">
+      <div class="skill-field">
+        <label class="skill-label">Client</label>
+        <select id="client_name" class="stage-override-select" style="width:100%;padding:10px;">
+          <option value="">— Select client —</option>
+          {% for c in clients %}<option>{{ c }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="skill-field">
+        <label class="skill-label">Renewal Year</label>
+        <input id="renewal_year" type="text" class="skill-input" placeholder="e.g. 2026" style="width:120px;">
+      </div>
+      <div class="skill-field">
+        <label class="skill-label">Coverage Lines</label>
+        <div class="skill-checkbox-grid">
+          {% for line in lines %}
+          <label class="skill-check-item">
+            <input type="checkbox" name="line" value="{{ line }}" checked> {{ line }}
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+      <button class="skill-run-btn" onclick="runHeaders()">Generate Header Checklist</button>
+    </div>
+    <div class="skill-result-panel" id="result" style="display:none;">
+      <div class="skill-result-header">
+        <strong>AMS Header Update Checklist</strong>
+        <button class="skill-copy-btn" onclick="copyText('header_note')">Copy</button>
+      </div>
+      <textarea id="header_note" class="skill-draft-box" rows="20"></textarea>
+    </div>
+  </div>
+</div>
+<script>
+function copyText(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.value || el.innerText);
+  showMiniToast('Copied');
+}
+</script>
+{%- endblock -%}

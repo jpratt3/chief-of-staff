@@ -1,0 +1,565 @@
+{%- extends "base.html" -%}
+{%- block title -%}Loss Run Request · CoS v2{%- endblock -%}
+
+{%- block head -%}
+<style>
+  /* Components this skill needs that the shared sheet does not have yet.
+     Everything is built from the v2 tokens so it stays in step with the rest. */
+  .lr-steps { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .lr-step { display: inline-flex; align-items: center; gap: 8px; padding: 7px 15px;
+             border-radius: 999px; font-size: 12px; font-weight: 600;
+             background: white; border: 1px solid var(--line); color: var(--muted); }
+  .lr-step .lr-step-num { width: 18px; height: 18px; border-radius: 50%; display: grid;
+             place-items: center; font-size: 11px; background: var(--line-soft); color: var(--text-soft); }
+  .lr-step.active { border-color: var(--accent); color: var(--accent); box-shadow: 0 1px 4px rgba(26,35,69,.07); }
+  .lr-step.active .lr-step-num { background: var(--accent); color: white; }
+  .lr-step.done { color: var(--green); border-color: #b7e4c7; }
+  .lr-step.done .lr-step-num { background: #d8f3dc; color: var(--green); }
+
+  .lr-drop { display: block; border: 2px dashed var(--line); border-radius: var(--radius-sm);
+             padding: 34px 20px; text-align: center; cursor: pointer; background: var(--panel);
+             transition: .15s; }
+  .lr-drop:hover, .lr-drop.drag-over { border-color: var(--accent); background: var(--accent-soft); }
+  .lr-drop input[type=file] { display: none; }
+  .lr-drop-title { font-size: 14px; font-weight: 700; color: var(--accent); }
+  .lr-drop-sub { font-size: 12px; color: var(--text-soft); margin-top: 5px; }
+
+  .lr-file-list { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+  .lr-file-row { display: flex; align-items: center; gap: 10px; padding: 7px 12px;
+             border-radius: 10px; background: var(--panel); border: 1px solid var(--line-soft); font-size: 12.5px; }
+  .lr-file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
+  .lr-file-remove { cursor: pointer; color: var(--red); font-weight: 700; font-size: 15px; line-height: 1;
+             background: none; border: none; padding: 0 2px; }
+
+  /* Keep the columns at their declared widths and let the wrapper scroll,
+     rather than squeezing the date and carrier cells into ellipsis. */
+  .lr-table { min-width: 1020px; }
+  .lr-cell-input { width: 100%; padding: 6px 9px; border: 1px solid var(--line); border-radius: 7px;
+             font-size: 12.5px; font-family: var(--font); color: var(--text); background: white; }
+  .lr-cell-input:focus { outline: none; border-color: var(--accent); }
+  .lr-cell-input.extracted { background: var(--accent-soft); border-color: #d0d8f8; }
+  .lr-cell-input.manual { background: #fdf6e7; border-color: #eddab0; }
+
+  .lr-conf { display: inline-flex; align-items: center; gap: 6px; font-size: 11px;
+             font-weight: 700; color: var(--text-soft); white-space: nowrap; }
+  .lr-conf-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .lr-conf.high .lr-conf-dot { background: var(--green); }
+  .lr-conf.mid .lr-conf-dot { background: var(--amber); }
+  .lr-conf.low .lr-conf-dot { background: var(--red); }
+
+  .lr-btn-ghost { padding: 10px 18px; border: 1px solid var(--line); border-radius: 10px;
+             background: white; font-size: 13px; font-weight: 600; color: var(--text-soft);
+             cursor: pointer; font-family: var(--font); }
+  .lr-btn-ghost:hover { color: var(--accent); border-color: var(--accent); }
+  .lr-btn-mini { padding: 4px 10px; border: 1px solid var(--line); border-radius: 7px; background: white;
+             font-size: 11px; font-weight: 600; color: var(--text-soft); cursor: pointer; font-family: var(--font); }
+  .lr-btn-mini:hover { color: var(--accent); border-color: var(--accent); }
+  .lr-btn-mini[disabled] { opacity: .5; cursor: wait; }
+
+  .lr-actions { display: flex; gap: 10px; align-items: center; margin-top: 20px; flex-wrap: wrap; }
+  .lr-actions .skill-run-btn { width: auto; margin-top: 0; padding: 11px 22px; }
+
+  .lr-optgrid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
+  @media (max-width: 1100px) { .lr-optgrid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
+  .lr-note { border-radius: 10px; padding: 11px 14px; font-size: 12.5px; margin-bottom: 14px; display: none; }
+  .lr-note.visible { display: block; }
+  .lr-note.warn { background: #fdf6e7; border: 1px solid #eddab0; color: #7a5b12; }
+  .lr-note.error { background: #fdf0f0; border: 1px solid #f0cccc; color: #8f3a3a; }
+
+  .lr-spinner { display: none; align-items: center; gap: 10px; color: var(--accent);
+             font-size: 13px; font-weight: 600; }
+  .lr-spinner.visible { display: inline-flex; }
+  .lr-spinner i { width: 15px; height: 15px; border: 2px solid var(--accent-soft);
+             border-top-color: var(--accent); border-radius: 50%; animation: lrspin .7s linear infinite; }
+  @keyframes lrspin { to { transform: rotate(360deg); } }
+
+  .lr-badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px;
+             font-size: 11px; font-weight: 700; }
+  .lr-badge.ok { background: #d8f3dc; color: #1a6630; }
+  .lr-badge.warn { background: #fdf6e7; color: #7a5b12; }
+  .lr-policy-lines { margin-top: 6px; font-size: 12px; color: var(--text-soft); line-height: 1.7; }
+  .lr-draft-meta { font-size: 12px; color: var(--text-soft); margin-bottom: 10px; }
+  .lr-file-cell { font-size: 12px; color: var(--text-soft); max-width: 260px; }
+</style>
+{%- endblock -%}
+
+{%- block content -%}
+<div class="stage-page">
+
+  <div class="stage-page-header">
+    <div class="stage-page-title">
+      <h1>Loss Run Request</h1>
+      <span class="stage-window-label">Renewal Preparation · Task #5</span>
+    </div>
+  </div>
+  <p style="color:var(--text-soft);margin:0 0 22px;font-size:14px;">
+    Drop in the binders for one client. Policy number, carrier, effective date and coverage are
+    pulled from each document, then grouped into one email per carrier.
+  </p>
+
+  <div class="lr-steps">
+    <span class="lr-step active" id="lr-step1-tab"><span class="lr-step-num">1</span>Upload binders</span>
+    <span class="lr-step" id="lr-step2-tab"><span class="lr-step-num">2</span>Review fields</span>
+    <span class="lr-step" id="lr-step3-tab"><span class="lr-step-num">3</span>Send drafts</span>
+  </div>
+
+  <!-- ══ STEP 1 ══════════════════════════════════════════════════════════ -->
+  <div id="lr-step1">
+    <div class="skill-shell">
+      <div class="skill-form-panel">
+        <div class="skill-field">
+          <label class="skill-label">Binder Files</label>
+          <label class="lr-drop" id="lr-drop">
+            <input type="file" id="lr-file-input" multiple
+                   accept=".pdf,.PDF,.docx,.xlsx,.xls,.csv">
+            <div class="lr-drop-title">Drop binders here, or click to browse</div>
+            <div class="lr-drop-sub">PDF, Word, Excel or CSV &middot; several at once</div>
+          </label>
+          <div class="lr-file-list" id="lr-file-list"></div>
+        </div>
+        <button class="skill-run-btn" id="lr-upload-btn" onclick="lrUpload()" disabled>
+          Extract Fields
+        </button>
+        <div class="lr-spinner" id="lr-upload-spinner" style="margin-top:12px;">
+          <i></i> Reading binders&hellip;
+        </div>
+        <div class="lr-note error" id="lr-upload-error"></div>
+      </div>
+
+      <div class="skill-result-panel">
+        <div class="skill-result-header"><strong>How this works</strong></div>
+        <div class="skill-info-box">
+          Each binder is scanned for its <strong>declarations page</strong>, then read with layout
+          preserved so labelled fields, column tables and cover letters all resolve.
+          Carriers are matched against <strong>companymap.md</strong> and insureds against
+          <strong>clients.json</strong>.
+        </div>
+        <p style="font-size:13px;color:var(--text-soft);line-height:1.65;margin:0;">
+          Extracted cells arrive <span style="color:var(--accent);font-weight:600;">blue</span>;
+          anything blank is flagged <span style="color:#7a5b12;font-weight:600;">amber</span> for you
+          to fill in. Rows the engine is unsure about get a <strong>Rescan</strong> button that
+          re-reads the whole document instead of just the top pages.
+        </p>
+        <p style="font-size:13px;color:var(--text-soft);line-height:1.65;margin:14px 0 0;">
+          Drafts are grouped by carrier contact, so five binders with the same carrier produce
+          one email listing all five policies.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 2 ══════════════════════════════════════════════════════════ -->
+  <div id="lr-step2" style="display:none;">
+    <div class="lr-note warn" id="lr-rejected-notice"></div>
+
+    <div class="stage-section">
+      <div class="stage-section-header">
+        <h2>Review Extracted Fields</h2>
+        <span class="stage-count-badge" id="lr-count-badge">0</span>
+      </div>
+
+      <div class="stage-table-wrap">
+        <table class="stage-table lr-table">
+          <thead>
+            <tr>
+              <th style="width:210px">File</th>
+              <th style="width:165px">Policy #</th>
+              <th style="width:245px">Carrier</th>
+              <th style="width:120px">Eff. Date</th>
+              <th style="width:170px">Coverage</th>
+              <th style="width:110px">Confidence</th>
+            </tr>
+          </thead>
+          <tbody id="lr-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="stage-section">
+      <div class="stage-section-header"><h2>Request Details</h2></div>
+      <div class="skill-form-panel">
+        <div class="lr-optgrid">
+          <div class="skill-field" style="margin:0;">
+            <label class="skill-label">Client / Insured</label>
+            <select id="lr-client" class="stage-override-select" style="width:100%;padding:10px;"
+                    onchange="lrClientChanged()">
+              <option value="">— Select client —</option>
+              {% for c in clients %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+              <option value="__other__">Other (type below)…</option>
+            </select>
+            <input type="text" id="lr-client-other" class="skill-input"
+                   placeholder="Insured name" style="margin-top:8px;display:none;">
+          </div>
+          <div class="skill-field" style="margin:0;">
+            <label class="skill-label">Your Name</label>
+            <input type="text" id="lr-requestor-name" class="skill-input" placeholder="Your name">
+          </div>
+          <div class="skill-field" style="margin:0;">
+            <label class="skill-label">Your Email</label>
+            <input type="text" id="lr-requestor-email" class="skill-input" placeholder="you@yourbrokerage.com">
+          </div>
+          <div class="skill-field" style="margin:0;">
+            <label class="skill-label">Years of History</label>
+            <select id="lr-years" class="stage-override-select" style="width:100%;padding:10px;">
+              <option value="3">3 years</option>
+              <option value="5" selected>5 years</option>
+              <option value="7">7 years</option>
+              <option value="10">10 years</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="lr-actions">
+          <button class="skill-run-btn" id="lr-draft-btn" onclick="lrDraft()">Generate Drafts</button>
+          <button class="lr-btn-ghost" onclick="lrReset()">Start Over</button>
+          <div class="lr-spinner" id="lr-draft-spinner"><i></i> Building drafts&hellip;</div>
+        </div>
+        <div class="lr-note error" id="lr-draft-error" style="margin-top:14px;margin-bottom:0;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 3 ══════════════════════════════════════════════════════════ -->
+  <div id="lr-step3" style="display:none;">
+    <div class="stage-section">
+      <div class="stage-section-header">
+        <h2>Draft Emails</h2>
+        <span class="stage-count-badge" id="lr-draft-badge">0</span>
+      </div>
+      <div class="lr-actions" style="margin:0 0 16px;">
+        <button class="lr-btn-ghost" onclick="lrSetStep(2)">&larr; Back to Fields</button>
+        <button class="lr-btn-ghost" onclick="lrReset()">New Batch</button>
+      </div>
+      <div id="lr-drafts"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── State ─────────────────────────────────────────────────────────────────
+let lrFiles = [];   // File objects the user picked
+let lrRows  = [];   // extracted rows returned by /upload-batch
+
+const lrEsc = s => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+function lrShortName(name) {
+  const base = (name || '').replace(/\.[^.]+$/, '');
+  return base.length > 40 ? base.slice(0, 38) + '…' : base;
+}
+
+function lrNote(id, message, visible) {
+  const el = document.getElementById(id);
+  el.textContent = message || '';
+  el.classList.toggle('visible', !!visible);
+}
+
+function lrSpin(id, on) {
+  document.getElementById(id).classList.toggle('visible', on);
+}
+
+function lrSetStep(n) {
+  [1, 2, 3].forEach(i => {
+    document.getElementById(`lr-step${i}`).style.display = i === n ? '' : 'none';
+    const tab = document.getElementById(`lr-step${i}-tab`);
+    tab.className = 'lr-step' + (i < n ? ' done' : i === n ? ' active' : '');
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Step 1 · file selection ───────────────────────────────────────────────
+const lrDrop  = document.getElementById('lr-drop');
+const lrInput = document.getElementById('lr-file-input');
+
+lrInput.addEventListener('change', () => {
+  lrAddFiles(Array.from(lrInput.files));
+  lrInput.value = '';                     // allow re-picking the same file
+});
+lrDrop.addEventListener('dragover', e => {
+  e.preventDefault(); lrDrop.classList.add('drag-over');
+});
+lrDrop.addEventListener('dragleave', () => lrDrop.classList.remove('drag-over'));
+lrDrop.addEventListener('drop', e => {
+  e.preventDefault();
+  lrDrop.classList.remove('drag-over');
+  lrAddFiles(Array.from(e.dataTransfer.files));
+});
+
+function lrAddFiles(files) {
+  const seen = new Set(lrFiles.map(f => f.name));
+  files.forEach(f => { if (!seen.has(f.name)) lrFiles.push(f); });
+  lrRenderFiles();
+}
+
+function lrRemoveFile(i) { lrFiles.splice(i, 1); lrRenderFiles(); }
+
+function lrRenderFiles() {
+  const list = document.getElementById('lr-file-list');
+  document.getElementById('lr-upload-btn').disabled = lrFiles.length === 0;
+  list.innerHTML = lrFiles.map((f, i) => `
+    <div class="lr-file-row">
+      <span class="lr-file-name" title="${lrEsc(f.name)}">${lrEsc(f.name)}</span>
+      <button class="lr-file-remove" onclick="lrRemoveFile(${i})" title="Remove">&times;</button>
+    </div>`).join('');
+}
+
+// ── Step 1 → 2 · extract ──────────────────────────────────────────────────
+async function lrUpload() {
+  if (!lrFiles.length) return;
+  lrNote('lr-upload-error', '', false);
+  document.getElementById('lr-upload-btn').disabled = true;
+  lrSpin('lr-upload-spinner', true);
+
+  const form = new FormData();
+  lrFiles.forEach(f => form.append('binders', f));
+
+  try {
+    const data = await postForm('/skills/loss-run/upload-batch', form);
+    lrSpin('lr-upload-spinner', false);
+    if (!data.ok) {
+      lrNote('lr-upload-error', data.error || 'Extraction failed.', true);
+      document.getElementById('lr-upload-btn').disabled = false;
+      return;
+    }
+    lrRows = data.rows || [];
+    lrNote('lr-rejected-notice',
+           (data.rejected || []).length
+             ? `${data.rejected.length} file(s) skipped — unsupported format: ${data.rejected.join(', ')}`
+             : '',
+           (data.rejected || []).length > 0);
+    lrRenderTable();
+    lrPresetClient();
+    lrSetStep(2);
+    showMiniToast(`Extracted ${lrRows.length} binder${lrRows.length !== 1 ? 's' : ''}`);
+  } catch (err) {
+    lrSpin('lr-upload-spinner', false);
+    lrNote('lr-upload-error', 'Request failed: ' + err.message, true);
+    document.getElementById('lr-upload-btn').disabled = false;
+  }
+}
+
+// ── Step 2 · review table ─────────────────────────────────────────────────
+function lrCell(i, field, value, isKey) {
+  const cls = value ? 'extracted' : (isKey ? 'manual' : '');
+  return `<input class="lr-cell-input ${cls}" data-row="${i}" data-field="${field}"
+           value="${lrEsc(value || '')}" oninput="lrSync(${i})">`;
+}
+
+function lrConfChip(score) {
+  const band = score >= 75 ? 'high' : score >= 50 ? 'mid' : 'low';
+  const label = score >= 75 ? 'Good' : score >= 50 ? 'Check' : 'Low';
+  return `<span class="lr-conf ${band}"><span class="lr-conf-dot"></span>${label}</span>`;
+}
+
+function lrRowHtml(r, i) {
+  const rescan = r.confidence <= 50
+    ? `<button class="lr-btn-mini" id="lr-rescan-${i}" onclick="lrRescan(${i})">Rescan</button>` : '';
+  return `
+    <td class="lr-file-cell" title="${lrEsc(r.filename)}">${lrEsc(lrShortName(r.filename))}</td>
+    <td class="lr-c-policy">${lrCell(i, 'policy_number', r.policy_number, true)}</td>
+    <td class="lr-c-carrier">${lrCell(i, 'carrier_raw', r.carrier_raw, true)}</td>
+    <td class="lr-c-date">${lrCell(i, 'effective_date', r.effective_date, true)}</td>
+    <td class="lr-c-cov">${lrCell(i, 'coverage_category', r.coverage_category, false)}</td>
+    <td class="lr-c-conf">${lrConfChip(r.confidence)} ${rescan}</td>`;
+}
+
+function lrRenderTable() {
+  document.getElementById('lr-count-badge').textContent = lrRows.length;
+  document.getElementById('lr-tbody').innerHTML = lrRows
+    .map((r, i) => `<tr id="lr-row-${i}">${lrRowHtml(r, i)}</tr>`).join('');
+  lrRows.forEach((r, i) => {
+    if (r.extract_note) {
+      const cell = document.querySelector(`#lr-row-${i} .lr-file-cell`);
+      cell.innerHTML += `<div style="color:var(--amber);font-size:11px;margin-top:3px;">${lrEsc(r.extract_note)}</div>`;
+    }
+  });
+}
+
+function lrSync(i) {
+  ['policy_number', 'carrier_raw', 'effective_date', 'coverage_category'].forEach(f => {
+    const el = document.querySelector(`input[data-row="${i}"][data-field="${f}"]`);
+    if (el) lrRows[i][f] = el.value;
+  });
+  const r = lrRows[i];
+  const filled = ['policy_number', 'carrier_raw', 'effective_date']
+    .filter(f => (r[f] || '').trim()).length;
+  r.partial = filled < 3;
+}
+
+// Pre-select the client the extractor resolved, so the common case is one glance.
+function lrPresetClient() {
+  const detected = lrRows.find(r => (r.insured_resolved || '').trim())?.insured_resolved
+                || lrRows.find(r => (r.insured_raw || '').trim())?.insured_raw || '';
+  if (!detected) return;
+  const select = document.getElementById('lr-client');
+  const match = [...select.options].find(o => o.value.toLowerCase() === detected.toLowerCase());
+  if (match) {
+    select.value = match.value;
+  } else {
+    const opt = new Option(detected + ' (detected)', detected, true, true);
+    select.add(opt, select.options[select.options.length - 1]);
+    select.value = detected;
+  }
+}
+
+function lrClientChanged() {
+  const other = document.getElementById('lr-client').value === '__other__';
+  const box = document.getElementById('lr-client-other');
+  box.style.display = other ? '' : 'none';
+  if (other) box.focus();
+}
+
+function lrClientValue() {
+  const select = document.getElementById('lr-client');
+  return select.value === '__other__'
+    ? document.getElementById('lr-client-other').value.trim()
+    : select.value.trim();
+}
+
+// ── Rescan one low-confidence row ─────────────────────────────────────────
+async function lrRescan(i) {
+  const btn = document.getElementById(`lr-rescan-${i}`);
+  const file = lrFiles.find(f => f.name === lrRows[i].filename);
+  if (!file) { showMiniToast('Re-add the file to rescan it'); return; }
+  if (btn) { btn.textContent = 'Scanning…'; btn.disabled = true; }
+
+  const form = new FormData();
+  form.append('binder', file);
+  try {
+    const data = await postForm('/skills/loss-run/rescan', form);
+    if (!data.ok) { showMiniToast('Rescan failed: ' + data.error); if (btn) { btn.textContent = 'Rescan'; btn.disabled = false; } return; }
+    // Fill blanks and take the new confidence; never clobber a value the user typed.
+    const u = data.row;
+    ['policy_number', 'carrier_raw', 'carrier_group', 'effective_date',
+     'coverage_raw', 'coverage_category', 'primary_email', 'secondary_email',
+     'portal_link', 'insured_raw', 'insured_resolved'].forEach(f => {
+      if (!(lrRows[i][f] || '').trim() && u[f]) lrRows[i][f] = u[f];
+    });
+    lrRows[i].confidence = u.confidence;
+    lrRows[i].partial = u.partial;
+    document.getElementById(`lr-row-${i}`).innerHTML = lrRowHtml(lrRows[i], i);
+    showMiniToast('Rescanned');
+  } catch (err) {
+    showMiniToast('Rescan failed');
+    if (btn) { btn.textContent = 'Rescan'; btn.disabled = false; }
+  }
+}
+
+// ── Step 2 → 3 · drafts ───────────────────────────────────────────────────
+async function lrDraft() {
+  const client = lrClientValue();
+  lrNote('lr-draft-error', '', false);
+  if (!client) {
+    lrNote('lr-draft-error', 'Choose the client this batch belongs to first.', true);
+    return;
+  }
+  document.getElementById('lr-draft-btn').disabled = true;
+  lrSpin('lr-draft-spinner', true);
+
+  const rows = lrRows.map(r => ({
+    filename:          r.filename,
+    insured:           client,
+    policy_number:     (r.policy_number || '').trim(),
+    carrier:           (r.carrier_raw || '').trim(),
+    carrier_group:     (r.carrier_group || '').trim(),
+    effective_date:    (r.effective_date || '').trim(),
+    coverage_category: (r.coverage_category || '').trim(),
+    primary_email:     (r.primary_email || '').trim(),
+    secondary_email:   (r.secondary_email || '').trim(),
+    portal_link:       (r.portal_link || '').trim(),
+  }));
+
+  try {
+    const data = await postJson('/skills/loss-run/draft-batch', {
+      rows,
+      requestor_name:  document.getElementById('lr-requestor-name').value.trim(),
+      requestor_email: document.getElementById('lr-requestor-email').value.trim(),
+      years:           parseInt(document.getElementById('lr-years').value, 10),
+    });
+    lrSpin('lr-draft-spinner', false);
+    document.getElementById('lr-draft-btn').disabled = false;
+    if (!data.ok) { lrNote('lr-draft-error', data.error || 'Draft build failed.', true); return; }
+    lrRenderDrafts(data);
+    lrSetStep(3);
+    showMiniToast(`${data.total_drafts} draft${data.total_drafts !== 1 ? 's' : ''} ready`);
+  } catch (err) {
+    lrSpin('lr-draft-spinner', false);
+    document.getElementById('lr-draft-btn').disabled = false;
+    lrNote('lr-draft-error', 'Request failed: ' + err.message, true);
+  }
+}
+
+function lrRenderDrafts(data) {
+  const drafts = data.drafts || [];
+  document.getElementById('lr-draft-badge').textContent = drafts.length;
+
+  document.getElementById('lr-drafts').innerHTML = drafts.map((d, i) => {
+    const badges = [];
+    if (d.primary_email && !d.has_portal) badges.push('<span class="lr-badge ok">Email</span>');
+    if (d.has_portal) badges.push('<span class="lr-badge warn">Portal</span>');
+    if (d.missing_contact) badges.push('<span class="lr-badge warn">No contact found</span>');
+
+    const policies = (d.rows || []).map(r => {
+      const parts = [];
+      if (r.coverage_category || r.coverage_raw) parts.push(r.coverage_category || r.coverage_raw);
+      if (r.policy_number) parts.push('Policy No. ' + r.policy_number);
+      if (r.effective_date) parts.push('Eff. ' + r.effective_date);
+      return parts.length ? '&bull; ' + lrEsc(parts.join('  |  ')) : '';
+    }).filter(Boolean).join('<br>');
+
+    const meta = [];
+    if (d.primary_email) meta.push(lrEsc(d.primary_email));
+    if (d.secondary_email) meta.push('CC: ' + lrEsc(d.secondary_email));
+    if (d.notes) meta.push(lrEsc(d.notes));
+
+    const portal = d.has_portal
+      ? `<div class="skill-info-box" style="margin-bottom:12px;">This carrier uses a portal —
+           <a href="${lrEsc(d.portal_link)}" target="_blank" rel="noopener"
+              style="color:var(--accent);font-weight:600;">${lrEsc(d.portal_link)}</a>.
+           Pull the loss runs directly if you have access.</div>`
+      : '';
+
+    return `
+      <div class="skill-email-card">
+        <div class="skill-email-card-header">
+          <div>
+            <strong>${lrEsc(d.carrier_group || 'Unknown carrier')}</strong>
+            ${policies ? `<div class="lr-policy-lines">${policies}</div>` : ''}
+          </div>
+          <div style="display:flex;gap:6px;align-items:flex-start;">
+            ${badges.join(' ')}
+            <button class="skill-copy-btn" onclick="lrCopy(${i})">Copy</button>
+          </div>
+        </div>
+        ${portal}
+        ${meta.length ? `<div class="lr-draft-meta">${meta.join(' &middot; ')}</div>` : ''}
+        <textarea class="skill-draft-box" id="lr-draft-${i}" rows="16">${lrEsc(d.draft || '')}</textarea>
+      </div>`;
+  }).join('') || '<div class="stage-empty">No drafts were produced.</div>';
+}
+
+function lrCopy(i) {
+  navigator.clipboard.writeText(document.getElementById(`lr-draft-${i}`).value);
+  showMiniToast('Copied');
+}
+
+// ── Reset ─────────────────────────────────────────────────────────────────
+function lrReset() {
+  lrFiles = []; lrRows = [];
+  lrInput.value = '';
+  lrRenderFiles();
+  document.getElementById('lr-upload-btn').disabled = true;
+  document.getElementById('lr-draft-btn').disabled = false;
+  document.getElementById('lr-client').value = '';
+  document.getElementById('lr-client-other').value = '';
+  document.getElementById('lr-client-other').style.display = 'none';
+  document.getElementById('lr-drafts').innerHTML = '';
+  lrNote('lr-upload-error', '', false);
+  lrNote('lr-draft-error', '', false);
+  lrNote('lr-rejected-notice', '', false);
+  lrSetStep(1);
+}
+</script>
+{%- endblock -%}

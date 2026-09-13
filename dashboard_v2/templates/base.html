@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Chief of Staff · CoS v2{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <div class="workspace-shell">
+    <aside class="left-rail">
+
+      <nav class="rail-nav">
+        <a class="rail-link {% if active_page == 'overview' %}active{% endif %}" href="{{ url_for('overview') }}">
+          <span class="rail-icon">•</span><span>Home</span>
+        </a>
+        <a class="rail-link {% if active_page == 'matrix' %}active{% endif %}" href="{{ url_for('matrix') }}">
+          <span class="rail-icon">•</span><span>Registry</span>
+        </a>
+      </nav>
+
+      <div class="rail-nav-stages">
+        <div class="rail-section-label">Portals</div>
+        <nav class="rail-nav">
+          {% for p in PORTALS %}
+          {% set pslug = portal_to_slug(p) %}
+          <a class="rail-link rail-tab {% if active_page == 'portal-' ~ pslug %}active{% endif %}" href="{{ url_for('portal', slug=pslug) }}">
+            <span>{{ p }}</span>
+          </a>
+          {% endfor %}
+        </nav>
+      </div>
+    </aside>
+
+    <div class="workspace-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <nav class="topbar-stages" aria-label="Renewal stages">
+            {% for s in STAGES %}
+            {% set slug = stage_to_slug(s) %}
+            <a class="topbar-stage-link {% if active_page == 'stage-' ~ slug %}active{% endif %}" href="{{ url_for('stage', slug=slug) }}">
+              <span class="stage-mini-dot" style="background: {{ STAGE_THEME[s].color }};"></span>
+              <span>{{ s }}</span>
+            </a>
+            {% endfor %}
+          </nav>
+        </div>
+        <div class="topbar-actions">
+        </div>
+      </header>
+
+      <main>
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+
+  {% block bottom %}{% endblock %}
+
+  <div class="mini-toast">Saved</div>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

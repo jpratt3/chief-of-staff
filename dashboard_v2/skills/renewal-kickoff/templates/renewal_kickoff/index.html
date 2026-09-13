@@ -1,0 +1,41 @@
+{%- extends "base.html" -%}
+{%- block title -%}Renewal Kickoff · CoS v2{%- endblock -%}
+{%- block content -%}
+<div class="stage-page">
+  <div class="stage-page-header">
+    <div class="stage-page-title">
+      <h1>Renewal Kickoff</h1>
+      <span class="stage-window-label">Document Generator · Task #5</span>
+    </div>
+  </div>
+  <p style="color:var(--text-soft);margin:0 0 24px;font-size:14px;">Select a client to generate a kickoff email to the full team with assignments and immediate next steps.</p>
+
+  <div class="skill-shell">
+    <div class="skill-form-panel">
+      <div class="skill-field">
+        <label class="skill-label">Client</label>
+        <select id="client_name" class="stage-override-select" style="width:100%;padding:10px;">
+          <option value="">— Select client —</option>
+          {% for c in clients %}<option>{{ c }}</option>{% endfor %}
+        </select>
+      </div>
+      <button class="skill-run-btn" onclick="runKickoff()">Generate Kickoff Email</button>
+    </div>
+    <div class="skill-result-panel" id="result" style="display:none;">
+      <div class="skill-result-header">
+        <strong>Kickoff Email Draft</strong>
+        <button class="skill-copy-btn" onclick="copyText('kickoff_draft')">Copy</button>
+      </div>
+      <div id="team_display" class="skill-info-box"></div>
+      <textarea id="kickoff_draft" class="skill-draft-box" rows="20"></textarea>
+    </div>
+  </div>
+</div>
+<script>
+function copyText(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.value || el.innerText);
+  showMiniToast('Copied');
+}
+</script>
+{%- endblock -%}

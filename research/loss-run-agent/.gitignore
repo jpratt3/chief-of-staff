@@ -1,0 +1,11 @@
+vault.json
+runs/
+mock_mail/
+mock_sharepoint/
+seed_pdfs/
+epic_state.json
+orchestrator_state.json
+.services.json
+web.log
+__pycache__/
+.pytest_cache/

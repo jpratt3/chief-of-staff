@@ -1,0 +1,910 @@
+# Exhaustive List of Coverage Types a Commercial P&C Broker May Place
+
+## 1) Property / Physical Damage
+- All risk property
+- Named perils property
+- Commercial property
+- Real estate portfolio property
+- Global property program
+- Difference in conditions (DIC)
+- Difference in limits (DIL)
+- Business personal property
+- Building coverage
+- Contents coverage
+- Stock / inventory
+- Equipment / machinery / plant
+- Fine arts / collectibles
+- Valuable papers and records
+- Electronic data processing (EDP)
+- Boiler and machinery
+- Equipment breakdown
+- Mechanical breakdown
+- Electrical breakdown
+- Inland marine property
+- Mobile equipment
+- Installation floater
+- Contractors equipment
+- Leased property
+- Property in transit
+- Stock throughput
+- Warehouses and storage locations
+- Temperature change / cold storage
+- Peak season coverage
+- Debris removal
+- Expediting expense
+- Extra expense
+- Service interruption
+- Utility interruption
+- Contingent business interruption
+- Time element coverage
+- Loss of rents / rental value
+- Leasehold interest
+- Ordinance or law
+- Civil authority
+- Ingress / egress
+- Impaired access
+- Brands and labels
+- Demolition / increased cost of construction
+- Green building / sustainable property upgrades
+
+## 2) Business Interruption / Time Element
+- Business interruption
+- Gross earnings
+- Gross profits
+- Loss of profits
+- Extra expense
+- Contingent business interruption
+- Dependent property
+- Supply chain interruption
+- Attraction property / leader property
+- Interruption by civil authority
+- Ingress/egress
+- Utilities / off-premises power failure
+- Communicable disease business interruption
+- Event cancellation interruption
+- Trade disruption
+- Port blockage / logistics interruption
+- Delay in start-up / delayed opening
+- Advance loss of profits (ALOP)
+- Delay in completion
+- Revenue protection
+
+## 3) Casualty / General Liability
+- Commercial general liability (CGL)
+- Public liability
+- Products liability
+- Completed operations
+- Premises liability
+- Operations liability
+- Contractual liability
+- Personal and advertising injury
+- Bodily injury / property damage liability
+- Tenant’s legal liability
+- Owners and contractors protective liability (OCP)
+- Railroad protective liability
+- Protective liability
+- Umbrella liability
+- Excess liability
+- Follow-form excess
+- Buffer / quota-share excess structures
+- Lead umbrella
+- Standalone excess
+- Cross liability
+- Severability of interests
+- Host liquor liability
+- Liquor liability
+- Dram shop liability
+- Fire legal liability
+- Care, custody, or control buybacks
+- Abuse / molestation liability
+- Sexual misconduct liability
+- Assault and battery liability
+- Active assailant / malicious attack liability
+- Communicable disease liability
+- Legionella liability
+- Pollution liability carve-backs or blends
+- Contractual indemnity backstop
+- Sudden and accidental pollution extensions
+
+## 4) Auto / Fleet / Motor
+- Commercial auto liability
+- Hired and non-owned auto
+- Owned auto
+- Symbol-based fleet coverages
+- Physical damage for autos
+- Collision
+- Comprehensive
+- Garage liability
+- Garagekeepers legal liability
+- Motor truck cargo
+- Truckers liability
+- Fleet liability
+- Passenger transportation liability
+- Public auto / livery
+- Auto umbrella / excess
+- Non-trucking liability
+- Trailer interchange
+- Drive-away / tow-away
+- Motor TPL (international compulsory)
+- Passenger legal liability
+- Rideshare / mobility fleet coverage
+- Autonomous vehicle liability
+- Telematics-based fleet insurance
+
+## 5) Workers’ Compensation / Employers Liability / Accident
+- Workers’ compensation
+- Employers liability
+- Stop-gap employers liability
+- Occupational accident
+- Voluntary compensation
+- Foreign voluntary workers’ compensation
+- USL&H
+- Jones Act
+- Longshore / harbor workers
+- Maritime employers liability
+- Defense Base Act
+- Crew personal accident
+- Group personal accident
+- Accidental death and dismemberment (AD&D)
+- Business travel accident
+- Occupational disease
+- Salary continuance / wage replacement
+- Injury-on-duty coverages
+
+## 6) Professional Liability / E&O
+- Professional indemnity
+- Errors and omissions (E&O)
+- Miscellaneous professional liability
+- Technology E&O
+- Media liability
+- Architects and engineers professional liability
+- Design professional liability
+- Contractors professional liability
+- Surveyors professional liability
+- Consultants professional liability
+- Real estate professional liability
+- Insurance agents / brokers E&O
+- Lawyers professional liability
+- Accountants professional liability
+- Actuaries professional liability
+- Investment advisors E&O
+- Asset managers E&O
+- Financial institutions professional indemnity
+- Trustee liability
+- Pension trustee liability
+- Healthcare professional liability
+- Medical malpractice
+- Allied healthcare professional liability
+- Hospital professional liability
+- Managed care E&O
+- Miscellaneous medical E&O
+- Staffing professional liability
+- Educators legal liability
+- School leaders E&O
+- Public officials E&O
+- Nonprofit management liability blends
+- Engineers’ latent defect / professional exposure programs
+
+## 7) Directors & Officers / Management Liability
+- Directors and officers (D&O)
+- Public company D&O
+- Private company D&O
+- Nonprofit D&O
+- Side A D&O
+- Side B D&O
+- Side C / entity securities coverage
+- Side A DIC
+- Independent director liability
+- Outside directorship liability
+- Employment practices liability (EPLI)
+- Fiduciary liability
+- Pension trust liability
+- Crime / management liability package
+- Wage and hour defense cost coverage
+- Workplace violence response extensions
+- Reputation rehabilitation
+- Securities liability
+- Securities class action coverage
+- Prospectus liability / POSI
+- Entity investigation costs
+- Books and records demand coverage
+- Regulatory investigation coverage
+- Extradition / inquiry costs
+- Corporate legal liability packages
+
+## 8) Crime / Fidelity / Fraud
+- Commercial crime
+- Employee dishonesty
+- Fidelity bond
+- Financial institution bond / bankers blanket bond
+- Computer fraud
+- Funds transfer fraud
+- Social engineering fraud
+- Invoice manipulation fraud
+- Forgery / alteration
+- Theft / disappearance / destruction
+- Money and securities
+- Robbery / safe burglary
+- Premises theft
+- Transit theft
+- Client property crime
+- Third-party crime
+- ERISA bond
+- Mortgage bankers bond
+- Broker-dealer bond
+- Credit union bond
+- Kidnap response expense overlap with crime
+- Cybercrime blended products
+
+## 9) Cyber / Privacy / Technology
+- Cyber liability
+- Privacy liability
+- Network security liability
+- Data breach response
+- Security event management costs
+- Incident response / forensics
+- Notification / credit monitoring
+- Cyber extortion / ransomware
+- Business interruption from cyber event
+- Contingent cyber business interruption
+- Data restoration / digital asset loss
+- System failure
+- Dependent system failure
+- Media liability
+- PCI fines / assessments
+- Regulatory defense and penalties
+- Technology E&O + cyber combined
+- Cyber crime blends
+- Cloud service provider dependency coverage
+- Bricking / hardware replacement
+- Cryptojacking / digital asset theft (where available)
+- Crypto / blockchain liability
+- Social engineering / invoice fraud extensions
+- Reputational harm from cyber event
+- AI liability / algorithmic bias emerging forms
+- Tech product recall / software failure variants
+
+## 10) Environmental / Pollution
+- Pollution legal liability (PLL)
+- Site pollution liability
+- Contractors pollution liability (CPL)
+- Environmental impairment liability
+- Premises pollution liability
+- Transportation pollution liability
+- Non-owned disposal site liability
+- Storage tank liability
+- Cleanup cost cap
+- Remediation stop loss
+- Brownfields / redevelopment liability
+- M&A pollution liability
+- Environmental professional liability
+- Combined general liability + pollution programs
+- Natural resource damages
+- Mold liability
+- Asbestos liability
+- Lead liability
+- PFAS / emerging contaminant programs where available
+- Waste facility liability
+- Environmental casualty package
+- Underground resource damage / seepage variants in energy
+
+## 11) Product Liability / Recall / Contamination
+- Product liability
+- Manufacturers liability
+- Vendors liability
+- Completed operations
+- Product guarantee / warranty liability
+- Product recall
+- Government recall
+- Third-party recall liability
+- First-party recall expense
+- Product contamination
+- Accidental contamination
+- Malicious tampering
+- Adverse publicity
+- Restaurant contamination coverage
+- Consumer goods recall
+- Automotive recall
+- Pharmaceutical / life sciences recall
+- Medical device recall
+- Product efficacy / failure to perform
+- Impaired property / rip and tear variants
+
+## 12) Healthcare / Life Sciences
+- Medical malpractice
+- Hospital professional liability
+- Physician liability
+- Allied healthcare liability
+- Clinical trials liability
+- Human subjects liability
+- Life sciences products liability
+- Pharma liability
+- Medical device liability
+- Errors and omissions for healthcare services
+- Managed care E&O
+- Healthcare cyber/privacy
+- Stop-loss for self-funded health plans
+- Translational medicine / biotech specialty covers
+- Cell and gene therapy logistics/transit programs
+- Blood / tissue / specimen transit
+- Research property and trial materials
+- Reproductive medicine liability
+- Telemedicine liability
+
+## 13) Construction / Infrastructure
+- Builder’s risk
+- Course of construction
+- Erection all risks
+- Contractors all risks (CAR)
+- Engineering all risks (EAR)
+- Delay in start-up (DSU)
+- Advance loss of profits (ALOP)
+- Delay in completion
+- Contractors equipment
+- Installation floater
+- Wrap-up liability
+- Owner-controlled insurance program (OCIP)
+- Contractor-controlled insurance program (CCIP)
+- Project-specific general liability
+- Project professional liability
+- Owners protective professional indemnity (OPPI)
+- Contractors professional liability
+- Subcontractor default insurance (SDI)
+- Latent defects insurance
+- Inherent defects insurance
+- Decennial liability / decennial insurance
+- Surety bonds for construction
+- Trade credit / contract frustration on infrastructure
+- Owners interest liability
+- Railroad protective
+- Marine cargo for project cargo
+- Delay / soft costs
+- Defects liability maintenance periods
+- Political risk for PPP/P3 projects
+
+## 14) Energy / Natural Resources / Power / Utilities
+### Upstream Energy
+- Control of well
+- Operators extra expense (OEE)
+- Blowout / cratering / seepage / pollution
+- Redrill / extra expense
+- Offshore physical damage
+- Offshore liability
+- Exploration and production package
+- Well servicing liability
+- Rig physical damage
+- Removal of wreck / debris
+- Business interruption / loss of production income
+
+### Midstream / Downstream
+- Refineries property and BI
+- Petrochemical liability
+- Pipeline liability
+- Tank farms / terminals
+- Transmission and distribution assets
+- Utility property
+- Utility liability
+- Power generation all-risk
+- Machinery breakdown
+- Boiler and turbine
+- Nuclear-associated specialty lines (where insurable through pools)
+
+### Renewables
+- Wind farm property and BI
+- Solar farm property and BI
+- Battery storage / BESS liability and property
+- Renewable energy construction and operational covers
+- Performance / weather-linked covers
+- Carbon capture and storage emerging liability
+- Hydrogen project liability
+- Geothermal, biomass, hydro specialty programs
+
+## 15) Marine / Ocean / Inland Marine / Logistics
+- Marine cargo
+- Open cargo
+- Stock throughput
+- Inland transit
+- Ocean cargo
+- Project cargo
+- Delay in transit
+- Cargo legal liability
+- Warehouse legal liability
+- Logistics liability
+- Freight forwarders liability
+- NVOCC liability
+- Terminal operators liability
+- Port operators liability
+- Hull and machinery
+- Protection and indemnity (P&I)
+- Charterers liability
+- Freight, demurrage and defense (FD&D)
+- Marine war
+- Kidnap and ransom for maritime exposure
+- Ship repairers liability
+- Marina operators liability
+- Boat dealers liability
+- Towage liability
+- Yachts / superyachts
+- Inland marine floaters
+- Bailees coverage
+- Installation floaters
+- Fine art transit
+- Specie / cash in transit
+- Jewelers block
+- Valuable goods in transit
+- Delay / cold-chain cargo
+- Reefer breakdown
+
+## 16) Aviation / Aerospace / Space
+- Aviation hull
+- Aircraft liability
+- Combined single limit aviation liability
+- Passenger liability
+- Products liability (aviation)
+- Completed operations
+- Airport owners and operators liability
+- Hangarkeepers liability
+- Ground handlers liability
+- General aviation
+- Corporate aircraft
+- Airline hull and liability
+- War risk aviation
+- Spares insurance
+- Loss of use
+- Drone / UAS liability
+- Drone hull
+- Aerospace products liability
+- Satellite launch insurance
+- In-orbit satellite insurance
+- Space liability
+- Space property / mission coverage
+- Aviation workers’ compensation / crew PA blends
+
+## 17) Terrorism / Political Violence / War / Security Risks
+- Standalone terrorism
+- Certified terrorism (e.g., TRIA-backed in the US)
+- Political violence
+- Sabotage and terrorism
+- Strikes, riots, and civil commotion (SRCC)
+- Malicious damage
+- Civil commotion
+- Insurrection / rebellion extensions
+- War risk
+- War on land
+- Terrorism liability
+- Terrorism property damage
+- Active assailant / malicious attack
+- Workplace violence
+- Deadly weapon protection products
+- Loss of attraction / denial of access from violence events
+- Kidnap and ransom (K&R)
+- Kidnap for ransom and extortion
+- Threat response / crisis management
+- Wrongful detention
+- Hijacking
+- Piracy
+- Express kidnap
+- Political evacuation
+- Security evacuation
+- Ransom in transit
+- Disappearance / hostage response extensions
+
+## 18) Trade Credit / Political Risk / Credit & Surety
+### Trade Credit
+- Whole-turnover trade credit
+- Key account / named buyer credit
+- Single-buyer credit
+- Export credit insurance
+- Domestic trade credit
+- Accounts receivable insurance
+- Non-payment insurance
+- Excess of loss credit insurance
+- Top-up credit insurance
+
+### Political Risk
+- Political risk insurance
+- Expropriation / confiscation / nationalization
+- Currency inconvertibility
+- Transfer restriction
+- Political violence for lenders/investors
+- Contract frustration
+- Wrongful calling of guarantees
+- Non-honoring of sovereign obligations
+- Non-honoring of financial obligations
+- Arbitration award default
+- License cancellation
+- Forced abandonment
+- Trade disruption
+- Embargo-related structured covers where permitted
+
+### Surety
+- Contract surety
+- Commercial surety
+- Bid bonds
+- Performance bonds
+- Payment bonds
+- Maintenance bonds
+- Supply bonds
+- Subdivision bonds
+- Court bonds
+- Customs bonds
+- Excise / tax bonds
+- License and permit bonds
+- Probate / fiduciary bonds
+- Appeal bonds
+- Environmental bonds
+- Reclamation bonds
+- Decommissioning bonds
+- Ancillary specialty bonds
+
+## 19) Financial Institutions / Banking / Lending
+- Financial institutions professional indemnity
+- Bankers blanket bond / FI bond
+- Mortgage impairment
+- Lender liability
+- Collateral protection insurance
+- Force-placed / lender-placed insurance
+- Vendor single interest (VSI)
+- Collateral single interest (CSI)
+- GAP insurance
+- Residual value insurance
+- Lease gap / deficiency covers
+- Trade finance credit insurance
+- Structured credit wraps
+- Representations and warranties for securitizations (where available)
+- Surety and financial guarantee-related placements
+- Trustee liability
+- Investment management liability
+- Crime + cyber + PI bundles for FIs
+
+## 20) Transactional Risk / M&A / Tax / Litigation
+- Representations and warranties insurance (R&W)
+- Warranty and indemnity (W&I)
+- Tax liability insurance
+- Contingent liability insurance
+- Litigation buyout insurance
+- Judgment preservation insurance
+- After-the-event (ATE) insurance
+- Contingent legal risk
+- IP litigation risk insurance
+- Specific known risk policies for deals
+- Synthetic warranty structures
+- Environmental liability in M&A
+- Pension / benefits diligence liabilities
+- Underwriting around escrow replacements
+
+## 21) Intellectual Property / Media / Reputation
+- Media liability
+- Publishers liability
+- Broadcasters liability
+- Advertising injury
+- Defamation / libel / slander
+- Copyright infringement
+- Trademark infringement defense
+- Patent infringement defense / abatement products where available
+- IP enforcement / pursuit insurance
+- Trade secret liability
+- Reputation risk / crisis response expense
+- Brand protection products
+- Adverse publicity coverage
+- Celebrity / talent liability programs
+- Content creator / influencer liability
+
+## 22) Employment / Human Capital
+- Employment practices liability (EPLI)
+- Wage and hour defense cost coverage
+- Third-party EPLI
+- Fiduciary liability
+- Pension trustee liability
+- Workplace violence response
+- Travel accident
+- Expatriate liability / benefits blends
+- Foreign workers comp
+- Voluntary benefits programs
+- Key person insurance
+- Executive disability
+- Executive medical reimbursement products
+- Group accident
+- Salary continuance
+- Business travel medical / security / evacuation
+- Occupational health specialty programs
+
+## 23) Employee Benefits / Accident & Health
+- Group medical / health
+- Dental
+- Vision
+- Prescription drug
+- Group life
+- Dependent life
+- AD&D
+- Short-term disability
+- Long-term disability
+- Stop-loss insurance
+- Aggregate stop-loss
+- Specific stop-loss
+- HMO / PPO / captive medical stop-loss structures
+- Travel medical
+- International private medical insurance
+- Expatriate medical
+- Global benefits network programs
+- Critical illness
+- Hospital indemnity
+- Supplemental accident
+- Cancer / specified disease products
+- Long-term care
+- Pet benefits (employer-sponsored)
+- Voluntary worksite benefits
+
+## 24) Public Entity / Education / Nonprofit
+- Public officials liability
+- Law enforcement liability
+- School board legal liability
+- Educators legal liability
+- Entity liability
+- General liability
+- Auto liability
+- Employment practices
+- Fiduciary
+- Crime
+- Sexual abuse/molestation liability
+- Student accident
+- Participant accident
+- Camp liability
+- Municipal bond/surety needs
+- Civic liability programs
+- Parks and recreation liability
+- Transit authority liability
+- Emergency services liability
+
+## 25) Hospitality / Leisure / Sports / Entertainment
+- Hotel and resort package
+- Innkeepers liability
+- Liquor liability
+- Event cancellation
+- Non-appearance
+- Prize indemnity
+- Weather insurance
+- Film / television production insurance
+- Cast insurance
+- Media production package
+- Touring / live event liability
+- Sports liability
+- Participant accident
+- Venue liability
+- Amusement / attraction liability
+- Theme park liability
+- Gaming / casino liability
+- Esports liability
+- Celebrity / talent non-appearance
+- Trade show liability
+- Wedding / special event coverage
+
+## 26) Agriculture / Food / Forestry / Aquaculture
+- Crop insurance
+- Multi-peril crop insurance
+- Crop hail
+- Named peril crop
+- Livestock mortality
+- Livestock transit
+- Equine mortality
+- Bloodstock insurance
+- Forestry / timber insurance
+- Farm property
+- Farm liability
+- Agribusiness liability
+- Food contamination
+- Product recall
+- Poultry / swine / dairy specialty programs
+- Aquaculture insurance
+- Fish stock mortality
+- Greenhouse / nursery stock
+- Weather-index / parametric ag products
+
+## 27) Real Estate / Title / Mortgage-Related
+- Real estate portfolio property
+- Real estate liability
+- Loss of rents
+- Builders risk
+- Environmental for real estate transactions
+- Title insurance
+- Owner’s title
+- Lender’s title
+- Mortgage impairment
+- Force-placed property
+- REO / lender-owned asset insurance
+- Vacancy / unoccupied property
+- Condo/co-op package
+- Habitational liability
+- Affordable housing programs
+- Residential catastrophe programs
+- Terrorism for real estate portfolios
+
+## 28) Personal Lines / Private Client / Affinity
+- High-value homeowners
+- Personal auto
+- Personal umbrella / excess
+- Valuable articles
+- Fine art
+- Jewelry
+- Collections
+- Personal cyber
+- Personal K&R
+- Yacht
+- Personal aircraft
+- Flood
+- Earthquake
+- Windstorm
+- Wildfire specialty
+- Secondary home / international home
+- Domestic staff workers’ comp
+- Family office package
+- Directors and trustees for family offices
+- Event cancellation for private events
+- Equine / bloodstock
+- Travel / evacuation / concierge risk products
+- Affinity programs
+- Warranty / service contract programs
+
+## 29) Catastrophe / Natural Hazard / Parametric
+- Flood
+- Earthquake
+- Windstorm
+- Named storm / hurricane
+- Tornado
+- Hail
+- Wildfire
+- Freeze / winter storm
+- Drought
+- Excess rainfall
+- Parametric weather insurance
+- Parametric earthquake
+- Parametric hurricane
+- Parametric flood
+- Parametric rainfall
+- Parametric temperature
+- Renewable energy weather covers
+- Catastrophe excess layers
+- National catastrophe pools / compulsory schemes where brokered
+- Business interruption from cat events
+- Agricultural index products
+- Supply chain parametric covers
+
+## 30) Alternative Risk / ART / Captives / Structured Solutions
+- Captive insurance program placement
+- Fronting arrangements
+- Protected cell / segregated cell structures
+- Rent-a-captive
+- Self-insured retention programs
+- Large deductible programs
+- Aggregate excess / stop-loss
+- Finite risk / structured risk
+- Multiline multiyear programs
+- Loss portfolio transfers
+- Adverse development covers
+- Parametric / index solutions
+- Insurance-linked securities support
+- Collateralized reinsurance structures
+- Structured casualty
+- Blended covers
+- Integrated risk programs
+- Retention buy-downs
+- Franchise deductibles / corridor programs
+
+## 31) Reinsurance
+- Facultative reinsurance
+- Treaty reinsurance
+- Quota share
+- Surplus share
+- Excess of loss
+- Catastrophe excess of loss
+- Aggregate excess of loss
+- Stop-loss reinsurance
+- Adverse development cover
+- Retrocession
+- Facultative obligatory
+- Clash / umbrella reinsurance
+- Property treaty
+- Casualty treaty
+- Specialty treaty
+- Life and health reinsurance
+- Structured / finite reinsurance
+- Sidecars / capital markets support
+
+## 32) Niche / Emerging / Miscellaneous Specialty
+- Legal expenses insurance
+- Warranty / extended service contracts
+- Mechanical warranty
+- Residual value
+- Residual lease / finance risk
+- Tuition refund insurance
+- Travel insurance
+- Travel medical / evacuation
+- Immigration bond products
+- Funeral / burial products in some markets
+- Animal mortality (pets, zoo, exotic)
+- Museum / exhibition coverage
+- Specie
+- Cash in transit
+- Jewelers block
+- Fine arts block
+- Exhibition / loaned works insurance
+- Communicable disease standalone forms where available
+- Cannabis industry insurance
+- Hemp / CBD insurance
+- Cryptocurrency custody coverage
+- Carbon credit / environmental market products
+- Decommissioning liability
+- Mine closure / reclamation
+- Space tourism emerging products
+- Autonomous systems / robotics liability
+- AI / algorithmic liability emerging products
+
+## 33) Common Program Structures Placed Across Many Lines
+These are not standalone coverage types, but they are often part of placement structure:
+
+- Primary
+- Excess
+- Umbrella
+- Follow form
+- Standalone
+- Shared and layered
+- Quota-share towers
+- Admitted
+- Non-admitted / surplus lines
+- Local admitted policies in multinational programs
+- Controlled master programs
+- Difference in conditions / limits
+- Fronted programs
+- Captive-backed programs
+- Parametric overlays
+- Deductible buy-downs
+- Buffer layers
+- Sidecar / facultative support
+- Coinsurance placements
+
+## 34) Multinational / Local Compulsory Lines Often Included
+A global broker may also place locally required coverages such as:
+
+- Employers liability
+- Workers’ compensation / accident insurance
+- Motor TPL
+- Decennial liability
+- Professional indemnity for regulated professions
+- Public liability
+- Environmental liability
+- Builders risk / CAR / EAR
+- Marine cargo
+- Group travel / accident
+- Health or medical schemes
+- Terrorism pools
+- Natural catastrophe schemes
+- Surety / bond requirements
+- Statutory pension / fiduciary related placements in some jurisdictions
+
+## Short Version
+At the broadest level, the universe of coverages a commercial P&C broker may place includes:
+
+- Property
+- Casualty
+- Auto
+- Workers’ comp / employers liability
+- Professional liability / E&O
+- Management liability (D&O, EPLI, fiduciary, crime)
+- Cyber
+- Environmental
+- Product recall / contamination
+- Construction
+- Energy
+- Marine
+- Aviation / space
+- Terrorism / political violence / K&R
+- Trade credit / political risk / surety
+- Financial institutions
+- Transactional risk
+- Employee benefits / A&H
+- Public entity / education / nonprofit
+- Agriculture
+- Entertainment / sports / event cancellation
+- Personal lines / private client
+- Parametric / captive / ART
+- Reinsurance
