@@ -57,12 +57,12 @@ def upload_batch():
 
 @bp.route("/client", methods=["POST"])
 def client_lookup():
-    """CN and RMB for the client the user picked."""
+    """CN and billing ID for the client the user picked."""
     body = request.get_json(force=True, silent=True) or {}
     return jsonify({"ok": True, "client": billing_ids(
         client_key=body.get("client_key", ""),
         display_name=body.get("display_name", ""),
-        rmb=body.get("rmb", ""),
+        billing_id=body.get("billing_id", ""),
     )})
 
 
@@ -75,7 +75,7 @@ def recap():
         return jsonify({"ok": False, "error": "No rows to summarise."})
     client = billing_ids(client_key=body.get("client_key", ""),
                          display_name=body.get("display_name", ""),
-                         rmb=body.get("rmb", ""))
+                         billing_id=body.get("billing_id", ""))
     return jsonify({"ok": True, "summary": summarize(rows), "client": client,
                     "text": build_summary_text(rows, client)})
 
@@ -89,7 +89,7 @@ def export():
         return jsonify({"ok": False, "error": "No rows to export."})
     client = billing_ids(client_key=body.get("client_key", ""),
                          display_name=body.get("display_name", ""),
-                         rmb=body.get("rmb", ""))
+                         billing_id=body.get("billing_id", ""))
     name = (client.get("client") or "placement").replace(" ", "_")
     return Response(
         build_csv(rows, client),

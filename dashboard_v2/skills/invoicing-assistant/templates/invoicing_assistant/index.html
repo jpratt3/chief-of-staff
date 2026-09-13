@@ -29,7 +29,7 @@
   .iv-file-remove { cursor: pointer; color: var(--red); font-weight: 700; font-size: 15px; line-height: 1;
              background: none; border: none; padding: 0 2px; }
 
-  /* Client identity strip — CN and RMB ride along with every figure below. */
+  /* Client identity strip — CN and billing ID ride along with every figure below. */
   .iv-idbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
   .iv-id { display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px; border-radius: 999px;
              background: white; border: 1px solid var(--line); font-size: 12px; color: var(--text); }
@@ -110,13 +110,12 @@
   <div class="stage-page-header">
     <div class="stage-page-title">
       <h1>Invoicing Assistant</h1>
-      <span class="stage-window-label">Invoice · Tasks #1–#3</span>
     </div>
   </div>
   <p style="color:var(--text-soft);margin:0 0 22px;font-size:14px;">
     Drop in the bound binders for one client. Premium, commission and every tax, fee and
     surcharge come back as individual lines per binder and as a placement total, with the
-    client's CN and RMB attached.
+    client's CN and billing ID attached.
   </p>
 
   <div class="iv-steps">
@@ -135,7 +134,7 @@
             <option value="">— Detect from binders —</option>
             {% for c in clients %}
             <option value="{{ c.folder_name }}" data-cn="{{ c.cn }}"
-                    data-rmbs="{{ c.rmb_options | tojson | forceescape }}"
+                    data-billing-ids="{{ c.billing_id_options | tojson | forceescape }}"
                     data-name="{{ c.display_name }}">
               {{ c.display_name }}{% if c.cn %} - {{ c.cn }}{% endif %}
             </option>
@@ -144,9 +143,9 @@
         </div>
 
         <div class="skill-field">
-          <label class="skill-label">RMB Billing ID</label>
-          <select id="iv-rmb" class="stage-override-select" style="width:100%;padding:10px;"
-                  onchange="ivRmbChanged()">
+          <label class="skill-label">Billing ID</label>
+          <select id="iv-billing-id" class="stage-override-select" style="width:100%;padding:10px;"
+                  onchange="ivBillingIdChanged()">
             <option value="">— Select a client first —</option>
           </select>
         </div>
@@ -187,7 +186,7 @@
           and marked <em>computed</em>. Every cell is editable before you export.
         </p>
         <p style="font-size:13px;color:var(--text-soft);line-height:1.65;margin:14px 0 0;">
-          CN and RMB come from <strong>config/clients.json</strong>; a blank one is flagged amber so
+          CN and billing ID come from <strong>config/clients.json</strong>; a blank one is flagged amber so
           it is fixed in config rather than typed into an invoice request.
         </p>
       </div>
@@ -230,7 +229,7 @@
 // ── State ─────────────────────────────────────────────────────────────────
 let ivFiles  = [];   // File objects the user picked
 let ivRows   = [];   // rows returned by /upload-batch, edited in place
-let ivClient = { client: '', cn: '', rmb: '', rmb_options: [], missing: ['CN', 'RMB'] };
+let ivClient = { client: '', cn: '', billing_id: '', billing_id_options: [], missing: ['CN', 'Billing ID'] };
 
 const ivEsc = s => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
                             .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -262,9 +261,9 @@ function ivSetStep(n) {
 
 // ── Client identity ───────────────────────────────────────────────────────
 // The chips only exist on the review step: step 1 has the two dropdowns, which
-// already say the client, its CN and the chosen RMB.
+// already say the client, its CN and the chosen billing ID.
 function ivRenderIds() {
-  const options = ivClient.rmb_options || [];
+  const options = ivClient.billing_id_options || [];
   const head = `
     <span class="iv-id"><b>Client</b> ${ivEsc(ivClient.client) || '—'}</span>
     <span class="iv-id ${ivClient.cn ? '' : 'missing'}"><b>CN</b> ${ivEsc(ivClient.cn) || 'not in config'}</span>`;
@@ -272,60 +271,60 @@ function ivRenderIds() {
   // The picker travels with the chips — the client is often only resolved once
   // the binders have been read.
   document.getElementById('iv-idbar2').innerHTML = head + (options.length
-    ? `<span class="iv-id ${ivClient.rmb ? '' : 'missing'}"><b>RMB</b>
-         <select id="iv-rmb2" onchange="ivRmbChanged2()"
+    ? `<span class="iv-id ${ivClient.billing_id ? '' : 'missing'}"><b>Billing ID</b>
+         <select id="iv-billing-id2" onchange="ivBillingIdChanged2()"
                  style="border:none;background:none;font:inherit;color:inherit;cursor:pointer;">
            ${options.length > 1 ? '<option value="">choose…</option>' : ''}
-           ${options.map(id => `<option value="${ivEsc(id)}"${id === ivClient.rmb ? ' selected' : ''}>${ivEsc(id)}</option>`).join('')}
+           ${options.map(id => `<option value="${ivEsc(id)}"${id === ivClient.billing_id ? ' selected' : ''}>${ivEsc(id)}</option>`).join('')}
          </select></span>`
-    : `<span class="iv-id missing"><b>RMB</b> not in config</span>`);
+    : `<span class="iv-id missing"><b>Billing ID</b> not in config</span>`);
 }
 
-function ivRmbChanged2() {
-  ivClient.rmb = document.getElementById('iv-rmb2').value;
-  const primary = document.getElementById('iv-rmb');
-  if (primary && !primary.disabled) primary.value = ivClient.rmb;
+function ivBillingIdChanged2() {
+  ivClient.billing_id = document.getElementById('iv-billing-id2').value;
+  const primary = document.getElementById('iv-billing-id');
+  if (primary && !primary.disabled) primary.value = ivClient.billing_id;
   ivRenderIds();
 }
 
-function ivRenderRmbSelect() {
-  const sel = document.getElementById('iv-rmb');
-  const options = ivClient.rmb_options || [];
+function ivRenderBillingIdSelect() {
+  const sel = document.getElementById('iv-billing-id');
+  const options = ivClient.billing_id_options || [];
   if (!options.length) {
     sel.innerHTML = `<option value="">${ivClient.client ? '— None in config —' : '— Select a client first —'}</option>`;
     sel.disabled = true;
     return;
   }
   sel.disabled = false;
-  const head = options.length > 1 ? '<option value="">— Select RMB —</option>' : '';
+  const head = options.length > 1 ? '<option value="">— Select billing ID —</option>' : '';
   sel.innerHTML = head + options.map(id =>
     `<option value="${ivEsc(id)}">${ivEsc(id)}</option>`).join('');
-  sel.value = ivClient.rmb || (options.length === 1 ? options[0] : '');
-  ivClient.rmb = sel.value;
+  sel.value = ivClient.billing_id || (options.length === 1 ? options[0] : '');
+  ivClient.billing_id = sel.value;
 }
 
 function ivClientChanged() {
   const sel = document.getElementById('iv-client');
   const opt = sel.selectedOptions[0];
   if (!sel.value) {
-    ivClient = { client: '', cn: '', rmb: '', rmb_options: [], missing: ['CN', 'RMB'] };
+    ivClient = { client: '', cn: '', billing_id: '', billing_id_options: [], missing: ['CN', 'Billing ID'] };
   } else {
     let options = [];
-    try { options = JSON.parse(opt.dataset.rmbs || '[]'); } catch (e) { options = []; }
+    try { options = JSON.parse(opt.dataset.billingIds || '[]'); } catch (e) { options = []; }
     ivClient = {
       client: opt.dataset.name || '', folder_name: sel.value,
       cn: opt.dataset.cn || '',
-      rmb: options.length === 1 ? options[0] : '',
-      rmb_options: options,
-      missing: [!opt.dataset.cn && 'CN', !options.length && 'RMB'].filter(Boolean),
+      billing_id: options.length === 1 ? options[0] : '',
+      billing_id_options: options,
+      missing: [!opt.dataset.cn && 'CN', !options.length && 'Billing ID'].filter(Boolean),
     };
   }
-  ivRenderRmbSelect();
+  ivRenderBillingIdSelect();
   ivRenderIds();
 }
 
-function ivRmbChanged() {
-  ivClient.rmb = document.getElementById('iv-rmb').value;
+function ivBillingIdChanged() {
+  ivClient.billing_id = document.getElementById('iv-billing-id').value;
   ivRenderIds();
 }
 
@@ -384,7 +383,7 @@ async function ivUpload() {
       const sel = document.getElementById('iv-client');
       const match = [...sel.options].find(o => o.dataset.name === data.client.client);
       if (match) sel.value = match.value;
-      ivRenderRmbSelect();
+      ivRenderBillingIdSelect();
     }
     ivRenderIds();
     ivRender();
@@ -588,7 +587,7 @@ function ivPayload() {
     rows: ivRows,
     client_key: document.getElementById('iv-client').value || ivClient.folder_name || '',
     display_name: ivClient.client || '',
-    rmb: ivClient.rmb || '',
+    billing_id: ivClient.billing_id || '',
   };
 }
 

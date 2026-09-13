@@ -278,7 +278,7 @@ No other files need to know a new skill exists.
 | Stage | Skill | Task Ref | Trigger | Input | Output | Owner |
 |---|---|---|---|---|---|---|
 | Proposal | Premium Financing | #12 | AE decision to offer financing | Premium totals | Draft premium financing email / notification in inbox | AE / AAE |
-| Invoice | Invoicing Assistant | #1, #2, #3 | Bind complete (within 5 days) | Binders; CBI; Installment Schedules; CN; RMB ID; PayTo codes | Premium totals; installment schedules broken out by line; invoicing stage per coverage line | AAE / AR |
+| Invoice | Invoicing Assistant | #1, #2, #3 | Bind complete (within 5 days) | Binders; CBI; Installment Schedules; CN; billing ID ID; PayTo codes | Premium totals; installment schedules broken out by line; invoicing stage per coverage line | AAE / AR |
 | Post Binding | Policy Tracker | #5 + #6 | 30 days post-bind | Binders; config (placement team members) | Policy receipt status per line; notifications to placement for outstanding policies; follow-up cadence set with AE | AR |
 
 **Notes:**
@@ -357,7 +357,7 @@ No other files need to know a new skill exists.
 
 **Flow:**
 ```
-1. GET /skills/invoicing-assistant → client picker (CN + RMB shown) + binder drop zone
+1. GET /skills/invoicing-assistant → client picker (CN + billing ID shown) + binder drop zone
 2. POST /skills/invoicing-assistant/upload-batch
      → identity via the v1 loss-run engine (insured, carrier, policy no., coverage, eff. date)
      → billing pages scored and re-read with layout preserved
@@ -371,7 +371,7 @@ No other files need to know a new skill exists.
 **Routes (live):**
 - `GET  /skills/invoicing-assistant`              → client + upload page
 - `POST /skills/invoicing-assistant/upload-batch` → N binders → rows + placement summary JSON
-- `POST /skills/invoicing-assistant/client`       → CN + RMB for one client
+- `POST /skills/invoicing-assistant/client`       → CN + billing ID for one client
 - `POST /skills/invoicing-assistant/recap`        → re-totals edited rows, returns summary text
 - `POST /skills/invoicing-assistant/export`       → CSV download
 
@@ -386,10 +386,10 @@ hand-checked truth in `eval/truth/*.json` — 60/60 on set1 (15 binders).
 **Design guardrails:**
 - `money.py` has no Flask and no PDF imports — text in, amounts out, so the eval can grade it
 - extraction never invents a figure: a missing premium stays empty and is flagged
-- CN and RMB are read from `config/clients.json`, never typed into the skill
+- CN and billing ID are read from `config/clients.json`, never typed into the skill
 
 **Source-of-truth files:**
-- `config/clients.json` — client list, aliases, and the `cn` / `rmb` billing identifiers
+- `config/clients.json` — client list, aliases, and the `cn` / `billing_ids` identifiers
 - `dashboard/skills/loss_run/service.py` — the shared identity extraction engine
 
 **Dependencies:** `pypdf`, `pdfplumber`

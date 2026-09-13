@@ -3,7 +3,7 @@ Invoicing Assistant — Invoice stage, tasks #1–#3.
 
 Takes the bound binders for one client and produces the numbers the invoice
 request needs: premium, commission, and every tax, fee and surcharge, per binder
-and totalled across the placement, with the client's CN and RMB billing ID
+and totalled across the placement, with the client's CN and billing ID billing ID
 attached from config/clients.json.
 
 Two engines, one row per binder:
@@ -65,8 +65,19 @@ def _clients() -> list:
     return _clients_cache
 
 
-def _rmb_list(value) -> list[str]:
-    """RMB ids as a list of strings.
+def _config_billing_ids(entry: dict):
+    """Billing ids for one client entry.
+
+    `billing_ids` is the current key; `rmb` was the previous name and is
+    still read so an older local clients.json keeps working.
+    """
+    if entry.get("billing_ids") not in (None, ""):
+        return entry.get("billing_ids")
+    return entry.get("rmb")
+
+
+def _billing_id_list(value) -> list[str]:
+    """Billing ids as a list of strings.
 
     An account can carry more than one, so config holds a list — but a single
     id written as a bare string or a JSON number still reads correctly, and the
@@ -79,10 +90,10 @@ def _rmb_list(value) -> list[str]:
     return [str(v).strip() for v in value if str(v).strip()]
 
 
-def billing_ids(client_key: str = "", display_name: str = "", rmb: str = "") -> dict:
-    """CN and RMB ids for a client, by folder_name or display name.
+def billing_ids(client_key: str = "", display_name: str = "", billing_id: str = "") -> dict:
+    """CN and billing ID ids for a client, by folder_name or display name.
 
-    `rmb` is the id the user picked; it is echoed back when it is one this
+    `billing_id` is the id the user picked; it is echoed back when it is one this
     client actually has, and a client with exactly one id needs no picking.
     Both fields are absent from config until someone fills them in, so the shape
     of the answer never changes — only whether the values are there.
@@ -97,23 +108,23 @@ def billing_ids(client_key: str = "", display_name: str = "", rmb: str = "") -> 
             match = c
             break
     else:
-        return {"client": display_name or client_key, "cn": "", "rmb": "",
-                "rmb_options": [], "missing": ["CN", "RMB"]}
+        return {"client": display_name or client_key, "cn": "", "billing_id": "",
+                "billing_id_options": [], "missing": ["CN", "Billing ID"]}
 
     cn = str(match.get("cn", "") or "").strip()
-    options = _rmb_list(match.get("rmb"))
+    options = _billing_id_list(_config_billing_ids(match))
 
-    selected = str(rmb or "").strip()
+    selected = str(billing_id or "").strip()
     if selected not in options:
         selected = options[0] if len(options) == 1 else ""
 
-    missing = [label for label, value in (("CN", cn), ("RMB", options)) if not value]
+    missing = [label for label, value in (("CN", cn), ("Billing ID", options)) if not value]
     return {
         "client": match.get("display_name", ""),
         "folder_name": match.get("folder_name", ""),
         "cn": cn,
-        "rmb": selected,
-        "rmb_options": options,
+        "billing_id": selected,
+        "billing_id_options": options,
         "missing": missing,
     }
 
@@ -128,7 +139,7 @@ def client_options() -> list[dict]:
             "display_name": c.get("display_name", ""),
             "folder_name": c.get("folder_name", ""),
             "cn": str(c.get("cn", "") or "").strip(),
-            "rmb_options": _rmb_list(c.get("rmb")),
+            "billing_id_options": _billing_id_list(_config_billing_ids(c)),
         })
     return out
 
@@ -294,9 +305,9 @@ _CSV_COLUMNS = [
 ]
 
 
-def _rmb_prompt(client: dict) -> str:
-    """What to print where an RMB should be but none was picked."""
-    count = len(client.get("rmb_options") or [])
+def _billing_id_prompt(client: dict) -> str:
+    """What to print where an billing ID should be but none was picked."""
+    count = len(client.get("billing_id_options") or [])
     return f"[select one of {count}]" if count else "[missing]"
 
 
@@ -307,7 +318,7 @@ def build_csv(rows: list[dict], client: dict) -> str:
 
     writer.writerow(["Client", client.get("client", "")])
     writer.writerow(["CN", client.get("cn", "")])
-    writer.writerow(["RMB", client.get("rmb", "") or _rmb_prompt(client)])
+    writer.writerow(["Billing ID", client.get("billing_id", "") or _billing_id_prompt(client)])
     writer.writerow([])
     writer.writerow(_CSV_COLUMNS)
 
@@ -347,7 +358,7 @@ def build_summary_text(rows: list[dict], client: dict) -> str:
     out = [
         f"Client: {client.get('client', '')}",
         f"CN: {client.get('cn') or '[missing]'}    "
-        f"RMB: {client.get('rmb') or _rmb_prompt(client)}",
+        f"Billing ID: {client.get('billing_id') or _billing_id_prompt(client)}",
         "",
         f"{summary['binders']} binder(s)",
         "",

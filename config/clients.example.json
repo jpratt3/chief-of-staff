@@ -17,7 +17,7 @@
       "Placeholder"
     ],
     "inactive_notes": "Folders listed here are excluded from all processing.",
-    "billing_ids": "Per-client billing identifiers used by the Invoicing Assistant. cn = client number, the string 'CN' plus 8 digits. rmb = list of billing IDs, each a 12-digit id held as a string so leading zeros and length are preserved; an account can carry more than one. All values in this file are synthetic.",
+    "billing_ids": "Per-client billing identifiers used by the Invoicing Assistant. cn = client number, the string 'CN' plus 8 digits. billing_ids = list of billing ids, each a 12-digit id held as a string so leading zeros and length are preserved; an account can carry more than one. All values in this file are synthetic.",
     "mock": true,
     "user_email": "you@examplebrokerage.com"
   },
@@ -26,11 +26,6 @@
       "folder_name": "Bellweather",
       "display_name": "Bellweather Financial",
       "cn": "CN19493931",
-      "rmb": [
-        "259278598720",
-        "201762219310",
-        "709761785775"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -114,17 +109,17 @@
             "email": "dana.fairbanks@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "259278598720",
+        "201762219310",
+        "709761785775"
+      ]
     },
     {
       "folder_name": "Copperline",
       "display_name": "Copperline Energy",
       "cn": "CN68370420",
-      "rmb": [
-        "848499746298",
-        "840867483572",
-        "711354948369"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -181,17 +176,17 @@
             "email": "owen.hargrave@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "848499746298",
+        "840867483572",
+        "711354948369"
+      ]
     },
     {
       "folder_name": "Driftwood",
       "display_name": "Driftwood Brewing",
       "cn": "CN79993266",
-      "rmb": [
-        "428192755011",
-        "691910522738",
-        "615930922456"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -240,17 +235,17 @@
             "email": "caleb.pruitt@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "428192755011",
+        "691910522738",
+        "615930922456"
+      ]
     },
     {
       "folder_name": "Halyard",
       "display_name": "Halyard Marine",
       "cn": "CN71987802",
-      "rmb": [
-        "862946815423",
-        "976188816625",
-        "234192527560"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -305,17 +300,17 @@
             "email": "rosalind.cardoza@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "862946815423",
+        "976188816625",
+        "234192527560"
+      ]
     },
     {
       "folder_name": "Ironclad",
       "display_name": "Ironclad Manufacturing",
       "cn": "CN31806799",
-      "rmb": [
-        "220166713704",
-        "504018391832",
-        "119079638082"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -374,17 +369,17 @@
             "email": "baxter.thorne@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "220166713704",
+        "504018391832",
+        "119079638082"
+      ]
     },
     {
       "folder_name": "Juniper",
       "display_name": "Juniper Grove Farms",
       "cn": "CN29111149",
-      "rmb": [
-        "964542291195",
-        "670939426341",
-        "395791982688"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -423,17 +418,17 @@
           "name": "Your Name",
           "email": "you@examplebrokerage.com"
         }
-      }
+      },
+      "billing_ids": [
+        "964542291195",
+        "670939426341",
+        "395791982688"
+      ]
     },
     {
       "folder_name": "Kestrel",
       "display_name": "Kestrel Robotics",
       "cn": "CN37039810",
-      "rmb": [
-        "149630722233",
-        "294085087745",
-        "322847807960"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -501,17 +496,17 @@
             "email": "dominic.ellsworth@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "149630722233",
+        "294085087745",
+        "322847807960"
+      ]
     },
     {
       "folder_name": "Larkspur",
       "display_name": "Larkspur Health",
       "cn": "CN94205586",
-      "rmb": [
-        "920205621682",
-        "604872434859",
-        "750337625839"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -556,17 +551,17 @@
             "email": "emil.ganz@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "920205621682",
+        "604872434859",
+        "750337625839"
+      ]
     },
     {
       "folder_name": "Meridian",
       "display_name": "Meridian Freight",
       "cn": "CN52747328",
-      "rmb": [
-        "287027808874",
-        "217061509094",
-        "438556719640"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -611,17 +606,17 @@
             "email": "nora.ellsworth@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "287027808874",
+        "217061509094",
+        "438556719640"
+      ]
     },
     {
       "folder_name": "Northwind",
       "display_name": "Northwind Foods",
       "cn": "CN19335665",
-      "rmb": [
-        "156382207726",
-        "861414583739",
-        "989045777508"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -686,17 +681,17 @@
             "email": "marcus.nyland@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "156382207726",
+        "861414583739",
+        "989045777508"
+      ]
     },
     {
       "folder_name": "Pinnacle",
       "display_name": "Pinnacle Composites",
       "cn": "CN58678102",
-      "rmb": [
-        "931405633453",
-        "909810132931",
-        "939430456861"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -745,17 +740,17 @@
             "email": "grant.thorne@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "931405633453",
+        "909810132931",
+        "939430456861"
+      ]
     },
     {
       "folder_name": "QuarryHill",
       "display_name": "Quarry Hill Aggregates",
       "cn": "CN79115580",
-      "rmb": [
-        "108266018706",
-        "893918914372",
-        "765615065686"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -794,17 +789,17 @@
           "name": "Your Name",
           "email": "you@examplebrokerage.com"
         }
-      }
+      },
+      "billing_ids": [
+        "108266018706",
+        "893918914372",
+        "765615065686"
+      ]
     },
     {
       "folder_name": "Ravenswood",
       "display_name": "Ravenswood Media",
       "cn": "CN82965839",
-      "rmb": [
-        "186209106923",
-        "994281358702",
-        "773914122971"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -849,17 +844,17 @@
             "email": "peter.bellamy@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "186209106923",
+        "994281358702",
+        "773914122971"
+      ]
     },
     {
       "folder_name": "Sandpiper",
       "display_name": "Sandpiper Hospitality",
       "cn": "CN56897113",
-      "rmb": [
-        "858326412036",
-        "534090238300",
-        "511051041257"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -904,17 +899,17 @@
             "email": "rafael.danforth@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "858326412036",
+        "534090238300",
+        "511051041257"
+      ]
     },
     {
       "folder_name": "Silverthorn",
       "display_name": "Silverthorn Labs",
       "cn": "CN00059855",
-      "rmb": [
-        "218637633201",
-        "650071271768",
-        "105469002825"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -971,17 +966,17 @@
             "email": "owen.nyland@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "218637633201",
+        "650071271768",
+        "105469002825"
+      ]
     },
     {
       "folder_name": "Stonebridge",
       "display_name": "Stonebridge Realty",
       "cn": "CN68882689",
-      "rmb": [
-        "376033933297",
-        "346702412825",
-        "783401712477"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -1026,17 +1021,17 @@
             "email": "peter.quintero@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "376033933297",
+        "346702412825",
+        "783401712477"
+      ]
     },
     {
       "folder_name": "Thornbury",
       "display_name": "Thornbury Chemical",
       "cn": "CN89185209",
-      "rmb": [
-        "785362846238",
-        "388250266090",
-        "447291205460"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -1091,17 +1086,17 @@
             "email": "dana.halloran@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "785362846238",
+        "388250266090",
+        "447291205460"
+      ]
     },
     {
       "folder_name": "Vantage",
       "display_name": "Vantage Logistics",
       "cn": "CN20002867",
-      "rmb": [
-        "578557515969",
-        "548363303016",
-        "409103103531"
-      ],
       "active": true,
       "jordan_role": "AR",
       "show_all_workflow_tasks": true,
@@ -1201,7 +1196,12 @@
             "email": "declan.cardoza@examplebrokerage.com"
           }
         ]
-      }
+      },
+      "billing_ids": [
+        "578557515969",
+        "548363303016",
+        "409103103531"
+      ]
     }
   ]
 }
