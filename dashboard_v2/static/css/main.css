@@ -196,6 +196,12 @@ body { min-height: 100vh; }
 
 /* Column sizing */
 .col-num { width: 52px; text-align: center; font-weight: 700; color: var(--accent); font-size: 13px; white-space: nowrap; }
+/* The launch icon sits in a slot that is always present, so a row without a
+   skill has the same geometry as one with it and every number lands on the
+   same baseline column. Without the reserved slot, "1 <icon>" centres as one
+   unit and the digit drifts left of the bare numbers above and below it. */
+.task-num   { display: inline-block; min-width: 11px; text-align: right; }
+.skill-slot { display: inline-block; width: 15px; text-align: left; }
 .col-task { line-height: 1.55; }
 .col-task.has-skill { color: var(--accent); font-weight: 500; }
 .col-role { width: 52px; text-align: center; }

@@ -42,8 +42,7 @@
           {% for t in data.tasks %}
           <tr class="stage-task-row">
             <td class="col-num">
-              {{ t.num }}
-              {% if t.skill_url %}<a class="skill-launch-icon" href="{{ t.skill_url }}" title="Launch skill">⚡</a>{% endif %}
+              <span class="task-num">{{ t.num }}</span><span class="skill-slot">{% if t.skill_url %}<a class="skill-launch-icon" href="{{ t.skill_url }}" title="Launch skill">⚡</a>{% endif %}</span>
             </td>
             <td class="col-task {% if t.skill_url %}has-skill{% endif %}">{{ t.text }}</td>
             <td class="col-role">{% if t.ae %}<span class="role-check">✓</span>{% endif %}</td>
