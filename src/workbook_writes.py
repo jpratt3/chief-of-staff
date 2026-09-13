@@ -300,11 +300,14 @@ def seed_workflow_template(project_root: Path) -> Path:
     #   stage_sort_order, task_sort_order, active, template_source
     rows = [
         ["Renewal Preparation", "180-120 Days", "Open the renewal file in the agency management system and confirm expiring terms, carriers, and premiums.", "AR", False, False, True, "", 1, 1, True, "Projects.xlsx"],
-        ["Renewal Preparation", "180-120 Days", "Check that the surplus lines home state assignment and ECP status still apply for the coming term.", "AR", False, False, True, "", 1, 2, True, "Projects.xlsx"],
+        ["Renewal Preparation", "180-120 Days", "Send the internal renewal kickoff note with team assignments, renewal date, and target dates.", "AE", True, True, False, "", 1, 2, True, "Projects.xlsx"],
         ["Renewal Preparation", "180-120 Days", "Confirm the service team for the renewal and record who owns each line of coverage.", "AE", True, True, False, "", 1, 3, True, "Projects.xlsx"],
-        ["Renewal Preparation", "180-120 Days", "Schedule the Internal Strategy Meeting (ISM) and circulate an agenda covering client goals and known changes.", "AAE", False, True, True, "", 1, 4, True, "Projects.xlsx"],
-        ["Renewal Preparation", "180-120 Days", "Request loss runs from each incumbent carrier and build a loss summary by line.", "AR", False, True, True, "", 1, 5, True, "Projects.xlsx"],
-        ["Renewal Preparation", "180-120 Days", "Send the client an exposure update request with prior-year schedules prefilled.", "AAE", False, True, False, "", 1, 6, True, "Projects.xlsx"],
+        ["Renewal Preparation", "180-120 Days", "Review the Exempt Commercial Purchaser (ECP) form and confirm it is current for any surplus lines placement.", "AR", False, False, True, "", 1, 4, True, "Projects.xlsx"],
+        ["Renewal Preparation", "180-120 Days", "Confirm the surplus lines home state assignment for the coming term and notify the placement contact.", "AR", False, False, True, "", 1, 5, True, "Projects.xlsx"],
+        ["Renewal Preparation", "180-120 Days", "Schedule the Internal Strategy Meeting (ISM) and circulate an agenda covering client goals and known changes.", "AAE", False, True, True, "", 1, 6, True, "Projects.xlsx"],
+        ["Renewal Preparation", "180-120 Days", "Build the ISM deck from the prior-year version, refreshed for current exposures and market conditions.", "AAE", False, True, True, "", 1, 7, True, "Projects.xlsx"],
+        ["Renewal Preparation", "180-120 Days", "Request loss runs from each incumbent carrier and build a loss summary by line.", "AAE", False, True, True, "", 1, 8, True, "Projects.xlsx"],
+        ["Renewal Preparation", "180-120 Days", "Send the client an exposure update request with prior-year schedules prefilled.", "AAE", False, True, False, "", 1, 9, True, "Projects.xlsx"],
 
         ["RSM", "180-90 Days", "Pull benchmarking and market condition data for the client's industry and program size.", "AAE", False, True, True, "180-120 Days", 2, 1, True, "Projects.xlsx"],
         ["RSM", "180-90 Days", "Draft the renewal strategy document: loss summary, exposure changes, and program options.", "AR", False, False, True, "180-120 Days", 2, 2, True, "Projects.xlsx"],

@@ -18,6 +18,9 @@ _ROOT = _HERE.parent
 
 _WORKBOOK   = _ROOT / "workbook" / "chief_of_staff_tracker.xlsx"
 _TASKS_XLSX = _ROOT / "docs" / "Renewal_Timeline.xlsx"
+# Committed sample workflow. Both workbook paths above are gitignored, so this is
+# what a fresh clone renders its stage task lists from.
+_TASKS_JSON = _ROOT / "config" / "workflow_tasks.json"
 _CLIENTS    = _ROOT / "config" / "clients.json"
 _SKILL_MAP  = _ROOT / "config" / "skill_map.json"
 _COMPLETIONS = _ROOT / "data" / "completions.json"
@@ -193,6 +196,38 @@ def load_clients() -> List[Dict]:
 
 # ── Tasks ─────────────────────────────────────────────────────────────────────
 
+def _tasks_from_json() -> Dict[str, Dict]:
+    """Committed sample workflow — the source a fresh clone renders from.
+
+    The two workbook paths below hold a real book's task list and are gitignored,
+    so without this fallback the stage pages come up empty on a clone.
+    """
+    data = _load_json(_TASKS_JSON, {})
+    result: Dict[str, Dict] = {}
+    for stage in STAGES:
+        entry = data.get(stage)
+        if not entry:
+            continue
+        tasks = []
+        for i, t in enumerate(entry.get("tasks", []), start=1):
+            text = str(t.get("text", "")).strip()
+            if not text:
+                continue
+            tasks.append({
+                "num":  t.get("num", i),
+                "text": text,
+                "ae":   bool(t.get("ae")),
+                "aae":  bool(t.get("aae")),
+                "ar":   bool(t.get("ar")),
+            })
+        if tasks:
+            result[stage] = {
+                "window": entry.get("window", STAGE_WINDOWS.get(stage, "")),
+                "tasks":  tasks,
+            }
+    return result
+
+
 def load_tasks() -> Dict[str, Dict]:
     result: Dict[str, Dict] = {}
     # Try primary workbook first
@@ -231,13 +266,13 @@ def load_tasks() -> Dict[str, Dict]:
             pass
     # Fallback: Renewal_Timeline.xlsx Tasks sheet
     if not _TASKS_XLSX.exists():
-        return result
+        return result or _tasks_from_json()
     try:
         wb2 = openpyxl.load_workbook(_TASKS_XLSX, data_only=True)
     except Exception:
-        return result
+        return result or _tasks_from_json()
     if "Tasks" not in wb2.sheetnames:
-        return result
+        return result or _tasks_from_json()
     ws2 = wb2["Tasks"]
     current_stage = None
     current_window = ""
@@ -264,7 +299,7 @@ def load_tasks() -> Dict[str, Dict]:
                 "aae":  bool(row[2] and str(row[2]).strip() == "X"),
                 "ar":   bool(row[3] and str(row[3]).strip() == "X"),
             })
-    return result
+    return result or _tasks_from_json()
 
 # ── Stage derivation ──────────────────────────────────────────────────────────
 

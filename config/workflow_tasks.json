@@ -1,0 +1,397 @@
+{
+  "Renewal Preparation": {
+    "window": "180-120 Days",
+    "tasks": [
+      {
+        "num": 1,
+        "text": "Open the renewal file in the agency management system and confirm expiring terms, carriers, and premiums.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 2,
+        "text": "Send the internal renewal kickoff note with team assignments, renewal date, and target dates.",
+        "ae": true,
+        "aae": true,
+        "ar": false,
+        "timing": ""
+      },
+      {
+        "num": 3,
+        "text": "Confirm the service team for the renewal and record who owns each line of coverage.",
+        "ae": true,
+        "aae": true,
+        "ar": false,
+        "timing": ""
+      },
+      {
+        "num": 4,
+        "text": "Review the Exempt Commercial Purchaser (ECP) form and confirm it is current for any surplus lines placement.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 5,
+        "text": "Confirm the surplus lines home state assignment for the coming term and notify the placement contact.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 6,
+        "text": "Schedule the Internal Strategy Meeting (ISM) and circulate an agenda covering client goals and known changes.",
+        "ae": false,
+        "aae": true,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 7,
+        "text": "Build the ISM deck from the prior-year version, refreshed for current exposures and market conditions.",
+        "ae": false,
+        "aae": true,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 8,
+        "text": "Request loss runs from each incumbent carrier and build a loss summary by line.",
+        "ae": false,
+        "aae": true,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 9,
+        "text": "Send the client an exposure update request with prior-year schedules prefilled.",
+        "ae": false,
+        "aae": true,
+        "ar": false,
+        "timing": ""
+      }
+    ]
+  },
+  "RSM": {
+    "window": "180-90 Days",
+    "tasks": [
+      {
+        "num": 1,
+        "text": "Pull benchmarking and market condition data for the client's industry and program size.",
+        "ae": false,
+        "aae": true,
+        "ar": true,
+        "timing": "180-120 Days"
+      },
+      {
+        "num": 2,
+        "text": "Draft the renewal strategy document: loss summary, exposure changes, and program options.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": "180-120 Days"
+      },
+      {
+        "num": 3,
+        "text": "Review and approve the strategy document before it goes to the client.",
+        "ae": true,
+        "aae": true,
+        "ar": false,
+        "timing": "180-90 Days"
+      },
+      {
+        "num": 4,
+        "text": "Hold the renewal strategy meeting with the client and agree on the market approach.",
+        "ae": true,
+        "aae": true,
+        "ar": true,
+        "timing": "180-90 Days"
+      },
+      {
+        "num": 5,
+        "text": "Confirm target terms, pricing expectations, and the list of markets to approach.",
+        "ae": true,
+        "aae": true,
+        "ar": false,
+        "timing": "180-90 Days"
+      },
+      {
+        "num": 6,
+        "text": "Send a written recap covering agreed strategy, assignments, and target dates.",
+        "ae": false,
+        "aae": true,
+        "ar": true,
+        "timing": "180-90 Days"
+      }
+    ]
+  },
+  "Submission": {
+    "window": "90-60 Days",
+    "tasks": [
+      {
+        "num": 1,
+        "text": "Review returned exposure data for completeness and follow up on gaps.",
+        "ae": false,
+        "aae": true,
+        "ar": false,
+        "timing": ""
+      },
+      {
+        "num": 2,
+        "text": "Complete ACORD applications and supplemental forms for each line being marketed.",
+        "ae": false,
+        "aae": true,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 3,
+        "text": "Refresh loss runs if the valuation date will be stale by the time quotes are due.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 4,
+        "text": "Assemble the submission package and route it to the AE for review.",
+        "ae": false,
+        "aae": true,
+        "ar": false,
+        "timing": ""
+      },
+      {
+        "num": 5,
+        "text": "Approve the submission and share it with the client before release.",
+        "ae": true,
+        "aae": true,
+        "ar": false,
+        "timing": ""
+      },
+      {
+        "num": 6,
+        "text": "Release the submission to the market with a stated quote due date and track receipt.",
+        "ae": true,
+        "aae": true,
+        "ar": true,
+        "timing": ""
+      }
+    ]
+  },
+  "Proposal": {
+    "window": "60-15 Days",
+    "tasks": [
+      {
+        "num": 1,
+        "text": "Log quotes as they arrive and chase markets that have not responded by the due date.",
+        "ae": false,
+        "aae": true,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 2,
+        "text": "Route underwriter questions to the client team and return the answers to the market.",
+        "ae": false,
+        "aae": true,
+        "ar": false,
+        "timing": ""
+      },
+      {
+        "num": 3,
+        "text": "Build the Cost & Coverage Comparison (CCC) against expiring terms and flag gaps, new exclusions, and changed sublimits.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 4,
+        "text": "Negotiate pricing, terms, and conditions with the preferred markets.",
+        "ae": true,
+        "aae": true,
+        "ar": false,
+        "timing": ""
+      },
+      {
+        "num": 5,
+        "text": "Finalize the proposal, including compensation disclosure, and present it to the client.",
+        "ae": true,
+        "aae": true,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 6,
+        "text": "Offer premium finance options where the client wants to spread payment.",
+        "ae": true,
+        "aae": false,
+        "ar": true,
+        "timing": ""
+      }
+    ]
+  },
+  "Bind": {
+    "window": "15-0 Days",
+    "tasks": [
+      {
+        "num": 1,
+        "text": "Obtain written bind instructions from the client before the expiration date.",
+        "ae": true,
+        "aae": true,
+        "ar": false,
+        "timing": ""
+      },
+      {
+        "num": 2,
+        "text": "Issue bind orders to the selected carriers and confirm receipt.",
+        "ae": true,
+        "aae": true,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 3,
+        "text": "Check binders against the quoted terms and request corrections in writing.",
+        "ae": false,
+        "aae": true,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 4,
+        "text": "Send the client the binders, a binder transmittal letter, and the list of open subjectivities.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 5,
+        "text": "Update the agency management system and the certificate system with the bound policy terms.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 6,
+        "text": "Collect signed applications, surplus lines forms, and any other carrier-required signatures.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": ""
+      }
+    ]
+  },
+  "Invoice": {
+    "window": "0-5 Days",
+    "tasks": [
+      {
+        "num": 1,
+        "text": "Confirm bound premium, taxes, fees, and surplus lines charges against the binder.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 2,
+        "text": "Agree the premium allocation across entities or locations with the client.",
+        "ae": false,
+        "aae": true,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 3,
+        "text": "Issue the invoice and record the payment terms and due date.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 4,
+        "text": "Reconcile carrier invoices to the binder and resolve differences before they age.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": ""
+      },
+      {
+        "num": 5,
+        "text": "Track payment and follow up ahead of any cancellation or audit deadline.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": ""
+      }
+    ]
+  },
+  "Post Binding": {
+    "window": "0-60 Days",
+    "tasks": [
+      {
+        "num": 1,
+        "text": "Meet internally to list open subjectivities, service commitments, and their owners.",
+        "ae": true,
+        "aae": true,
+        "ar": true,
+        "timing": "0-21 Days"
+      },
+      {
+        "num": 2,
+        "text": "Close carrier subjectivities and keep written evidence in the document management system.",
+        "ae": false,
+        "aae": true,
+        "ar": true,
+        "timing": "0-21 Days"
+      },
+      {
+        "num": 3,
+        "text": "Issue updated certificates and auto ID cards from the certificate system.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": "0-21 Days"
+      },
+      {
+        "num": 4,
+        "text": "Produce the program summary and schedule of insurance for the bound term.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": "0-21 Days"
+      },
+      {
+        "num": 5,
+        "text": "Track policy receipt and follow up with carriers that are late.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": "30-60 Days post-bind"
+      },
+      {
+        "num": 6,
+        "text": "Check issued policies against the binder and request correcting endorsements.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": "30-60 Days post-bind"
+      },
+      {
+        "num": 7,
+        "text": "Deliver the policies with a policy transmittal letter (PTL) and file the final set in the document management system.",
+        "ae": false,
+        "aae": false,
+        "ar": true,
+        "timing": "30-60 Days post-bind"
+      }
+    ]
+  }
+}
