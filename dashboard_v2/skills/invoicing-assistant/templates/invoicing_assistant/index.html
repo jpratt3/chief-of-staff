@@ -377,6 +377,21 @@ async function ivUpload() {
       return;
     }
     ivRows = data.rows || [];
+    // A separately stated terrorism premium that the binder ADDS to its printed
+    // total has to appear as its own billable line. The parser reports it in
+    // `terrorism` with `terrorism_included_in_premium: false` rather than in
+    // `charges`; without promoting it here the table sums premium plus charges
+    // only, so the binder total renders below the figure the binder prints while
+    // still being badged as reconciled.
+    ivRows.forEach(r => {
+      if (r.terrorism && r.terrorism_included_in_premium === false) {
+        r.charges = r.charges || [];
+        if (!r.charges.some(l => (l.kind || '') === 'terrorism')) {
+          r.charges.push({ label: 'Terrorism Premium', kind: 'terrorism',
+                           amount: r.terrorism, percent: null });
+        }
+      }
+    });
     // A client picked by hand wins; otherwise take the one the binders resolved to.
     if (!document.getElementById('iv-client').value && data.client && data.client.client) {
       ivClient = data.client;

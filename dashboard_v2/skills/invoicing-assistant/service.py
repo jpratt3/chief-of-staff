@@ -167,6 +167,12 @@ class BinderRow:
     charges:           list = field(default_factory=list)
     excluded:          list = field(default_factory=list)
     charges_total:     float = 0.0
+    # A separately stated terrorism (TRIA) premium. Carriers print it both ways:
+    # inside the premium figure, or added on top of it. money.py decides which
+    # from the arithmetic and reports it here so the UI can show it as its own
+    # billable line when it is additive.
+    terrorism:         Optional[float] = None
+    terrorism_included_in_premium: bool = True
     total:             float = 0.0
     printed_total:     Optional[float] = None
     net_due:           Optional[float] = None
@@ -244,6 +250,9 @@ def extract_rows(files: list[tuple[bytes, str]]) -> list[dict]:
             row.charges          = result["charges"]
             row.excluded         = result["excluded"]
             row.charges_total    = result["charges_total"]
+            row.terrorism        = result.get("terrorism")
+            row.terrorism_included_in_premium = result.get(
+                "terrorism_included_in_premium", True)
             row.total            = result["total"]
             row.printed_total    = result["printed_total"]
             row.net_due          = result["net_due"]
