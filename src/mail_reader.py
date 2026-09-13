@@ -16,7 +16,7 @@ class MailReaderError(Exception):
 def _collect_team_emails(client_config: Any) -> Set[str]:
     """
     Flatten all team member email addresses from client_config into a
-    lowercase set.  Includes Jordan's email from _meta.jordan_email.
+    lowercase set.  Includes the operator's own address from _meta.
 
     client_config is the ClientConfig object from client_resolver.
     Falls back gracefully if the attribute is missing.
@@ -24,10 +24,12 @@ def _collect_team_emails(client_config: Any) -> Set[str]:
     emails: Set[str] = set()
     raw = getattr(client_config, "raw", None) or {}
 
-    # Jordan's email from _meta
-    jordan_email = str(raw.get("_meta", {}).get("jordan_email") or "").strip().lower()
-    if jordan_email:
-        emails.add(jordan_email)
+    # The operator's own address. `user_email` is the current key; `jordan_email`
+    # is accepted so an older local clients.json keeps working.
+    meta = raw.get("_meta", {})
+    own = str(meta.get("user_email") or meta.get("jordan_email") or "").strip().lower()
+    if own:
+        emails.add(own)
 
     for client in raw.get("clients", []):
         team = client.get("team") or {}

@@ -22,6 +22,10 @@ _TASKS_XLSX = _ROOT / "docs" / "Renewal_Timeline.xlsx"
 # what a fresh clone renders its stage task lists from.
 _TASKS_JSON = _ROOT / "config" / "workflow_tasks.json"
 _CLIENTS    = _ROOT / "config" / "clients.json"
+# Committed synthetic fallbacks. The real files above are gitignored, so without
+# these a fresh clone renders an empty dashboard.
+_CLIENTS_EXAMPLE     = _ROOT / "config" / "clients.example.json"
+_COMPLETIONS_EXAMPLE = _ROOT / "data" / "completions.example.json"
 _SKILL_MAP  = _ROOT / "config" / "skill_map.json"
 _COMPLETIONS = _ROOT / "data" / "completions.json"
 _STAGE_RESP  = _ROOT / "data" / "stage_responses.json"
@@ -135,7 +139,9 @@ def _load_json(path: Path, default=None):
 
 
 def load_completions() -> Dict:
-    return _load_json(_COMPLETIONS, {})
+    if _COMPLETIONS.exists():
+        return _load_json(_COMPLETIONS, {})
+    return _load_json(_COMPLETIONS_EXAMPLE, {})
 
 
 def save_completions(data: Dict) -> None:
@@ -170,7 +176,8 @@ def load_skill_map() -> Dict:
 # ── Client config ─────────────────────────────────────────────────────────────
 
 def load_clients() -> List[Dict]:
-    cfg = _load_json(_CLIENTS, {"clients": []})
+    source = _CLIENTS if _CLIENTS.exists() else _CLIENTS_EXAMPLE
+    cfg = _load_json(source, {"clients": []})
     out = []
     for c in cfg.get("clients", []):
         if not c.get("active", True):

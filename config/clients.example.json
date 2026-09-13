@@ -1,9 +1,8 @@
 {
   "_meta": {
-    "description": "Chief of Staff client configuration. Single source of truth for client names, engagements, renewal schedules, and role assignments. Copy to clients.json and fill in with real values — clients.json is gitignored.",
+    "description": "Sample client book shipped with the repo. Every client, billing id, and team member is synthetic. Copy to config/clients.json (gitignored) and replace with real values for local use; the dashboard falls back to this file when clients.json is absent.",
     "version": "1.0",
-    "user_email": "you@yourbrokerage.com",
-    "user_default_role": "AR",
+    "jordan_default_role": "AR",
     "show_all_workflow_tasks": true,
     "non_renewal_types": [
       "COI / Certificate Request",
@@ -18,83 +17,36 @@
       "Placeholder"
     ],
     "inactive_notes": "Folders listed here are excluded from all processing.",
-    "billing_ids": "Per-client billing identifiers used by the Invoicing Assistant. cn = client number, the string 'CN' plus 8 digits. rmb = list of billing IDs, each a 12-digit id held as a string so leading digits and length are preserved; an account can carry more than one.",
-    "roles": "ao_ce = Account Officer / Client Executive. ae = Account Executive. ar = Account Representative. Each carries a name and an email; the inference engine treats mail from these addresses as team-internal signal rather than client signal."
+    "billing_ids": "Per-client billing identifiers used by the Invoicing Assistant. cn = client number, the string 'CN' plus 8 digits. rmb = list of billing IDs, each a 12-digit id held as a string so leading zeros and length are preserved; an account can carry more than one. All values in this file are synthetic.",
+    "mock": true,
+    "user_email": "you@examplebrokerage.com"
   },
   "clients": [
     {
-      "folder_name": "Northwind",
-      "display_name": "Northwind Foods",
-      "cn": "CN00000001",
+      "folder_name": "Bellweather",
+      "display_name": "Bellweather Financial",
+      "cn": "CN19493931",
       "rmb": [
-        "100000000001"
+        "259278598720",
+        "201762219310",
+        "709761785775"
       ],
       "active": true,
-      "user_role": "AR",
+      "jordan_role": "AR",
       "show_all_workflow_tasks": true,
-      "notes": "Single-track account — one engagement, one renewal date.",
-      "engagements": [
-        {
-          "label": "",
-          "legal_name": "Northwind Foods Inc a cooperative",
-          "project_name": "08/31/2026 Renewal",
-          "renewal_date": "08/31/2026",
-          "primary": true,
-          "stage_dates": {
-            "Renewal Preparation": "02/02/2026",
-            "RSM": "04/07/2026",
-            "Submission": "06/24/2026",
-            "Proposal": "07/22/2026",
-            "Bind": "08/31/2026",
-            "Invoice": "08/31/2026",
-            "Post Binding": "09/10/2026"
-          }
-        }
-      ],
-      "aliases": [
-        "Northwind",
-        "Northwind Foods",
-        "NWF"
-      ],
-      "team": {
-        "ao_ce": {
-          "name": "First Last",
-          "email": "first.last@yourbrokerage.com"
-        },
-        "ae": {
-          "name": "First Last",
-          "email": "first.last@yourbrokerage.com"
-        },
-        "ar": {
-          "name": "Your Name",
-          "email": "you@yourbrokerage.com"
-        }
-      }
-    },
-    {
-      "folder_name": "Vantage",
-      "display_name": "Vantage",
-      "cn": "CN00000002",
-      "rmb": [
-        "200000000001",
-        "200000000002"
-      ],
-      "active": true,
-      "user_role": "AR",
-      "show_all_workflow_tasks": true,
-      "notes": "Parallel-track account. Three coverage programs on three different renewal dates — this is the shape a spreadsheet handles badly and the reason the tracker keys on engagement rather than client.",
+      "notes": "",
       "engagements": [
         {
           "label": "P&C",
-          "legal_name": "Vantage Technologies (P&C)",
+          "legal_name": "Bellweather Financial (P&C)",
           "project_name": "12/18/2026 Renewal (P&C)",
           "renewal_date": "12/18/2026",
           "primary": true,
           "stage_dates": {
-            "Renewal Preparation": "07/06/2026",
-            "RSM": "09/19/2026",
-            "Submission": "08/10/2026",
-            "Proposal": "12/04/2026",
+            "Renewal Preparation": "05/29/2026",
+            "RSM": "07/24/2026",
+            "Submission": "10/14/2026",
+            "Proposal": "11/15/2026",
             "Bind": "12/18/2026",
             "Invoice": "12/18/2026",
             "Post Binding": "12/28/2026"
@@ -102,102 +54,1153 @@
         },
         {
           "label": "ML + Cyber",
-          "legal_name": "Vantage Technologies (ML + Cyber)",
-          "project_name": "01/13/2026 Renewal (ML + Cyber)",
-          "renewal_date": "01/13/2026",
+          "legal_name": "Bellweather Financial (ML + Cyber)",
+          "project_name": "01/13/2027 Renewal (ML + Cyber)",
+          "renewal_date": "01/13/2027",
           "primary": false,
           "stage_dates": {
-            "Renewal Preparation": "08/01/2025",
-            "RSM": "10/15/2025",
-            "Submission": "10/30/2025",
-            "Proposal": "12/30/2025",
-            "Bind": "01/13/2026",
-            "Invoice": "01/13/2026",
-            "Post Binding": "01/23/2026"
+            "Renewal Preparation": "06/21/2026",
+            "RSM": "08/23/2026",
+            "Submission": "10/28/2026",
+            "Proposal": "12/10/2026",
+            "Bind": "01/13/2027",
+            "Invoice": "01/13/2027",
+            "Post Binding": "01/23/2027"
           }
         },
         {
           "label": "Intl",
-          "legal_name": "Vantage Technologies (Intl)",
-          "project_name": "08/17/2026 Renewal (Intl)",
-          "renewal_date": "08/17/2026",
+          "legal_name": "Bellweather Financial (Intl)",
+          "project_name": "08/17/2027 Renewal (Intl)",
+          "renewal_date": "08/17/2027",
           "primary": false,
           "stage_dates": {
-            "Renewal Preparation": "03/05/2026",
-            "RSM": "05/19/2026",
-            "Submission": "06/03/2026",
-            "Proposal": "08/03/2026",
-            "Bind": "08/17/2026",
-            "Invoice": "08/17/2026",
-            "Post Binding": "08/27/2026"
+            "Renewal Preparation": "01/27/2027",
+            "RSM": "03/25/2027",
+            "Submission": "06/09/2027",
+            "Proposal": "07/05/2027",
+            "Bind": "08/17/2027",
+            "Invoice": "08/17/2027",
+            "Post Binding": "08/27/2027"
           }
         }
       ],
       "aliases": [
-        "Vantage"
+        "BWF",
+        "Bellweather"
       ],
       "team": {
         "ao_ce": {
-          "name": "First Last",
-          "email": "first.last@yourbrokerage.com"
+          "name": "Tabitha Halloran",
+          "email": "tabitha.halloran@examplebrokerage.com"
         },
-        "ae": {
-          "name": "First Last",
-          "email": "first.last@yourbrokerage.com"
+        "aae": {
+          "name": "Dominic Delgado",
+          "email": "dominic.delgado@examplebrokerage.com"
         },
         "ar": {
           "name": "Your Name",
-          "email": "you@yourbrokerage.com"
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_casualty": [
+          {
+            "name": "Nadia Hargrave",
+            "email": "nadia.hargrave@examplebrokerage.com"
+          }
+        ],
+        "placement_environmental": [
+          {
+            "name": "Dana Fairbanks",
+            "email": "dana.fairbanks@examplebrokerage.com"
+          }
+        ]
+      }
+    },
+    {
+      "folder_name": "Copperline",
+      "display_name": "Copperline Energy",
+      "cn": "CN68370420",
+      "rmb": [
+        "848499746298",
+        "840867483572",
+        "711354948369"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Copperline Energy Partners LP",
+          "project_name": "11/15/2026 Renewal",
+          "renewal_date": "11/15/2026",
+          "stage_dates": {
+            "Renewal Preparation": "04/17/2026",
+            "RSM": "06/22/2026",
+            "Submission": "09/09/2026",
+            "Proposal": "09/29/2026",
+            "Bind": "11/15/2026",
+            "Invoice": "11/15/2026",
+            "Post Binding": "11/25/2026"
+          }
         }
+      ],
+      "aliases": [
+        "CLE",
+        "Copperline"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Hollis Lindgren",
+          "email": "hollis.lindgren@examplebrokerage.com"
+        },
+        "ae": {
+          "name": "Caleb Amari",
+          "email": "caleb.amari@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_cyber": [
+          {
+            "name": "Caleb Brightwell",
+            "email": "caleb.brightwell@examplebrokerage.com"
+          }
+        ],
+        "placement_casualty": [
+          {
+            "name": "Amara Cardoza",
+            "email": "amara.cardoza@examplebrokerage.com"
+          }
+        ],
+        "placement_excess": [
+          {
+            "name": "Owen Hargrave",
+            "email": "owen.hargrave@examplebrokerage.com"
+          }
+        ]
+      }
+    },
+    {
+      "folder_name": "Driftwood",
+      "display_name": "Driftwood Brewing",
+      "cn": "CN79993266",
+      "rmb": [
+        "428192755011",
+        "691910522738",
+        "615930922456"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "Bound; in post-binding follow-up.",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Driftwood Brewing Company LLC",
+          "project_name": "08/31/2026 Renewal",
+          "renewal_date": "08/31/2026",
+          "stage_dates": {
+            "Renewal Preparation": "01/29/2026",
+            "RSM": "04/11/2026",
+            "Submission": "06/19/2026",
+            "Proposal": "07/31/2026",
+            "Bind": "08/31/2026",
+            "Invoice": "08/31/2026",
+            "Post Binding": "09/10/2026"
+          }
+        }
+      ],
+      "aliases": [
+        "DBC",
+        "Driftwood"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Tabitha Nyland",
+          "email": "tabitha.nyland@examplebrokerage.com"
+        },
+        "ae": {
+          "name": "Grant Abernathy",
+          "email": "grant.abernathy@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_finpro": [
+          {
+            "name": "Colette Castellano",
+            "email": "colette.castellano@examplebrokerage.com"
+          },
+          {
+            "name": "Caleb Pruitt",
+            "email": "caleb.pruitt@examplebrokerage.com"
+          }
+        ]
+      }
+    },
+    {
+      "folder_name": "Halyard",
+      "display_name": "Halyard Marine",
+      "cn": "CN71987802",
+      "rmb": [
+        "862946815423",
+        "976188816625",
+        "234192527560"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Halyard Marine Holdings, L.P.",
+          "project_name": "02/01/2027 Renewal",
+          "renewal_date": "02/01/2027",
+          "stage_dates": {
+            "Renewal Preparation": "07/13/2026",
+            "RSM": "09/01/2026",
+            "Submission": "12/04/2026",
+            "Proposal": "12/27/2026",
+            "Bind": "02/01/2027",
+            "Invoice": "02/01/2027",
+            "Post Binding": "02/11/2027"
+          }
+        }
+      ],
+      "aliases": [
+        "HMH",
+        "Halyard"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Declan Ashford",
+          "email": "declan.ashford@examplebrokerage.com"
+        },
+        "aae": {
+          "name": "Caleb Castellano",
+          "email": "caleb.castellano@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_cyber": [
+          {
+            "name": "Renee Fairbanks",
+            "email": "renee.fairbanks@examplebrokerage.com"
+          },
+          {
+            "name": "Emil Brennan",
+            "email": "emil.brennan@examplebrokerage.com"
+          }
+        ],
+        "placement_environmental": [
+          {
+            "name": "Rosalind Cardoza",
+            "email": "rosalind.cardoza@examplebrokerage.com"
+          }
+        ]
       }
     },
     {
       "folder_name": "Ironclad",
-      "display_name": "Ironclad",
-      "cn": "CN00000003",
+      "display_name": "Ironclad Manufacturing",
+      "cn": "CN31806799",
       "rmb": [
-        "300000000001"
+        "220166713704",
+        "504018391832",
+        "119079638082"
       ],
       "active": true,
-      "user_role": "AR",
+      "jordan_role": "AR",
       "show_all_workflow_tasks": true,
-      "notes": "Aliases matter: mail arrives under several trading entity names that all resolve to one client folder.",
+      "notes": "",
       "engagements": [
         {
           "label": "",
-          "legal_name": "Ironclad Trading LLC",
-          "project_name": "01/16/2026 Renewal",
-          "renewal_date": "01/16/2026",
-          "primary": true,
+          "legal_name": "Ironclad Manufacturing Industries Inc",
+          "project_name": "10/15/2026 Renewal",
+          "renewal_date": "10/15/2026",
           "stage_dates": {
-            "Renewal Preparation": "07/20/2025",
-            "RSM": "10/01/2025",
-            "Submission": "11/05/2025",
-            "Proposal": "12/19/2025",
-            "Bind": "01/16/2026",
-            "Invoice": "01/16/2026",
-            "Post Binding": "01/26/2026"
+            "Renewal Preparation": "03/24/2026",
+            "RSM": "05/31/2026",
+            "Submission": "07/30/2026",
+            "Proposal": "09/05/2026",
+            "Bind": "10/15/2026",
+            "Invoice": "10/15/2026",
+            "Post Binding": "10/25/2026"
           }
         }
       ],
       "aliases": [
-        "Ironclad",
-        "Ironclad Trading",
-        "Ironclad Holdings"
+        "ICM",
+        "Ironclad"
       ],
       "team": {
         "ao_ce": {
-          "name": "First Last",
-          "email": "first.last@yourbrokerage.com"
+          "name": "Roland Nyland",
+          "email": "roland.nyland@examplebrokerage.com"
         },
         "ae": {
-          "name": "First Last",
-          "email": "first.last@yourbrokerage.com"
+          "name": "Ingrid Castellano",
+          "email": "ingrid.castellano@examplebrokerage.com"
         },
         "ar": {
           "name": "Your Name",
-          "email": "you@yourbrokerage.com"
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_casualty": [
+          {
+            "name": "Bianca Reyes",
+            "email": "bianca.reyes@examplebrokerage.com"
+          },
+          {
+            "name": "Jocelyn Nakamura",
+            "email": "jocelyn.nakamura@examplebrokerage.com"
+          }
+        ],
+        "placement_environmental": [
+          {
+            "name": "Camille Ganz",
+            "email": "camille.ganz@examplebrokerage.com"
+          },
+          {
+            "name": "Baxter Thorne",
+            "email": "baxter.thorne@examplebrokerage.com"
+          }
+        ]
+      }
+    },
+    {
+      "folder_name": "Juniper",
+      "display_name": "Juniper Grove Farms",
+      "cn": "CN29111149",
+      "rmb": [
+        "964542291195",
+        "670939426341",
+        "395791982688"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Juniper Grove Farms Inc a cooperative",
+          "project_name": "03/01/2027 Renewal",
+          "renewal_date": "03/01/2027",
+          "stage_dates": {
+            "Renewal Preparation": "07/27/2026",
+            "RSM": "09/28/2026",
+            "Submission": "12/26/2026",
+            "Proposal": "01/28/2027",
+            "Bind": "03/01/2027",
+            "Invoice": "03/01/2027",
+            "Post Binding": "03/11/2027"
+          }
         }
+      ],
+      "aliases": [
+        "JGF",
+        "Juniper"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Nadia Nakamura",
+          "email": "nadia.nakamura@examplebrokerage.com"
+        },
+        "ae": {
+          "name": "Ingrid Pruitt",
+          "email": "ingrid.pruitt@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        }
+      }
+    },
+    {
+      "folder_name": "Kestrel",
+      "display_name": "Kestrel Robotics",
+      "cn": "CN37039810",
+      "rmb": [
+        "149630722233",
+        "294085087745",
+        "322847807960"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "",
+      "engagements": [
+        {
+          "label": "P&C",
+          "legal_name": "Kestrel Robotics Inc",
+          "project_name": "10/31/2026 Renewal (P&C)",
+          "renewal_date": "10/31/2026",
+          "primary": true,
+          "stage_dates": {
+            "Renewal Preparation": "03/31/2026",
+            "RSM": "06/04/2026",
+            "Submission": "08/25/2026",
+            "Proposal": "09/30/2026",
+            "Bind": "10/31/2026",
+            "Invoice": "10/31/2026",
+            "Post Binding": "11/10/2026"
+          }
+        },
+        {
+          "label": "Cyber",
+          "legal_name": "Kestrel Robotics Cyber Tower",
+          "project_name": "02/28/2027 Renewal (Cyber)",
+          "renewal_date": "02/28/2027",
+          "primary": false,
+          "stage_dates": {
+            "Renewal Preparation": "08/06/2026",
+            "RSM": "10/03/2026",
+            "Submission": "12/23/2026",
+            "Proposal": "01/22/2027",
+            "Bind": "02/28/2027",
+            "Invoice": "02/28/2027",
+            "Post Binding": "03/10/2027"
+          }
+        }
+      ],
+      "aliases": [
+        "KRB",
+        "Kestrel"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Marta Abernathy",
+          "email": "marta.abernathy@examplebrokerage.com"
+        },
+        "ae": {
+          "name": "Marta Pruitt",
+          "email": "marta.pruitt@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_property": [
+          {
+            "name": "Priya Halloran",
+            "email": "priya.halloran@examplebrokerage.com"
+          }
+        ],
+        "placement_excess": [
+          {
+            "name": "Dominic Ellsworth",
+            "email": "dominic.ellsworth@examplebrokerage.com"
+          }
+        ]
+      }
+    },
+    {
+      "folder_name": "Larkspur",
+      "display_name": "Larkspur Health",
+      "cn": "CN94205586",
+      "rmb": [
+        "920205621682",
+        "604872434859",
+        "750337625839"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Larkspur Health Systems LLC",
+          "project_name": "11/01/2026 Renewal",
+          "renewal_date": "11/01/2026",
+          "stage_dates": {
+            "Renewal Preparation": "04/13/2026",
+            "RSM": "06/04/2026",
+            "Submission": "09/03/2026",
+            "Proposal": "09/27/2026",
+            "Bind": "11/01/2026",
+            "Invoice": "11/01/2026",
+            "Post Binding": "11/11/2026"
+          }
+        }
+      ],
+      "aliases": [
+        "LHS",
+        "Larkspur"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Marcus Kovach",
+          "email": "marcus.kovach@examplebrokerage.com"
+        },
+        "ae": {
+          "name": "Wes Rutherford",
+          "email": "wes.rutherford@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_environmental": [
+          {
+            "name": "Emil Ganz",
+            "email": "emil.ganz@examplebrokerage.com"
+          }
+        ]
+      }
+    },
+    {
+      "folder_name": "Meridian",
+      "display_name": "Meridian Freight",
+      "cn": "CN52747328",
+      "rmb": [
+        "287027808874",
+        "217061509094",
+        "438556719640"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Meridian Freight Lines Inc",
+          "project_name": "12/01/2026 Renewal",
+          "renewal_date": "12/01/2026",
+          "stage_dates": {
+            "Renewal Preparation": "04/28/2026",
+            "RSM": "06/30/2026",
+            "Submission": "09/18/2026",
+            "Proposal": "10/17/2026",
+            "Bind": "12/01/2026",
+            "Invoice": "12/01/2026",
+            "Post Binding": "12/11/2026"
+          }
+        }
+      ],
+      "aliases": [
+        "MFL",
+        "Meridian"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Priya Delgado",
+          "email": "priya.delgado@examplebrokerage.com"
+        },
+        "aae": {
+          "name": "Priya Abernathy",
+          "email": "priya.abernathy@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_property": [
+          {
+            "name": "Nora Ellsworth",
+            "email": "nora.ellsworth@examplebrokerage.com"
+          }
+        ]
+      }
+    },
+    {
+      "folder_name": "Northwind",
+      "display_name": "Northwind Foods",
+      "cn": "CN19335665",
+      "rmb": [
+        "156382207726",
+        "861414583739",
+        "989045777508"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Northwind Foods Inc a cooperative",
+          "project_name": "10/01/2026 Renewal",
+          "renewal_date": "10/01/2026",
+          "stage_dates": {
+            "Renewal Preparation": "03/01/2026",
+            "RSM": "05/07/2026",
+            "Submission": "07/16/2026",
+            "Proposal": "08/27/2026",
+            "Bind": "10/01/2026",
+            "Invoice": "10/01/2026",
+            "Post Binding": "10/11/2026"
+          }
+        }
+      ],
+      "aliases": [
+        "NWF",
+        "Northwind"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Grant Sciarra",
+          "email": "grant.sciarra@examplebrokerage.com"
+        },
+        "ae": {
+          "name": "Owen Ashford",
+          "email": "owen.ashford@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_cyber": [
+          {
+            "name": "Yusuf Ashby",
+            "email": "yusuf.ashby@examplebrokerage.com"
+          }
+        ],
+        "placement_property": [
+          {
+            "name": "Tabitha Vance",
+            "email": "tabitha.vance@examplebrokerage.com"
+          },
+          {
+            "name": "Colette Brennan",
+            "email": "colette.brennan@examplebrokerage.com"
+          }
+        ],
+        "placement_casualty": [
+          {
+            "name": "Theo Whitfield",
+            "email": "theo.whitfield@examplebrokerage.com"
+          },
+          {
+            "name": "Marcus Nyland",
+            "email": "marcus.nyland@examplebrokerage.com"
+          }
+        ]
+      }
+    },
+    {
+      "folder_name": "Pinnacle",
+      "display_name": "Pinnacle Composites",
+      "cn": "CN58678102",
+      "rmb": [
+        "931405633453",
+        "909810132931",
+        "939430456861"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Pinnacle Composites Inc",
+          "project_name": "06/15/2027 Renewal",
+          "renewal_date": "06/15/2027",
+          "stage_dates": {
+            "Renewal Preparation": "11/16/2026",
+            "RSM": "01/22/2027",
+            "Submission": "04/08/2027",
+            "Proposal": "05/06/2027",
+            "Bind": "06/15/2027",
+            "Invoice": "06/15/2027",
+            "Post Binding": "06/25/2027"
+          }
+        }
+      ],
+      "aliases": [
+        "PCI",
+        "Pinnacle"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Bianca Bellamy",
+          "email": "bianca.bellamy@examplebrokerage.com"
+        },
+        "aae": {
+          "name": "Jocelyn Abernathy",
+          "email": "jocelyn.abernathy@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_environmental": [
+          {
+            "name": "Jocelyn Rutherford",
+            "email": "jocelyn.rutherford@examplebrokerage.com"
+          },
+          {
+            "name": "Grant Thorne",
+            "email": "grant.thorne@examplebrokerage.com"
+          }
+        ]
+      }
+    },
+    {
+      "folder_name": "QuarryHill",
+      "display_name": "Quarry Hill Aggregates",
+      "cn": "CN79115580",
+      "rmb": [
+        "108266018706",
+        "893918914372",
+        "765615065686"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "Bound; policies outstanding.",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Quarry Hill Aggregates Inc",
+          "project_name": "07/15/2026 Renewal",
+          "renewal_date": "07/15/2026",
+          "stage_dates": {
+            "Renewal Preparation": "12/25/2025",
+            "RSM": "02/16/2026",
+            "Submission": "05/12/2026",
+            "Proposal": "05/30/2026",
+            "Bind": "07/15/2026",
+            "Invoice": "07/15/2026",
+            "Post Binding": "07/25/2026"
+          }
+        }
+      ],
+      "aliases": [
+        "QHA",
+        "Quarry Hill"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Harlan Okafor",
+          "email": "harlan.okafor@examplebrokerage.com"
+        },
+        "ae": {
+          "name": "Owen Ellsworth",
+          "email": "owen.ellsworth@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        }
+      }
+    },
+    {
+      "folder_name": "Ravenswood",
+      "display_name": "Ravenswood Media",
+      "cn": "CN82965839",
+      "rmb": [
+        "186209106923",
+        "994281358702",
+        "773914122971"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Ravenswood Media LLC",
+          "project_name": "04/01/2027 Renewal",
+          "renewal_date": "04/01/2027",
+          "stage_dates": {
+            "Renewal Preparation": "09/05/2026",
+            "RSM": "11/06/2026",
+            "Submission": "01/30/2027",
+            "Proposal": "02/27/2027",
+            "Bind": "04/01/2027",
+            "Invoice": "04/01/2027",
+            "Post Binding": "04/11/2027"
+          }
+        }
+      ],
+      "aliases": [
+        "RWM",
+        "Ravenswood"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Peter Reyes",
+          "email": "peter.reyes@examplebrokerage.com"
+        },
+        "aae": {
+          "name": "Owen Amari",
+          "email": "owen.amari@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_casualty": [
+          {
+            "name": "Peter Bellamy",
+            "email": "peter.bellamy@examplebrokerage.com"
+          }
+        ]
+      }
+    },
+    {
+      "folder_name": "Sandpiper",
+      "display_name": "Sandpiper Hospitality",
+      "cn": "CN56897113",
+      "rmb": [
+        "858326412036",
+        "534090238300",
+        "511051041257"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Sandpiper Hospitality Group LLC",
+          "project_name": "12/31/2026 Renewal",
+          "renewal_date": "12/31/2026",
+          "stage_dates": {
+            "Renewal Preparation": "06/05/2026",
+            "RSM": "08/04/2026",
+            "Submission": "10/20/2026",
+            "Proposal": "11/27/2026",
+            "Bind": "12/31/2026",
+            "Invoice": "12/31/2026",
+            "Post Binding": "01/10/2027"
+          }
+        }
+      ],
+      "aliases": [
+        "SHG",
+        "Sandpiper"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Rafael Oyelaran",
+          "email": "rafael.oyelaran@examplebrokerage.com"
+        },
+        "ae": {
+          "name": "Amara Lindgren",
+          "email": "amara.lindgren@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_cyber": [
+          {
+            "name": "Rafael Danforth",
+            "email": "rafael.danforth@examplebrokerage.com"
+          }
+        ]
+      }
+    },
+    {
+      "folder_name": "Silverthorn",
+      "display_name": "Silverthorn Labs",
+      "cn": "CN00059855",
+      "rmb": [
+        "218637633201",
+        "650071271768",
+        "105469002825"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "Bound; invoice out, awaiting policies.",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Silverthorn Labs Corporation",
+          "project_name": "09/08/2026 Renewal",
+          "renewal_date": "09/08/2026",
+          "stage_dates": {
+            "Renewal Preparation": "02/12/2026",
+            "RSM": "04/21/2026",
+            "Submission": "06/29/2026",
+            "Proposal": "08/04/2026",
+            "Bind": "09/08/2026",
+            "Invoice": "09/08/2026",
+            "Post Binding": "09/18/2026"
+          }
+        }
+      ],
+      "aliases": [
+        "STL",
+        "Silverthorn"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Grant Danforth",
+          "email": "grant.danforth@examplebrokerage.com"
+        },
+        "ae": {
+          "name": "Jocelyn Stack",
+          "email": "jocelyn.stack@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_cyber": [
+          {
+            "name": "Sylvia Pruitt",
+            "email": "sylvia.pruitt@examplebrokerage.com"
+          }
+        ],
+        "placement_environmental": [
+          {
+            "name": "Yusuf Mercer",
+            "email": "yusuf.mercer@examplebrokerage.com"
+          }
+        ],
+        "placement_casualty": [
+          {
+            "name": "Owen Nyland",
+            "email": "owen.nyland@examplebrokerage.com"
+          }
+        ]
+      }
+    },
+    {
+      "folder_name": "Stonebridge",
+      "display_name": "Stonebridge Realty",
+      "cn": "CN68882689",
+      "rmb": [
+        "376033933297",
+        "346702412825",
+        "783401712477"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Stonebridge Realty Trust",
+          "project_name": "05/01/2027 Renewal",
+          "renewal_date": "05/01/2027",
+          "stage_dates": {
+            "Renewal Preparation": "09/30/2026",
+            "RSM": "12/07/2026",
+            "Submission": "02/16/2027",
+            "Proposal": "03/24/2027",
+            "Bind": "05/01/2027",
+            "Invoice": "05/01/2027",
+            "Post Binding": "05/11/2027"
+          }
+        }
+      ],
+      "aliases": [
+        "SBR",
+        "Stonebridge"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Nadia Rutherford",
+          "email": "nadia.rutherford@examplebrokerage.com"
+        },
+        "ae": {
+          "name": "Wes Pruitt",
+          "email": "wes.pruitt@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_property": [
+          {
+            "name": "Peter Quintero",
+            "email": "peter.quintero@examplebrokerage.com"
+          }
+        ]
+      }
+    },
+    {
+      "folder_name": "Thornbury",
+      "display_name": "Thornbury Chemical",
+      "cn": "CN89185209",
+      "rmb": [
+        "785362846238",
+        "388250266090",
+        "447291205460"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "Bind order placed; invoicing lags bind by a week.",
+      "engagements": [
+        {
+          "label": "",
+          "legal_name": "Thornbury Chemical Co",
+          "project_name": "09/10/2026 Renewal",
+          "renewal_date": "09/10/2026",
+          "stage_dates": {
+            "Renewal Preparation": "02/16/2026",
+            "RSM": "04/21/2026",
+            "Submission": "06/30/2026",
+            "Proposal": "08/05/2026",
+            "Bind": "09/10/2026",
+            "Invoice": "09/17/2026",
+            "Post Binding": "09/27/2026"
+          }
+        }
+      ],
+      "aliases": [
+        "TCC",
+        "Thornbury"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Marcus Danforth",
+          "email": "marcus.danforth@examplebrokerage.com"
+        },
+        "aae": {
+          "name": "Tessa Castellano",
+          "email": "tessa.castellano@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_excess": [
+          {
+            "name": "Harlan Abernathy",
+            "email": "harlan.abernathy@examplebrokerage.com"
+          },
+          {
+            "name": "Tessa Quintero",
+            "email": "tessa.quintero@examplebrokerage.com"
+          }
+        ],
+        "placement_property": [
+          {
+            "name": "Dana Halloran",
+            "email": "dana.halloran@examplebrokerage.com"
+          }
+        ]
+      }
+    },
+    {
+      "folder_name": "Vantage",
+      "display_name": "Vantage Logistics",
+      "cn": "CN20002867",
+      "rmb": [
+        "578557515969",
+        "548363303016",
+        "409103103531"
+      ],
+      "active": true,
+      "jordan_role": "AR",
+      "show_all_workflow_tasks": true,
+      "notes": "Four-track account - separate renewal date per program.",
+      "engagements": [
+        {
+          "label": "Casualty + FI",
+          "legal_name": "Vantage Logistics Holdings, L.P.",
+          "project_name": "01/16/2027 Renewal (Casualty + FI)",
+          "renewal_date": "01/16/2027",
+          "primary": true,
+          "stage_dates": {
+            "Renewal Preparation": "06/12/2026",
+            "RSM": "08/14/2026",
+            "Submission": "11/14/2026",
+            "Proposal": "11/29/2026",
+            "Bind": "01/16/2027",
+            "Invoice": "01/16/2027",
+            "Post Binding": "01/26/2027"
+          }
+        },
+        {
+          "label": "Property",
+          "legal_name": "Vantage Logistics Trading LLC",
+          "project_name": "12/31/2026 Renewal (Property)",
+          "renewal_date": "12/31/2026",
+          "primary": false,
+          "stage_dates": {
+            "Renewal Preparation": "06/06/2026",
+            "RSM": "07/31/2026",
+            "Submission": "11/01/2026",
+            "Proposal": "11/13/2026",
+            "Bind": "12/31/2026",
+            "Invoice": "12/31/2026",
+            "Post Binding": "01/10/2027"
+          }
+        },
+        {
+          "label": "Cyber",
+          "legal_name": "Vantage Logistics Holdings, L.P.",
+          "project_name": "03/21/2027 Renewal (Cyber)",
+          "renewal_date": "03/21/2027",
+          "primary": false,
+          "stage_dates": {
+            "Renewal Preparation": "08/29/2026",
+            "RSM": "10/25/2026",
+            "Submission": "01/06/2027",
+            "Proposal": "02/13/2027",
+            "Bind": "03/21/2027",
+            "Invoice": "03/21/2027",
+            "Post Binding": "03/31/2027"
+          }
+        },
+        {
+          "label": "Intl",
+          "legal_name": "Vantage Logistics Intl Ltd",
+          "project_name": "05/01/2027 Renewal (Intl)",
+          "renewal_date": "05/01/2027",
+          "primary": false,
+          "stage_dates": {
+            "Renewal Preparation": "10/01/2026",
+            "RSM": "11/30/2026",
+            "Submission": "02/22/2027",
+            "Proposal": "03/14/2027",
+            "Bind": "05/01/2027",
+            "Invoice": "05/01/2027",
+            "Post Binding": "05/11/2027"
+          }
+        }
+      ],
+      "aliases": [
+        "VLG",
+        "Vantage"
+      ],
+      "team": {
+        "ao_ce": {
+          "name": "Wes Braddock",
+          "email": "wes.braddock@examplebrokerage.com"
+        },
+        "ae": {
+          "name": "Marta Lowell",
+          "email": "marta.lowell@examplebrokerage.com"
+        },
+        "ar": {
+          "name": "Your Name",
+          "email": "you@examplebrokerage.com"
+        },
+        "placement_cyber": [
+          {
+            "name": "Yusuf Vance",
+            "email": "yusuf.vance@examplebrokerage.com"
+          }
+        ],
+        "placement_casualty": [
+          {
+            "name": "Declan Cardoza",
+            "email": "declan.cardoza@examplebrokerage.com"
+          }
+        ]
       }
     }
   ]
