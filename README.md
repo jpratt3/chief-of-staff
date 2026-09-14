@@ -20,7 +20,7 @@ and fictional data.
 1. **[The welcome dashboard](#1-the-welcome-dashboard)** — sign in & understand exactly where each client stands - in a matter of seconds
 2. **[The loss run request](#2-the-loss-run-request)** — read a stack of binders, extract necessary fields, & produce one email per carrier
 3. **[The invoicing assistant](#3-the-invoicing-assistant)** — reconcile premium, commission, taxes and fees
-4. **The RSM deck builder** — roll last year's strategy deck forward
+4. **[The RSM deck builder](#4-the-rsm-deck-builder)** — roll last year's strategy deck forward
 
 ---
 
@@ -190,10 +190,9 @@ The reading is done by [`engine/loss_run.py`](engine/loss_run.py) — about 2,70
 that the loss run request, the invoicing assistant and the eval harness all share. Three
 ideas do most of the work.
 
-**Find the page before reading it.** A binder runs twenty to sixty pages and the
-declarations page is one of them. Pages are ranked on a cheap text pass first, and only
-the winners are re-read in layout mode, which is the expensive operation. That is what
-keeps a fifteen-document batch quick.
+**Find the page before reading it.** A standard binder can be anywhere from 2 to 60 pages - 
+declarations page is only one of them. Pages are ranked on a cheap text pass first, and only
+the winners are re-read in layout mode, which is the expensive operation. This keeps a fifteen-document batch quick.
 
 **The label vocabulary is ordered, and the order is the design.** Each field has a list
 of patterns tried most-specific first, first match wins. `Net of commission` has to be
@@ -264,6 +263,65 @@ exports as CSV, and every cell is editable first.
 Identity — insured, carrier, policy number, dates — comes from the same extraction
 engine as the loss run request, [`engine/loss_run.py`](engine/loss_run.py). Only the
 money parsing is new here.
+
+---
+
+## 4. The RSM deck builder
+
+The first two skills read documents. This one writes one.
+
+Before the renewal strategy meeting, last year's deck gets rebuilt: same narrative, new
+policy year, current market conditions bolted on. Done by hand it is an hour of
+copy-paste across PowerPoint files, and the copy-paste is where decks break — a slide
+arrives without its chart, or the file opens with a repair prompt.
+
+### Upload and configure
+
+![Uploading the prior deck](docs/screenshots/rsm-upload-docs.png)
+
+Last year's deck goes in, plus the program graphic if there is one. The old and new
+policy years are stated explicitly — *2025-26* to *2026-27* — because the year appears
+throughout the deck and every instance has to move together.
+
+The program graphic is handled differently from everything else: it is injected **as-is**.
+It is a diagram someone laid out by hand, and the one useful thing to do with it is not
+touch it.
+
+### Pick the market slides
+
+![Selecting market slides](docs/screenshots/rsm-slides.png)
+
+Market commentary is kept as a slide library, filed by line and by quarter — twenty-six
+slides across casualty, property, FINPRO, cyber and marine. You check the ones that
+match the client's programme, and they are appended in the order they appear.
+
+The point is that the library is current and the deck is not. Rolling last year's file
+forward keeps the client narrative; picking from the library replaces the market view
+without rebuilding either.
+
+### Build and download
+
+The assembled deck comes back as `RSM_<client>_<year>.pptx`, with a slide-by-slide log
+of what was copied and how each slide was classified — diagram, content, market,
+divider, chrome — so a deck that comes out wrong can be traced to the slide that caused
+it rather than rebuilt from scratch.
+
+### Under the hood
+
+[`engine/rsm.py`](engine/rsm.py) assembles the deck at the ZIP level rather than through
+python-pptx's object model, and the docstring at the top of that file explains why at
+length. In short: there is no correct cross-presentation slide copy API. Every route
+through the Part model fails in one of three ways — duplicate slide part URIs, aliasing
+that drags the source's transitive relationships along with the slide, or lost
+`customXml` that lives outside `ppt/` and is unreachable from the slide part.
+
+So it works on the bytes. Each slide's XML and its `.rels` are read, every referenced
+part is renamed to avoid collisions, images, charts, notes and embeddings are copied
+under the new names, the relationship IDs are rewritten to match, and the slide is
+registered in `[Content_Types].xml` and `presentation.xml`.
+
+That is more work than calling a library function, and it is the difference between a
+deck that opens and a deck that opens with a repair prompt.
 
 ---
 
