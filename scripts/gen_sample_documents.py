@@ -6,8 +6,8 @@ real documents. Every figure is fabricated.
 
 Carriers
 --------
-All paper here is ADMITTED, and the carriers are matched to the lines they
-actually write in the US admitted market:
+Most of the tower sits on ADMITTED paper, with the carriers matched to the lines
+they actually write in the US admitted market:
 
   GL / Auto / WC      Travelers, Hartford - the large admitted casualty writers.
                       Fleet auto for a trucking risk goes to Old Republic, which
@@ -23,10 +23,21 @@ actually write in the US admitted market:
   Property            Zurich for a distribution risk; Affiliated FM for a
                       manufacturing/technology risk, which is its core appetite.
 
-Because the paper is admitted, none of these carry surplus lines tax or a
-stamping fee - those belong to non-admitted E&S placements. Admitted charges are
-modelled instead: separately stated terrorism (TRIA) premium, state workers
-compensation assessments, and policy fees.
+Admitted paper carries no surplus lines tax or stamping fee, so those binders
+model the charges admitted business actually shows: separately stated terrorism
+(TRIA) premium, state workers compensation assessments, and policy fees.
+
+A real tower is not all admitted, though. High excess layers and tough-occupancy
+property routinely sit on E&S paper, so each client also carries non-admitted
+placements through Lexington (AIG), Westchester (Chubb), Evanston (Markel) and
+Scottsdale (Nationwide). Those are the binders that carry a surplus lines tax, a
+stamping fee and a municipal surcharge.
+
+Between them the documents exercise every branch of the money parser: each
+charge kind (tax, fee, surcharge, terrorism), premium components and
+carrier-stated subtotals that must not be double counted, a binder printing only
+a net-of-commission figure, and a charge whose label the vocabulary has never
+seen, recoverable only from the hole it leaves against the printed total.
 
 Label vocabulary
 ----------------
@@ -146,6 +157,72 @@ def invoice(fn, *, insured, carrier, policy, period, coverage,
             "premium": premium, "total": total}
 
 
+def surplus_binder(fn, *, insured, carrier, policy, period, coverage, limits,
+                   premium, commission_pct, charges, licensee, home_state,
+                   components=(), subtotals=(), underlying=None):
+    """A non-admitted (surplus lines) placement.
+
+    E&S paper is what actually carries a surplus lines tax and a stamping fee,
+    so these are the documents that exercise that side of the money parser.
+    """
+    d = Doc(OUT / fn, "BINDER OF INSURANCE")
+    d.row("Named Insured", insured)
+    d.row("Insurance Carrier", carrier)
+    d.row("Policy Number", policy)
+    d.row("Policy Period", period)
+    d.row("Line of Business", coverage)
+    d.row("Limit of Liability", limits)
+    d.row("Paper", "Non-Admitted (Surplus Lines)")
+    d.row("Surplus Lines Licensee", licensee)
+    d.row("Home State", home_state)
+
+    d.heading("PREMIUM SUMMARY")
+    for label, amt in components:
+        d.row(label, _money(amt))
+    d.row("Total Premium", _money(premium))
+    d.row("Commission", f"{commission_pct:.1f}% ({_money(round(premium * commission_pct / 100, 2))})")
+    total = premium
+    for label, amt in charges:
+        d.row(label, _money(amt))
+        total += amt
+    for label, amt in subtotals:
+        d.row(label, _money(amt))
+    d.row("Total Amount Due", _money(round(total, 2)), bold=True)
+    if underlying:
+        d.heading("UNDERLYING SCHEDULE")
+        for label, value in underlying:
+            d.row(label, value)
+    d.save()
+    return {"file": fn, "carrier": carrier, "coverage": coverage,
+            "premium": premium, "total": round(total, 2)}
+
+
+def net_due_binder(fn, *, insured, carrier, policy, period, coverage, limits,
+                   premium, commission_pct):
+    """A binder that prints only the net-of-commission figure.
+
+    Some carriers state what the broker remits rather than what the client is
+    billed. The parser has to reconcile against premium less commission instead
+    of against a gross total; this is the document that proves it.
+    """
+    d = Doc(OUT / fn, "BINDER OF INSURANCE")
+    d.row("Named Insured", insured)
+    d.row("Insurance Carrier", carrier)
+    d.row("Policy Number", policy)
+    d.row("Policy Period", period)
+    d.row("Line of Business", coverage)
+    d.row("Limit of Liability", limits)
+    d.row("Paper", "Admitted")
+    d.heading("PREMIUM SUMMARY")
+    commission = round(premium * commission_pct / 100, 2)
+    d.row("Total Premium", _money(premium))
+    d.row("Commission", f"{commission_pct:.1f}% ({_money(commission)})")
+    d.row("Net Premium Due", _money(round(premium - commission, 2)), bold=True)
+    d.save()
+    return {"file": fn, "carrier": carrier, "coverage": coverage,
+            "premium": premium, "total": round(premium - commission, 2)}
+
+
 TRAVELERS = "Travelers Property Casualty Company of America"
 TRAV_SURETY = "Travelers Casualty and Surety Company of America"
 OLD_REPUBLIC = "Old Republic Insurance Company"
@@ -160,6 +237,14 @@ AIG = "National Union Fire Insurance Company of Pittsburgh, Pa."
 BEAZLEY = "Beazley Insurance Company, Inc."
 STARR = "Starr Indemnity & Liability Company"
 AFM = "Affiliated FM Insurance Company"
+
+# Non-admitted (E&S) paper. Real towers mix admitted and surplus lines: high
+# excess layers and tough-occupancy property routinely sit on E&S paper, which
+# is what carries surplus lines tax and a stamping fee.
+LEXINGTON = "Lexington Insurance Company"                      # AIG E&S
+WESTCHESTER = "Westchester Surplus Lines Insurance Company"    # Chubb E&S
+EVANSTON = "Evanston Insurance Company"                        # Markel E&S
+SCOTTSDALE = "Scottsdale Insurance Company"                    # Nationwide E&S
 
 
 def vantage():
@@ -242,6 +327,29 @@ def vantage():
         premium=242_850.00, commission_pct=10.0,
         charges=[("Terrorism Premium", 4_857.00), ("Inspection Fee", 1_250.00)]))
 
+    # 2nd excess layer on E&S paper: surplus lines tax, stamping fee, surcharge.
+    out.append(surplus_binder("vantage_14_excess_2nd_layer_binder.pdf", insured=V, carrier=LEXINGTON,
+        policy="VL-XS2-2027-771903", period=CAS, coverage="Excess Liability",
+        limits="$25,000,000 excess of $25,000,000",
+        premium=64_800.00, commission_pct=12.5,
+        licensee="Ashford Surplus Brokers LLC", home_state="Illinois",
+        charges=[("Surplus Lines Tax", 2_268.00), ("Stamping Fee", 25.92),
+                 ("Municipal Surcharge", 648.00)],
+        underlying=[("Underlying Excess Carrier", GREAT_AMERICAN),
+                    ("Underlying Limit", "$25,000,000 total"),
+                    ("Underlying Policy", "VL-XS-2027-556104")]))
+
+    # Blended package: per-coverage premium components plus carrier-stated
+    # subtotals, which the parser must read without double counting.
+    out.append(surplus_binder("vantage_15_package_binder.pdf", insured=V, carrier=WESTCHESTER,
+        policy="VL-PKG-2027-449028", period=CAS, coverage="Commercial Package",
+        limits="Per schedule on file", premium=96_500.00, commission_pct=12.5,
+        licensee="Ashford Surplus Brokers LLC", home_state="Illinois",
+        components=[("Property Premium", 58_200.00), ("General Liability Premium", 38_300.00)],
+        charges=[("Surplus Lines Tax", 3_377.50), ("Stamping Fee", 38.60),
+                 ("Policy Fee", 500.00)],
+        subtotals=[("Total Taxes", 3_377.50), ("Total Fees", 538.60)]))
+
     out.append(invoice("vantage_13_casualty_invoice.pdf", insured=V, carrier=TRAVELERS,
         policy="VL-GL-2027-004417", period=CAS, coverage="Commercial General Liability",
         premium=186_400.00, commission_pct=12.5,
@@ -322,6 +430,32 @@ def kestrel():
         limits="$62,000,000 blanket building, contents and equipment",
         premium=168_400.00, commission_pct=10.0,
         charges=[("Terrorism Premium", 3_368.00)]))
+
+    out.append(surplus_binder("kestrel_14_excess_2nd_layer_binder.pdf", insured=K, carrier=EVANSTON,
+        policy="KR-XS2-2026-660412", period=PC, coverage="Excess Liability",
+        limits="$25,000,000 excess of $25,000,000",
+        premium=28_400.00, commission_pct=12.5,
+        licensee="Ashford Surplus Brokers LLC", home_state="Massachusetts",
+        charges=[("Surplus Lines Tax", 1_136.00), ("Stamping Fee", 11.36)],
+        underlying=[("Underlying Excess Carrier", BHSI),
+                    ("Underlying Limit", "$25,000,000 total"),
+                    ("Underlying Policy", "KR-XS-2026-901772")]))
+
+    # Carries a charge the label vocabulary has never seen. It is identifiable
+    # only by the hole it leaves against the printed total, which is the gap
+    # adoption path.
+    out.append(surplus_binder("kestrel_15_property_surplus_binder.pdf", insured=K, carrier=SCOTTSDALE,
+        policy="KR-PRX-2026-118377", period=PC, coverage="Commercial Property",
+        limits="$15,000,000 excess property", premium=51_600.00, commission_pct=12.5,
+        licensee="Ashford Surplus Brokers LLC", home_state="Massachusetts",
+        charges=[("Surplus Lines Tax", 2_064.00), ("Stamping Fee", 20.64),
+                 ("Guaranty Association Recoupment", 387.00)]))
+
+    # Prints only what the broker remits, not what the client is billed.
+    out.append(net_due_binder("kestrel_16_equipment_floater_binder.pdf", insured=K, carrier=HARTFORD,
+        policy="KR-EF-2026-220148", period=PC, coverage="Inland Marine",
+        limits="$4,000,000 scheduled equipment",
+        premium=22_800.00, commission_pct=12.5))
 
     out.append(invoice("kestrel_13_directors_officers_invoice.pdf", insured=K, carrier=AIG,
         policy="KR-DO-2026-556301", period=PC, coverage="Directors and Officers Liability",
