@@ -325,6 +325,119 @@ deck that opens and a deck that opens with a repair prompt.
 
 ---
 
+## Architecture
+
+Three diagrams cover most of it: how a request reaches the engine, what the engine does
+to a document, and how configuration resolves.
+
+### Layers
+
+The Flask app owns routing and state. The skills are thin. The engine holds the hard
+parts and imports no Flask, which is what lets the eval harness call it directly.
+
+```mermaid
+flowchart TD
+    B["Browser"] --> APP["dashboard_v2/app.py<br/>Flask · discovers skills by path"]
+    APP --> DL["data_loader.py<br/>clients · tasks · completions · skill map"]
+    APP --> AS["assistant.py<br/>book snapshot · streaming answers"]
+
+    subgraph SK["dashboard_v2/skills/ — 11 blueprints"]
+        LR["loss-run"]
+        IV["invoicing-assistant"]
+        MO["money.py<br/>premium · commission · charges"]
+        RS["rsm"]
+        OT["8 deterministic scaffolds"]
+        IV --- MO
+    end
+    APP --> SK
+
+    subgraph ENG["engine/ — shared, imports no Flask"]
+        E1["loss_run.py<br/>2,692 lines"]
+        E2["rsm.py<br/>769 lines"]
+    end
+
+    LR --> E1
+    IV --> E1
+    RS --> E2
+    EV["engine/eval/run_eval.py"] --> E1
+
+    subgraph REF["Committed reference data"]
+        CM["companymap.md<br/>341 carrier groups"]
+        CV["coverages.md"]
+        EM["emailmap.md<br/>235 mailboxes"]
+        MDB["rsm_market_db.json<br/>26 market slides"]
+    end
+
+    E1 --> CM
+    E1 --> CV
+    E1 --> EM
+    E2 --> MDB
+```
+
+Only three of the eleven skills reach the engine. The other eight generate correct
+checklists and draft text deterministically — `dashboard_v2/README.md` marks which is
+which.
+
+### What happens to a document
+
+Both document skills share the front half of this path. They diverge once the fields are
+out: the loss run request groups by carrier, the invoicing assistant keeps reading for
+money.
+
+```mermaid
+flowchart TD
+    DOC["Binder in<br/>PDF · DOCX · XLSX · CSV"] --> RANK["Rank pages<br/>cheap text pass"]
+    RANK --> READ["Re-read the winners<br/>layout preserved"]
+    READ --> LBL["Match labels<br/>most-specific first, first wins"]
+    LBL --> NEG["Suppress matches beside<br/>underlying · expiring · excess of"]
+
+    NEG --> ID["Identity fields"]
+    ID --> RC["Resolve carrier to group"]
+    ID --> RI["Resolve insured to account"]
+    ID --> RV["Resolve coverage category"]
+
+    RC --> ROWS["Reviewable rows"]
+    RI --> ROWS
+    RV --> ROWS
+
+    ROWS --> GRP["Group by carrier contact<br/>→ one email each"]
+    ROWS --> MON["Money lines<br/>premium · commission · tax · fee"]
+    MON --> REC{"Sum equals the<br/>printed total?"}
+    REC -->|yes| OK["matches printed total"]
+    REC -->|no| GAP["Find the gap:<br/>adopt an unlabelled charge,<br/>or reconcile net of commission"]
+    GAP --> OK
+```
+
+### How configuration resolves
+
+Anything that would hold a real book is gitignored. Every one of those files has a
+committed synthetic twin, and the loader falls back to it — which is why a fresh clone
+renders a populated dashboard instead of an empty one.
+
+```mermaid
+flowchart LR
+    subgraph G["Gitignored — real data, local only"]
+        direction TB
+        R1["config/clients.json"]
+        R2["data/completions.json"]
+        R3["docs/Skills/emailmap.md"]
+        R4["data/loss_run_carriers.json"]
+    end
+    subgraph C["Committed — synthetic"]
+        direction TB
+        E1["clients.example.json"]
+        E2["completions.example.json"]
+        E3["emailmap.example.md"]
+        E4["loss_run_carriers.example.json"]
+    end
+    R1 -.->|"absent"| E1
+    R2 -.->|"absent"| E2
+    R3 -.->|"absent"| E3
+    R4 -.->|"absent"| E4
+```
+
+---
+
 ## Setup
 
 Requires Python 3.12+. The `src/` pipeline additionally requires Windows with a desktop
