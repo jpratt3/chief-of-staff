@@ -2,27 +2,23 @@
 
 A renewal-operations workspace for a commercial property & casualty insurance book.
 
-A commercial insurance renewal is a 90–180 day project that repeats every year, per
-client, per line of coverage. Most of the work is document logistics: collect exposure
+A commercial insurance renewal is a 270 day project that repeats every year, per
+client, per line of coverage. Most of the operational work is document logistics: collect exposure
 data, request loss runs from every incumbent carrier, assemble a submission, compare
-quotes, bind, invoice, chase policies. The tracking for it usually lives in a
-spreadsheet and a mailbox, which means status is whatever somebody last remembered to
-type.
+quotes, bind, invoice, chase policies. The tracking for it usually lives in a spreadsheet
+that goes stale every other day, filed away in a crowded Outlook folder, or worse - in your head.
+At best, status is whatever somebody last remembered to type, save, and share with the team.
 
-This replaces that with a pipeline: read mail and calendar, infer which stage each
+This replaces that with an AI-native pipeline: read mail and calendar, infer which stage each
 renewal is in, derive status from evidence rather than self-report, and attach tools to
-the tasks that involve reading or writing documents. What runs today is the dashboard
-and the document skills — [Maturity](#maturity) at the end is specific about what is and
-is not wired up.
-
-It is a personal portfolio project. Every client, carrier contact, figure and document
-in it is synthetic, and it is not affiliated with any employer.
+the tasks that involve reading or writing documents.
 
 The sections below walk through the app as you would actually use it: the dashboard,
-then the skills that do real document work.
+then the skills that do real document work. All examples are made using fictional clients
+and fictional data.
 
-1. **[The welcome dashboard](#1-the-welcome-dashboard)** — the book at a glance, and the assistant
-2. **The loss run request** — read a stack of binders, produce one email per carrier
+1. **[The welcome dashboard](#1-the-welcome-dashboard)** — sign in & understand exactly where each client stands - in a matter of seconds
+2. **[The loss run request](#2-the-loss-run-request)** — read a stack of binders, extract necessary fields, & produce one email per carrier
 3. **The invoicing assistant** — reconcile premium, commission, taxes and fees
 4. **The RSM deck builder** — roll last year's strategy deck forward
 
@@ -43,16 +39,16 @@ order:
 | Stage | Window | What happens |
 |---|---|---|
 | Renewal Preparation | 180–120 days | Open the file, confirm the team, request loss runs and exposures |
-| RSM | 180–90 days | Build the strategy, meet the client, agree the market approach |
-| Submission | 90–60 days | Applications, submission package, release to market |
-| Proposal | 60–15 days | Log quotes, compare against expiring, negotiate, present |
-| Bind | 15–0 days | Bind instructions, bind orders, check binders, transmit |
-| Invoice | 0–5 days | Confirm bound figures, allocate premium, invoice, reconcile |
+| RSM | 180–90 days | Build the strategy, meet the client, & agree on this years approach to the program |
+| Submission | 90–60 days | Applications, submission package, & marketing efforts |
+| Proposal | 60–15 days | Log quotes, compare against expiring, negotiate, & present |
+| Bind | 15–0 days | Bind instructions, bind orders, check binders, & transmittal |
+| Invoice | 0–5 days | Confirm bound figures, allocate premium, & invoice |
 | Post Binding | 0–60 days | Close subjectivities, issue certificates, check and deliver policies |
 
 Each tab opens that stage's task list and the accounts currently sitting in it. A
 client's stage is **derived, not typed** — it is the last stage whose date has passed,
-and it can be overridden per account when reality disagrees with the calendar.
+and it can be overridden per account when reality disagrees with the derivation.
 
 The left rail is the same work sliced the other way, by portal: Renewal Pipeline, Deck
 Builder, Document Review, Document Generator, System Updates, Meeting Scheduler,
@@ -129,7 +125,71 @@ exactly as it does here; the bar simply says how to configure one.
 
 ---
 
-<!-- Sections 2-4 (loss run request, invoicing assistant, RSM deck builder) go here. -->
+## 2. The loss run request
+
+Every renewal starts by asking each incumbent carrier for the last five years of claims
+history. On a programme of any size that means opening a dozen binders, copying policy
+numbers and effective dates out of each one, working out which carrier services loss
+runs for which paper, and writing the same email over and over.
+
+This turns that into three steps.
+
+### Drop the binders in
+
+![Uploading binders](docs/screenshots/loss-run-upload-binders.png)
+
+One client's binders go in together — PDF, Word, Excel or CSV. There is no per-carrier
+template to pick and no form to fill in first; the documents are the input.
+
+Each file is scanned for its declarations page and read with layout preserved, so a
+label keeps the number that sits beside it rather than the next number in the text
+stream. That matters because binders are laid out, not written: a policy number can sit
+in a column, a table cell, or a cover letter paragraph, and all three have to resolve to
+the same field.
+
+### Check what it read
+
+![Extracted fields](docs/screenshots/loss-run-extracted-fields.png)
+
+Four fields come back per document — policy number, carrier, effective date and coverage
+— with a confidence flag on each row. Extracted cells arrive blue; anything blank is
+flagged amber to fill in. A row the engine is unsure about gets a **Rescan** button that
+re-reads the whole document rather than just the pages it ranked highest.
+
+Two resolutions happen here, and both are worth calling out:
+
+**The insured is matched against the client book.** Fifteen documents that say *Kestrel
+Robotics Inc* on their face come back as the account *Kestrel Robotics*, so the request
+is grouped under one client rather than several spellings of one.
+
+**The carrier is matched to its group, not its paper.** *Hartford Fire Insurance
+Company*, *Twin City Fire Insurance Company* and *Continental Casualty Company* are
+entity names on binders; they resolve to **Hartford**, **Hartford** and **CNA** through a
+341-group carrier map. This is the part that makes grouping possible at all — loss runs
+are serviced by the group, not by whichever subsidiary issued the paper.
+
+It also holds where it would be easy to get wrong. An excess binder names its own
+carrier *and* the underlying carrier it sits above. The two excess layers in this set
+resolve to **Berkshire Hathaway** and **Markel** — the carriers actually on the risk —
+rather than to the umbrella markets named in their underlying schedules.
+
+### Send the drafts
+
+![Draft emails](docs/screenshots/loss-run-draft-emails.png)
+
+Fifteen binders across nine carriers become **nine emails, not fifteen**. Each one lists
+every policy that carrier writes for the client, with coverage, policy number and
+effective date on its own line — Hartford's draft carries four policies, CNA's carries
+three.
+
+The recipient is resolved from a routing map of 235 published carrier loss-run mailboxes,
+so the draft arrives addressed rather than blank. Where a carrier has no mailbox on file
+the draft is still written and simply says so, which is the honest failure: a missing
+contact is a lookup to do, not a reason to lose the request.
+
+Each draft is editable in place and copies to the clipboard.
+
+---
 
 ## Setup
 
