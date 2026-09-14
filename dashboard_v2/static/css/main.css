@@ -58,13 +58,10 @@ body { min-height: 100vh; }
 /* A flex item shrinks to its content by default, which would make the 75%
    below resolve against the text width rather than the content area. */
 .hero-inner { max-width: none; width: 100%; }
-/* The hero text keeps a reading measure; the ask bar and its transcript are
-   sized against the full content area instead (see .hero-commandbar). */
-.hero-inner h1, .hero-subtitle { max-width: 760px; margin-left: auto; margin-right: auto; }
 .hero-kicker, .workspace-kicker { color: var(--text-soft); font-size: 20px; margin-bottom: 6px; }
 .hero-inner h1, .workspace-header h1 { margin: 0; font-size: 54px; line-height: 1.06; color: var(--text-strong); font-weight: 800; }
 .hero-subtitle, .workspace-subtitle { margin: 16px auto 0; color: var(--text-soft); font-size: 18px; max-width: 760px; line-height: 1.55; }
-.hero-commandbar { margin: 28px auto 0; width: 75%; max-width: none; min-height: 52px; border-radius: 999px; background: rgba(255,255,255,0.9); border: 1px solid var(--line); display: flex; align-items: center; gap: 12px; padding: 10px 16px; box-shadow: var(--shadow); }
+.hero-commandbar { margin: 28px auto 0; width: 50%; max-width: none; min-height: 52px; border-radius: 999px; background: rgba(255,255,255,0.9); border: 1px solid var(--line); display: flex; align-items: center; gap: 12px; padding: 10px 16px; box-shadow: var(--shadow); }
 .commandbar-icon { color: var(--accent); font-size: 14px; line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
 .commandbar-text { flex: 1; text-align: left; color: var(--text-soft); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .commandbar-go { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: white; display: grid; place-items: center; font-weight: 700; flex: 0 0 auto; }
@@ -147,7 +144,7 @@ body { min-height: 100vh; }
 .mini-toast { position: fixed; right: 18px; bottom: 18px; background: var(--text-strong); color: white; padding: 10px 14px; border-radius: 12px; opacity: 0; transform: translateY(10px); transition: .18s ease; pointer-events: none; font-size: 13px; }
 .mini-toast.visible { opacity: 1; transform: translateY(0); }
 @media (max-width: 1280px) { .portal-studio-grid, .metric-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } .split-layout, .workflow-header, .thread-grid { grid-template-columns: 1fr; } .workflow-grid { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 920px) { .workspace-shell { flex-direction: column; } .left-rail { width: 100%; border-right: none; border-bottom: 1px solid var(--line); } .workspace-page, .workflow-shell { padding: 20px; } .hero-inner h1, .workspace-header h1, .workflow-title { font-size: 34px; } .portal-studio-grid, .metric-grid, .workflow-grid { grid-template-columns: 1fr; } .client-row-card { grid-template-columns: 1fr; } .hero-commandbar, .ask-answer { width: 100%; } .commandbar-text { white-space: normal; } .topbar { align-items: flex-start; } .topbar-left { flex-direction: column; align-items: flex-start; } }
+@media (max-width: 920px) { .workspace-shell { flex-direction: column; } .left-rail { width: 100%; border-right: none; border-bottom: 1px solid var(--line); } .workspace-page, .workflow-shell { padding: 20px; } .hero-inner h1, .workspace-header h1, .workflow-title { font-size: 34px; } .portal-studio-grid, .metric-grid, .workflow-grid { grid-template-columns: 1fr; } .client-row-card { grid-template-columns: 1fr; } .hero-commandbar { width: 100%; } .commandbar-text { white-space: normal; } .topbar { align-items: flex-start; } .topbar-left { flex-direction: column; align-items: flex-start; } }
 
 .topbar-stage-link .stage-mini-dot { display: none; }
 /* ── Portfolio strip ──────────────────────────────────────────────────────── */
@@ -319,3 +316,17 @@ button.suggestion-chip:hover { background: rgba(255,255,255,0.65); }
 .ask-a { font-size: 14px; line-height: 1.62; color: var(--text); white-space: pre-wrap; }
 .ask-a.is-error { color: var(--red); }
 .ask-a.is-waiting::after { content: " b7 b7 b7"; letter-spacing: 2px; color: var(--text-soft); }
+
+/* Hero text keeps a reading measure and stays centred. This has to sit after
+   `.hero-inner h1 { margin: 0 }` above, which would otherwise cancel the auto
+   margins and pin the heading to the left of the content area. */
+.hero-inner h1 { max-width: 760px; margin-left: auto; margin-right: auto; }
+.hero-inner .hero-subtitle { max-width: 760px; margin-left: auto; margin-right: auto; }
+
+/* Narrow screens: both the ask bar and its transcript go full width. This must
+   live at the end of the sheet - the 920px block above is declared before
+   `.ask-answer`, so an override there loses on source order. */
+@media (max-width: 920px) {
+  .hero-commandbar, .ask-answer { width: 100%; }
+  .hero-inner h1, .hero-inner .hero-subtitle { max-width: 100%; }
+}
