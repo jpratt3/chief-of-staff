@@ -19,7 +19,7 @@ and fictional data.
 
 1. **[The welcome dashboard](#1-the-welcome-dashboard)** — sign in & understand exactly where each client stands - in a matter of seconds
 2. **[The loss run request](#2-the-loss-run-request)** — read a stack of binders, extract necessary fields, & produce one email per carrier
-3. **The invoicing assistant** — reconcile premium, commission, taxes and fees
+3. **[The invoicing assistant](#3-the-invoicing-assistant)** — reconcile premium, commission, taxes and fees
 4. **The RSM deck builder** — roll last year's strategy deck forward
 
 ---
@@ -218,6 +218,57 @@ Everything above resolves against two committed reference files rather than hard
 lists: [`docs/Skills/companymap.md`](docs/Skills/companymap.md) for carrier groups and
 their paper, and [`docs/Skills/coverages.md`](docs/Skills/coverages.md) for coverage
 categories.
+
+---
+
+## 3. The invoicing assistant
+
+Same shape as the loss run request — one client's binders in, a reviewable table out —
+but the job is different. The loss run skill pulls *fields*. This one pulls *numbers
+that have to add up*.
+
+A bound programme arrives as a stack of binders, each printing a premium, a commission,
+and some mix of taxes, fees and surcharges that varies by state, by line, and by whether
+the paper is admitted. Someone has to key every figure into an invoice request and be
+right, and nobody can eyeball whether fifteen binders' line items reconcile.
+
+![Reviewing amounts](docs/screenshots/invoicing-assistant-output.png)
+
+Every charge comes back as its own editable line, typed — premium, commission, tax, fee,
+surcharge, terrorism — and each binder is checked against the total it prints on its own
+face. `matches printed total` means the extracted lines sum to the carrier's own figure.
+That check is the point: it catches a missed fee rather than quietly under-billing.
+
+Three cases it has to survive, all visible above:
+
+- **Non-admitted paper carries different charges.** The two E&S binders here show a
+  surplus lines tax and a stamping fee; the admitted ones never do. What appears instead
+  on admitted business is separately stated terrorism premium and state assessments.
+- **Some carriers print only what the broker remits.** A binder stating a
+  net-of-commission figure and no gross total reconciles against premium less commission
+  instead.
+- **A charge the vocabulary has never seen is still recoverable.** *Guaranty Association
+  Recoupment* is not in any label list. It is identified by the 387.00 hole it leaves
+  against the printed total, adopted, and labelled as such in the note under the binder.
+
+### The output
+
+<table>
+<tr>
+<td width="50%"><img src="docs/screenshots/invoicing-assistant-summary1.png" alt="Summary header and binders"></td>
+<td width="50%"><img src="docs/screenshots/invoicing-assistant-summary2.png" alt="Summary charges and totals"></td>
+</tr>
+</table>
+
+The summary is what gets sent: the client's CN and billing ID from the book, then every
+binder with its premium, commission and charges itemised, then the placement total.
+Fifteen binders, 1,931,050.00 of premium, 36,721.02 of taxes, fees and surcharges,
+1,967,771.02 billed — reconciled per binder before it is summed. It copies as text or
+exports as CSV, and every cell is editable first.
+
+Identity — insured, carrier, policy number, dates — comes from the same
+[extraction engine](#under-the-hood) as the loss run request. Only the money parsing is
+new here.
 
 ---
 
