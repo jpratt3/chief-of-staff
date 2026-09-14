@@ -50,11 +50,19 @@ Today's date and the full book follow. Treat them as the only source of truth.""
 
 
 def is_configured() -> bool:
-    """True when a credential is available for the Anthropic SDK."""
-    return bool(
-        os.environ.get("ANTHROPIC_API_KEY")
-        or os.environ.get("ANTHROPIC_AUTH_TOKEN")
-    )
+    """True when a usable credential is available for the Anthropic SDK.
+
+    A non-empty value is not enough. Copying .env.example to .env leaves the
+    placeholder in place, which is truthy, so the request went out and came back
+    a 401 — an authentication error for what is really an unconfigured install.
+    Anything that is not shaped like a key is treated as absent.
+    """
+    key = (os.environ.get("ANTHROPIC_API_KEY") or "").strip()
+    if key.startswith("sk-ant-") and len(key) > 40:
+        return True
+    # OAuth tokens come from `ant auth login` and have no fixed prefix.
+    token = (os.environ.get("ANTHROPIC_AUTH_TOKEN") or "").strip()
+    return len(token) > 40
 
 
 def build_book_snapshot() -> str:
@@ -115,7 +123,38 @@ def build_book_snapshot() -> str:
     )
 
 
-def stream_answer(question: str) -> Iterator[str]:
+MAX_TURNS = 12          # question/answer pairs carried forward
+MAX_TURN_CHARS = 6000   # per message, so one long paste cannot blow up context
+
+
+def clean_history(raw) -> list[dict]:
+    """Validate client-supplied history into an alternating message list.
+
+    The transcript round-trips through the browser, so treat it as untrusted:
+    keep only well-formed user/assistant turns, cap their length, and keep the
+    most recent ones.
+    """
+    if not isinstance(raw, list):
+        return []
+    out: list[dict] = []
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        role = item.get("role")
+        content = item.get("content")
+        if role not in ("user", "assistant") or not isinstance(content, str):
+            continue
+        content = content.strip()[:MAX_TURN_CHARS]
+        if content:
+            out.append({"role": role, "content": content})
+    # A turn is a pair, and the model needs the list to start on a user message.
+    out = out[-(MAX_TURNS * 2):]
+    while out and out[0]["role"] != "user":
+        out.pop(0)
+    return out
+
+
+def stream_answer(question: str, history: list[dict] | None = None) -> Iterator[str]:
     """Yield the answer in chunks. Raises nothing the caller must handle."""
     import anthropic
 
@@ -138,7 +177,9 @@ def stream_answer(question: str) -> Iterator[str]:
         # Lookups over a small book don't need deep reasoning, and the bar
         # should feel immediate.
         output_config={"effort": "low"},
-        messages=[{"role": "user", "content": question}],
+        # Prior turns sit after the cached system block, so the book is served
+        # from cache and only the conversation itself is fresh input.
+        messages=(history or []) + [{"role": "user", "content": question}],
     ) as stream:
         for text in stream.text_stream:
             yield text

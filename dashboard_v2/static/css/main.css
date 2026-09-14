@@ -55,11 +55,16 @@ body { min-height: 100vh; }
 .topbar-icon { min-width: 52px; height: 28px; padding: 0 10px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-soft); background: rgba(255,255,255,0.75); border: 1px solid var(--line-soft); font-size: 12px; font-weight: 600; }
 .workflow-shell { padding: 34px 34px 48px; } .workspace-page { padding: 34px 34px 0; }
 .hero-panel { background: transparent; min-height: 340px; display: flex; align-items: center; justify-content: center; text-align: center; }
-.hero-inner { max-width: 760px; }
+/* A flex item shrinks to its content by default, which would make the 75%
+   below resolve against the text width rather than the content area. */
+.hero-inner { max-width: none; width: 100%; }
+/* The hero text keeps a reading measure; the ask bar and its transcript are
+   sized against the full content area instead (see .hero-commandbar). */
+.hero-inner h1, .hero-subtitle { max-width: 760px; margin-left: auto; margin-right: auto; }
 .hero-kicker, .workspace-kicker { color: var(--text-soft); font-size: 20px; margin-bottom: 6px; }
 .hero-inner h1, .workspace-header h1 { margin: 0; font-size: 54px; line-height: 1.06; color: var(--text-strong); font-weight: 800; }
 .hero-subtitle, .workspace-subtitle { margin: 16px auto 0; color: var(--text-soft); font-size: 18px; max-width: 760px; line-height: 1.55; }
-.hero-commandbar { margin: 28px auto 0; width: 100%; max-width: 560px; min-height: 52px; border-radius: 999px; background: rgba(255,255,255,0.9); border: 1px solid var(--line); display: flex; align-items: center; gap: 12px; padding: 10px 16px; box-shadow: var(--shadow); }
+.hero-commandbar { margin: 28px auto 0; width: 75%; max-width: none; min-height: 52px; border-radius: 999px; background: rgba(255,255,255,0.9); border: 1px solid var(--line); display: flex; align-items: center; gap: 12px; padding: 10px 16px; box-shadow: var(--shadow); }
 .commandbar-icon { color: var(--accent); font-size: 14px; line-height: 1; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
 .commandbar-text { flex: 1; text-align: left; color: var(--text-soft); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .commandbar-go { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: white; display: grid; place-items: center; font-weight: 700; flex: 0 0 auto; }
@@ -142,7 +147,7 @@ body { min-height: 100vh; }
 .mini-toast { position: fixed; right: 18px; bottom: 18px; background: var(--text-strong); color: white; padding: 10px 14px; border-radius: 12px; opacity: 0; transform: translateY(10px); transition: .18s ease; pointer-events: none; font-size: 13px; }
 .mini-toast.visible { opacity: 1; transform: translateY(0); }
 @media (max-width: 1280px) { .portal-studio-grid, .metric-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } .split-layout, .workflow-header, .thread-grid { grid-template-columns: 1fr; } .workflow-grid { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 920px) { .workspace-shell { flex-direction: column; } .left-rail { width: 100%; border-right: none; border-bottom: 1px solid var(--line); } .workspace-page, .workflow-shell { padding: 20px; } .hero-inner h1, .workspace-header h1, .workflow-title { font-size: 34px; } .portal-studio-grid, .metric-grid, .workflow-grid { grid-template-columns: 1fr; } .client-row-card { grid-template-columns: 1fr; } .hero-commandbar { max-width: 100%; } .commandbar-text { white-space: normal; } .topbar { align-items: flex-start; } .topbar-left { flex-direction: column; align-items: flex-start; } }
+@media (max-width: 920px) { .workspace-shell { flex-direction: column; } .left-rail { width: 100%; border-right: none; border-bottom: 1px solid var(--line); } .workspace-page, .workflow-shell { padding: 20px; } .hero-inner h1, .workspace-header h1, .workflow-title { font-size: 34px; } .portal-studio-grid, .metric-grid, .workflow-grid { grid-template-columns: 1fr; } .client-row-card { grid-template-columns: 1fr; } .hero-commandbar, .ask-answer { width: 100%; } .commandbar-text { white-space: normal; } .topbar { align-items: flex-start; } .topbar-left { flex-direction: column; align-items: flex-start; } }
 
 .topbar-stage-link .stage-mini-dot { display: none; }
 /* ── Portfolio strip ──────────────────────────────────────────────────────── */
@@ -282,7 +287,7 @@ button.commandbar-go { border: none; cursor: pointer; font-family: var(--font); 
 button.commandbar-go:hover:not(:disabled) { filter: brightness(1.08); }
 button.commandbar-go:disabled { opacity: .5; cursor: default; }
 
-.ask-answer { margin: 18px auto 0; width: 100%; max-width: 680px; text-align: left;
+.ask-answer { margin: 18px auto 0; width: 75%; max-width: none; text-align: left;
              background: white; border: 1px solid var(--line); border-radius: var(--radius-sm);
              box-shadow: var(--shadow); overflow: hidden; }
 .ask-answer-head { display: flex; align-items: center; gap: 12px; padding: 10px 16px;
@@ -303,3 +308,14 @@ button.commandbar-go:disabled { opacity: .5; cursor: default; }
 
 button.suggestion-chip { cursor: pointer; font-family: var(--font); }
 button.suggestion-chip:hover { background: rgba(255,255,255,0.65); }
+
+/* Ask transcript - one block per exchange, so a follow-up reads against what
+   it is building on. */
+.ask-answer-body { max-height: 46vh; overflow-y: auto; }
+.ask-turn { padding: 14px 0; border-top: 1px solid var(--line-soft); }
+.ask-turn:first-child { border-top: none; padding-top: 2px; }
+.ask-q { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 7px; }
+.ask-q::before { content: "You  "; color: var(--muted); font-weight: 600; }
+.ask-a { font-size: 14px; line-height: 1.62; color: var(--text); white-space: pre-wrap; }
+.ask-a.is-error { color: var(--red); }
+.ask-a.is-waiting::after { content: " b7 b7 b7"; letter-spacing: 2px; color: var(--text-soft); }

@@ -210,11 +210,13 @@ def api_ask():
     """
     import assistant
 
-    question = (request.get_json(silent=True) or {}).get("question", "").strip()
+    payload = request.get_json(silent=True) or {}
+    question = str(payload.get("question", "")).strip()
     if not question:
         return jsonify({"ok": False, "error": "Ask a question first."}), 400
     if len(question) > 2000:
         return jsonify({"ok": False, "error": "Question is too long."}), 400
+    history = assistant.clean_history(payload.get("history"))
 
     def sse(event: str, data: str) -> str:
         return f"event: {event}\ndata: {json.dumps(data)}\n\n"
@@ -227,7 +229,7 @@ def api_ask():
             yield sse("done", "")
             return
         try:
-            for chunk in assistant.stream_answer(question):
+            for chunk in assistant.stream_answer(question, history):
                 yield sse("delta", chunk)
         except Exception as exc:                      # noqa: BLE001
             # Surface the failure type but never the message — an SDK error can

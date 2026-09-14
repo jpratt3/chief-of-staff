@@ -169,18 +169,27 @@ async function runScheduler() {
 // ── Ask bar ──────────────────────────────────────────────────────────────
 // Streams /api/ask over SSE. The endpoint reports its own failures as `error`
 // events, so there is no non-200 path to handle here.
+//
+// The conversation is kept client-side and resent with each turn: the Messages
+// API is stateless, so "building on the last answer" simply means passing the
+// prior turns back. The book snapshot sits behind a cache breakpoint in the
+// system prompt, so growing history costs only the turns themselves.
 (function () {
   const form  = document.getElementById('askForm');
   if (!form) return;                       // not the overview page
   const input = document.getElementById('askInput');
   const go    = document.getElementById('askGo');
   const panel = document.getElementById('askAnswer');
-  const label = document.getElementById('askLabel');
   const body  = document.getElementById('askBody');
   const close = document.getElementById('askClose');
   let busy = false;
+  let history = [];                        // [{role, content}, ...]
 
-  close?.addEventListener('click', () => { panel.hidden = true; });
+  close?.addEventListener('click', () => {
+    panel.hidden = true;
+    body.textContent = '';
+    history = [];                          // closing the panel starts fresh
+  });
 
   document.querySelectorAll('.ask-suggestion').forEach(chip => {
     chip.addEventListener('click', () => {
@@ -188,6 +197,20 @@ async function runScheduler() {
       form.requestSubmit();
     });
   });
+
+  function addTurn(question) {
+    const turn = document.createElement('div');
+    turn.className = 'ask-turn';
+    const q = document.createElement('div');
+    q.className = 'ask-q';
+    q.textContent = question;
+    const a = document.createElement('div');
+    a.className = 'ask-a is-waiting';
+    turn.append(q, a);
+    body.appendChild(turn);
+    turn.scrollIntoView({ block: 'nearest' });
+    return a;
+  }
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
@@ -197,21 +220,22 @@ async function runScheduler() {
     busy = true;
     go.disabled = true;
     panel.hidden = false;
-    label.textContent = question;
-    body.textContent = '';
-    body.classList.add('is-waiting');
+    input.value = '';
+    const answer = addTurn(question);
+    let full = '';
 
     try {
       const res = await fetch('/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({ question, history }),
       });
 
       if (!res.ok || !res.body) {
         const d = await res.json().catch(() => ({}));
-        body.classList.remove('is-waiting');
-        body.textContent = d.error || 'The assistant is unavailable.';
+        answer.classList.remove('is-waiting');
+        answer.classList.add('is-error');
+        answer.textContent = d.error || 'The assistant is unavailable.';
         return;
       }
 
@@ -236,22 +260,32 @@ async function runScheduler() {
           try { payload = JSON.parse(raw); } catch { continue; }
 
           if (evt === 'delta') {
-            body.classList.remove('is-waiting');
-            body.textContent += payload;
+            answer.classList.remove('is-waiting');
+            full += payload;
+            answer.textContent = full;
+            panel.scrollTop = panel.scrollHeight;
           } else if (evt === 'error') {
-            body.classList.remove('is-waiting');
-            body.classList.add('is-error');
-            body.textContent = payload;
+            answer.classList.remove('is-waiting');
+            answer.classList.add('is-error');
+            answer.textContent = payload;
           }
         }
       }
+
+      // Only a completed answer joins the history the next turn builds on.
+      if (full.trim()) {
+        history.push({ role: 'user', content: question });
+        history.push({ role: 'assistant', content: full.trim() });
+      }
     } catch (err) {
-      body.classList.remove('is-waiting');
-      body.textContent = 'Could not reach the assistant.';
+      answer.classList.remove('is-waiting');
+      answer.classList.add('is-error');
+      answer.textContent = 'Could not reach the assistant.';
     } finally {
-      body.classList.remove('is-waiting');
+      answer.classList.remove('is-waiting');
       busy = false;
       go.disabled = false;
+      input.focus();
     }
   });
 })();
