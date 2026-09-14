@@ -2,6 +2,9 @@
   "Renewal Preparation": {
     "8": "/skills/loss-run"
   },
+  "RSM": {
+    "2": "/skills/rsm"
+  },
   "Invoice": {
     "1": "/skills/invoicing-assistant"
   }
