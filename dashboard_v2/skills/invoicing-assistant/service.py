@@ -66,14 +66,8 @@ def _clients() -> list:
 
 
 def _config_billing_ids(entry: dict):
-    """Billing ids for one client entry.
-
-    `billing_ids` is the current key; `rmb` was the previous name and is
-    still read so an older local clients.json keeps working.
-    """
-    if entry.get("billing_ids") not in (None, ""):
-        return entry.get("billing_ids")
-    return entry.get("rmb")
+    """Billing ids for one client entry, as configured."""
+    return entry.get("billing_ids")
 
 
 def _billing_id_list(value) -> list[str]:
