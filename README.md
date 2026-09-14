@@ -1,117 +1,135 @@
 # Chief of Staff
 
-A renewal-operations workflow engine for a commercial property & casualty insurance
-book. A commercial insurance renewal is a 90-180 day project that repeats every year,
-per client, per coverage line, and most of the work is document logistics: collect
-exposure data, request loss runs from every incumbent carrier, assemble a submission,
-compare quotes, bind, invoice. The tracking for that work normally lives in a
-spreadsheet and a mailbox, which means status is whatever someone last remembered to
-type. This project replaces that with a pipeline: read mail and calendar, infer which
-renewal stage each client is in, derive work-item status from evidence rather than
-self-report, and expose task-linked tools that do the repetitive document work — reading
-binders, drafting carrier requests, assembling decks, reconciling invoice figures.
+A renewal-operations workspace for a commercial property & casualty insurance book.
 
-It is a personal portfolio project, built to demonstrate systems engineering against a
-domain the author knows well. It is not affiliated with, and does not describe the
-internal process of, any employer.
+A commercial insurance renewal is a 90–180 day project that repeats every year, per
+client, per line of coverage. Most of the work is document logistics: collect exposure
+data, request loss runs from every incumbent carrier, assemble a submission, compare
+quotes, bind, invoice, chase policies. The tracking for it usually lives in a
+spreadsheet and a mailbox, which means status is whatever somebody last remembered to
+type.
+
+This replaces that with a pipeline: read mail and calendar, infer which stage each
+renewal is in, derive status from evidence rather than self-report, and attach tools to
+the tasks that involve reading or writing documents. What runs today is the dashboard
+and the document skills — [Maturity](#maturity) at the end is specific about what is and
+is not wired up.
+
+It is a personal portfolio project. Every client, carrier contact, figure and document
+in it is synthetic, and it is not affiliated with any employer.
+
+The sections below walk through the app as you would actually use it: the dashboard,
+then the skills that do real document work.
+
+1. **[The welcome dashboard](#1-the-welcome-dashboard)** — the book at a glance, and the assistant
+2. **The loss run request** — read a stack of binders, produce one email per carrier
+3. **The invoicing assistant** — reconcile premium, commission, taxes and fees
+4. **The RSM deck builder** — roll last year's strategy deck forward
 
 ---
 
-## Architecture
+## 1. The welcome dashboard
 
-Four layers, deliberately decoupled.
+Everything starts on one screen: what is in the book, where each account sits, and what
+is due next.
 
-**Ingestion and inference (`src/`).** Readers pull mail and calendar items from a local
-desktop Outlook profile over COM (`pywin32`) rather than Graph — no app registration, no
-token cache, no client secret. `client_resolver.py` maps a message to a client and
-engagement using folder placement plus configured aliases. `inference_engine.py` scores
-each item against stage keyword lists and produces stage signals.
-`status_logic.py` is the single place that decides what a work item's status is; nothing
-else in the tree is allowed to make that call. `workbook_writes.py` projects the result
-into a tracker workbook, and `briefing_builder.py` renders a daily summary.
+![The welcome dashboard](docs/screenshots/CoS-Welcome.png)
 
-**The 7-stage pipeline.** Every engagement moves through a fixed stage order:
+Three things are on this page.
 
-| # | Stage | What happens |
+**The stage tabs.** Across the top are the seven stages every renewal moves through, in
+order:
+
+| Stage | Window | What happens |
 |---|---|---|
-| 1 | Renewal Preparation | Kickoff, team confirmation, exposure collection, loss-run requests |
-| 2 | RSM | Renewal strategy meeting; placement strategy is agreed and recorded |
-| 3 | Submission | Submission assembled and sent to the marketplace |
-| 4 | Proposal | Quotes returned, compared, and presented |
-| 5 | Bind | Bind order issued; binders received and checked |
-| 6 | Invoice | Premium, commission, taxes and fees reconciled and invoiced |
-| 7 | Post Binding | Subjectivities closed, policies received and reviewed, documents issued |
+| Renewal Preparation | 180–120 days | Open the file, confirm the team, request loss runs and exposures |
+| RSM | 180–90 days | Build the strategy, meet the client, agree the market approach |
+| Submission | 90–60 days | Applications, submission package, release to market |
+| Proposal | 60–15 days | Log quotes, compare against expiring, negotiate, present |
+| Bind | 15–0 days | Bind instructions, bind orders, check binders, transmit |
+| Invoice | 0–5 days | Confirm bound figures, allocate premium, invoice, reconcile |
+| Post Binding | 0–60 days | Close subjectivities, issue certificates, check and deliver policies |
 
-Stages are the row axis of the dashboard. Each stage carries a numbered task list, and a
-task may have a tool attached to it.
+Each tab opens that stage's task list and the accounts currently sitting in it. A
+client's stage is **derived, not typed** — it is the last stage whose date has passed,
+and it can be overridden per account when reality disagrees with the calendar.
 
-**Document extraction and assembly (`engine/`).** UI-independent and Flask-free, so it
-can be graded outside a request context and reused by more than one caller. The loss-run
-extractor reads a carrier binder in whatever layout the carrier chose — there is no
-schema, and a binder from one carrier looks nothing like a binder from the next. It
-ranks pages to find the declarations page, then runs successive passes (label:value
-scan, dense-text splitter, `pdfplumber` spatial layout) and scores the candidates each
-pass produces for insured, carrier, policy number, coverage line and effective date.
-Coverage strings resolve to canonical categories through `config/coverage_aliases.json`
-rather than hardcoded rules. The deck assembler rewrites PowerPoint files at the ZIP
-level — renaming parts, rewriting relationship targets, patching
-`[Content_Types].xml` — because the `python-pptx` cross-presentation copy API produces
-files PowerPoint will not open without repair.
+The left rail is the same work sliced the other way, by portal: Renewal Pipeline, Deck
+Builder, Document Review, Document Generator, System Updates, Meeting Scheduler,
+Invoicing Assistant. The stage answers *when*; the portal answers *what kind of work*.
 
-**Web application (`dashboard_v2/`).** A Flask app serving a stage x portal matrix:
-stages are rows, functional portals (Document Review, Deck Builder, Document Generator,
-System Updates, Meeting Scheduler, Invoicing Assistant, Renewal Pipeline) are columns,
-and each cell is a skill. A "skill" is this project's name for a task-linked tool page,
-not a framework concept. Each one is a directory containing a Flask Blueprint, a
-Flask-free `service.py` holding the business logic, and Jinja2 templates. Registration
-is a plugin pattern with three touch points and no other file needs to know the skill
-exists:
+### The renewal portfolio
 
-1. `dashboard_v2/app.py` loads each skill directory by name and registers the `bp`
-   Blueprint it exposes; a failed load is logged and skipped rather than taking down
-   the app
-2. the route lives at `/skills/<name>`
-3. `config/skill_map.json` maps stage name -> task number -> skill URL, so renumbering a
-   stage's tasks is a config edit rather than a template change
+Below the fold is the whole book on one screen, ordered by renewal date.
 
-Every service function returns the same `SkillResult` shape (`success`, `data`,
-`error`), which keeps error handling and logging in one base class.
+![The renewal portfolio](docs/screenshots/renewal-portfolio.png)
 
-**Eval harness (`engine/eval/`).** `run_eval.py` grades the extractor cell by cell
-against hand-checked truth files. Ground truth for a field is a *list* of acceptable
-answers, not a single string, because some questions are genuinely ambiguous — on an
-excess tower, the fronting carrier and the syndicate are both defensible answers to
-"who is the carrier". The harness exists so that accuracy claims are reproducible and so
-that regressions are visible; a companion script prints, for a single document, which
-pages were selected and why, every candidate each field generated, and the score that
-picked the winner.
+Each row carries the stage, how far through that stage's task list the account is, the
+renewal date, and the single next thing to do. Accounts running more than one program
+show it under the name — Bellweather Financial carries *ML + Cyber* and *Intl* alongside
+its P&C track, on separate renewal dates.
 
-**Research (`research/loss-run-agent/`).** A self-contained agentic replica of
-carrier-portal loss-run retrieval: fictional carrier portals, several document layouts,
-a virtual clock, no network and no real credentials. The agent reads a prose operating
-procedure rather than per-carrier scripts, and stops with an explicit "input required"
-when a portal asks for something it does not hold instead of guessing. Secrets are never
-placed in planner context — the agent emits a `secret_ref` and the resolver substitutes
-at the tool boundary.
+Progress is a real count, not a status someone set: it is the share of that stage's
+tasks marked complete, and tasks complete in order, so the outstanding work is always
+the tail of the list.
+
+### The assistant
+
+The bar under the title answers questions against the book — every client, its stage,
+its dates, which tasks are done and which are outstanding, and who is on the team.
+
+![Asking the assistant](docs/screenshots/CoS-chatbot.png)
+
+Asking *"what's left to wrap up in Thornbury's binding process?"* returns the stage, that
+it is three days past its 09/10/2026 due date, the two specific tasks still open, and a
+note that tasks 1–4 are already done — because it is reading the same task state the
+portfolio counts.
+
+**Follow-ups build on what came before.** The second question — *"can you draft an email
+to the client and the AMS team to resolve these issues?"* — never names Thornbury. It
+does not need to. The conversation is carried forward, so "these issues" resolves to the
+two open tasks from the previous answer, and the assistant splits the work by owner: the
+AMS and certificate system update belongs to the internal team, the signature package
+belongs to the client.
+
+<table>
+<tr>
+<td width="50%">
+
+**Internal — task 5**
+
+Addressed to the two colleagues actually named on the account, asking for the agency
+management system and certificate system to be updated with the bound terms so the file
+can move to Invoice without a gap in certificate issuance.
+
+</td>
+<td width="50%">
+
+**Client — task 6**
+
+Addressed to the insured, listing exactly the signatures outstanding — signed
+applications, surplus lines forms, remaining carrier-required signatures — and why they
+matter before invoicing.
+
+</td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/screenshots/CoS-chatbot-email1.png" alt="Internal draft"></td>
+<td width="50%"><img src="docs/screenshots/CoS-chatbot-email2.png" alt="Client draft"></td>
+</tr>
+</table>
+
+Both drafts are specific because the model is not guessing: the dates, task numbers,
+colleague names and open items all come from the book passed with every request. That
+book sits behind a prompt-cache breakpoint, so a long conversation costs the turns
+themselves rather than re-reading the whole portfolio each time.
+
+The assistant is optional. Without an `ANTHROPIC_API_KEY` the rest of the app runs
+exactly as it does here; the bar simply says how to configure one.
 
 ---
 
-## Project structure
-
-```
-config/           Stage keywords, coverage aliases, skill map, example client config
-data/             Example carrier routing table
-docs/Skills/      Architecture decision record, coverage vocabulary, carrier name map
-engine/           Document extraction and deck assembly; no Flask imports
-  eval/           Accuracy harness and truth files
-dashboard_v2/     Flask app, templates, static assets
-  skills/         One directory per task-linked tool
-research/         Loss-run agent replica (own requirements.txt and tests)
-src/              Outlook readers, inference engine, status logic, workbook writes
-.env.example      Environment template for the src/ pipeline
-```
-
----
+<!-- Sections 2-4 (loss run request, invoicing assistant, RSM deck builder) go here. -->
 
 ## Setup
 
