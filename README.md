@@ -127,12 +127,12 @@ exactly as it does here; the bar simply says how to configure one.
 
 ## 2. The loss run request
 
-Every renewal starts by asking each incumbent carrier for the last five years of claims
-history. On a programme of any size that means opening a dozen binders, copying policy
+Every renewal starts by asking each incumbent carrier for the last 5-10 years of claims
+history. On a program of any size that means opening a dozen binders, copying policy
 numbers and effective dates out of each one, working out which carrier services loss
 runs for which paper, and writing the same email over and over.
 
-This turns that into three steps.
+This turns that into three steps using a human-in-the-loop model.
 
 ### Drop the binders in
 
@@ -156,7 +156,7 @@ Four fields come back per document — policy number, carrier, effective date an
 flagged amber to fill in. A row the engine is unsure about gets a **Rescan** button that
 re-reads the whole document rather than just the pages it ranked highest.
 
-Two resolutions happen here, and both are worth calling out:
+Two resolutions happen here:
 
 **The insured is matched against the client book.** Fifteen documents that say *Kestrel
 Robotics Inc* on their face come back as the account *Kestrel Robotics*, so the request
@@ -168,10 +168,8 @@ entity names on binders; they resolve to **Hartford**, **Hartford** and **CNA** 
 341-group carrier map. This is the part that makes grouping possible at all — loss runs
 are serviced by the group, not by whichever subsidiary issued the paper.
 
-It also holds where it would be easy to get wrong. An excess binder names its own
-carrier *and* the underlying carrier it sits above. The two excess layers in this set
-resolve to **Berkshire Hathaway** and **Markel** — the carriers actually on the risk —
-rather than to the umbrella markets named in their underlying schedules.
+The two excess layers in this set resolve to **Berkshire Hathaway** and **Markel** 
+— the carriers actually on the risk — rather than to the umbrella markets named in their underlying schedules.
 
 ### Send the drafts
 
@@ -184,40 +182,7 @@ three.
 
 The recipient is resolved from a routing map of 235 published carrier loss-run mailboxes,
 so the draft arrives addressed rather than blank. Where a carrier has no mailbox on file
-the draft is still written and simply says so, which is the honest failure: a missing
-contact is a lookup to do, not a reason to lose the request.
-
-Each draft is editable in place and copies to the clipboard.
-
-### Under the hood
-
-The reading is done by [`engine/loss_run.py`](engine/loss_run.py) — about 2,700 lines
-that the loss run request, the invoicing assistant and the eval harness all share. Three
-ideas do most of the work.
-
-**Find the page before reading it.** A binder runs twenty to sixty pages and the
-declarations page is one of them. Pages are ranked on a cheap text pass first, and only
-the winners are re-read in layout mode, which is the expensive operation. That is what
-keeps a fifteen-document batch quick.
-
-**The label vocabulary is ordered, and the order is the design.** Each field has a list
-of patterns tried most-specific first, first match wins. `Net of commission` has to be
-tested before both `commission` and `total`, because the label contains the words for
-each — get that order wrong and every net-of-commission binder reports the wrong figure.
-The same applies to `Policy Symbol and Number` ahead of `Policy No.`, and to
-`First Named Insured` ahead of `Insured`.
-
-**A label near the wrong words belongs to a different policy.** `Underlying`,
-`expiring`, `excess of`, `followed`, `renewal of` — each of these turns the value
-beside a label into somebody else's policy. The engine suppresses matches in that
-context, which is why the two excess binders resolve to the carriers actually on the
-risk rather than to the umbrella markets named a few lines below them in their
-underlying schedules.
-
-Everything above resolves against two committed reference files rather than hard-coded
-lists: [`docs/Skills/companymap.md`](docs/Skills/companymap.md) for carrier groups and
-their paper, and [`docs/Skills/coverages.md`](docs/Skills/coverages.md) for coverage
-categories.
+the draft is still written and simply says so. Each draft is editable in place and copies to the clipboard.
 
 ---
 
@@ -227,7 +192,7 @@ Same shape as the loss run request — one client's binders in, a reviewable tab
 but the job is different. The loss run skill pulls *fields*. This one pulls *numbers
 that have to add up*.
 
-A bound programme arrives as a stack of binders, each printing a premium, a commission,
+A bound program arrives as a stack of binders, each printing a premium, a commission,
 and some mix of taxes, fees and surcharges that varies by state, by line, and by whether
 the paper is admitted. Someone has to key every figure into an invoice request and be
 right, and nobody can eyeball whether fifteen binders' line items reconcile.
@@ -266,9 +231,9 @@ Fifteen binders, 1,931,050.00 of premium, 36,721.02 of taxes, fees and surcharge
 1,967,771.02 billed — reconciled per binder before it is summed. It copies as text or
 exports as CSV, and every cell is editable first.
 
-Identity — insured, carrier, policy number, dates — comes from the same
-[extraction engine](#under-the-hood) as the loss run request. Only the money parsing is
-new here.
+Identity — insured, carrier, policy number, dates — comes from the same extraction
+engine as the loss run request, [`engine/loss_run.py`](engine/loss_run.py). Only the
+money parsing is new here.
 
 ---
 
