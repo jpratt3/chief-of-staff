@@ -184,6 +184,36 @@ The recipient is resolved from a routing map of 235 published carrier loss-run m
 so the draft arrives addressed rather than blank. Where a carrier has no mailbox on file
 the draft is still written and simply says so. Each draft is editable in place and copies to the clipboard.
 
+### Under the hood
+
+The reading is done by [`engine/loss_run.py`](engine/loss_run.py) — about 2,700 lines
+that the loss run request, the invoicing assistant and the eval harness all share. Three
+ideas do most of the work.
+
+**Find the page before reading it.** A binder runs twenty to sixty pages and the
+declarations page is one of them. Pages are ranked on a cheap text pass first, and only
+the winners are re-read in layout mode, which is the expensive operation. That is what
+keeps a fifteen-document batch quick.
+
+**The label vocabulary is ordered, and the order is the design.** Each field has a list
+of patterns tried most-specific first, first match wins. `Net of commission` has to be
+tested before both `commission` and `total`, because the label contains the words for
+each — get that order wrong and every net-of-commission binder reports the wrong figure.
+The same applies to `Policy Symbol and Number` ahead of `Policy No.`, and to
+`First Named Insured` ahead of `Insured`.
+
+**A label near the wrong words belongs to a different policy.** `Underlying`,
+`expiring`, `excess of`, `followed`, `renewal of` — each of these turns the value
+beside a label into somebody else's policy. The engine suppresses matches in that
+context, which is why the two excess binders resolve to the carriers actually on the
+risk rather than to the umbrella markets named a few lines below them in their
+underlying schedules.
+
+Everything above resolves against two committed reference files rather than hard-coded
+lists: [`docs/Skills/companymap.md`](docs/Skills/companymap.md) for carrier groups and
+their paper, and [`docs/Skills/coverages.md`](docs/Skills/coverages.md) for coverage
+categories.
+
 ---
 
 ## 3. The invoicing assistant
