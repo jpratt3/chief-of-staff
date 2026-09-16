@@ -119,7 +119,7 @@ colleague names and open items all come from the book passed with every request.
 book sits behind a prompt-cache breakpoint, so a long conversation costs the turns
 themselves rather than re-reading the whole portfolio each time.
 
-The assistant is optional. Without an `ANTHROPIC_API_KEY` the rest of the app runs
+The assistant is optional. Without a `LLM_API_KEY` the rest of the app runs
 exactly as it does here; the bar simply says how to configure one.
 
 ---
@@ -127,8 +127,8 @@ exactly as it does here; the bar simply says how to configure one.
 ## 2. The loss run request
 
 Every renewal starts by asking each incumbent carrier for the last 5-10 years of claims
-history. On a program of any size that means opening a dozen binders, copying policy
-numbers and effective dates out of each one, working out which carrier services loss
+history. On a program of any size that means opening anywhere from half a dozen to 30+ binders, copying policy
+numbers, effective dates, issuing company, & line of coverage out of each one, working out which carrier services loss
 runs for which paper, and writing the same email over and over.
 
 This turns that into three steps using a human-in-the-loop model.
@@ -150,8 +150,7 @@ the same field.
 
 ![Extracted fields](docs/screenshots/loss-run-extracted-fields.png)
 
-Four fields come back per document — policy number, carrier, effective date and coverage
-— with a confidence flag on each row. Extracted cells arrive blue; anything blank is
+Four fields come back per document: policy number, carrier, effective date and coverage - with a confidence flag on each row. Extracted cells arrive blue; anything blank is
 flagged amber to fill in. A row the engine is unsure about gets a **Rescan** button that
 re-reads the whole document rather than just the pages it ranked highest.
 
@@ -168,7 +167,7 @@ entity names on binders; they resolve to **Hartford**, **Hartford** and **CNA** 
 are serviced by the group, not by whichever subsidiary issued the paper.
 
 The two excess layers in this set resolve to **Berkshire Hathaway** and **Markel** 
-— the carriers actually on the risk — rather than to the umbrella markets named in their underlying schedules.
+(the carriers actually on the risk) rather than to the umbrella markets named in their underlying schedules.
 
 ### Send the drafts
 
@@ -176,10 +175,10 @@ The two excess layers in this set resolve to **Berkshire Hathaway** and **Markel
 
 Fifteen binders across nine carriers become **nine emails, not fifteen**. Each one lists
 every policy that carrier writes for the client, with coverage, policy number and
-effective date on its own line — Hartford's draft carries four policies, CNA's carries
+effective date on its own line. Hartford's draft carries four policies, CNA's carries
 three.
 
-The recipient is resolved from a routing map of 235 published carrier loss-run mailboxes,
+The recipient is resolved from a routing map of 235 carrier loss-run mailboxes,
 so the draft arrives addressed rather than blank. Where a carrier has no mailbox on file
 the draft is still written and simply says so. Each draft is editable in place and copies to the clipboard.
 
@@ -196,7 +195,7 @@ the winners are re-read in layout mode, which is the expensive operation. This k
 **The label vocabulary is ordered, and the order is the design.** Each field has a list
 of patterns tried most-specific first, first match wins. `Net of commission` has to be
 tested before both `commission` and `total`, because the label contains the words for
-each — get that order wrong and every net-of-commission binder reports the wrong figure.
+each. Get that order wrong and every net-of-commission binder reports the wrong figure.
 The same applies to `Policy Symbol and Number` ahead of `Policy No.`, and to
 `First Named Insured` ahead of `Insured`.
 
@@ -216,8 +215,8 @@ categories.
 
 ## 3. The invoicing assistant
 
-Same shape as the loss run request — one client's binders in, a reviewable table out —
-but the job is different. The loss run skill pulls *fields*. This one pulls *numbers
+Same shape as the loss run request: one client's binders in & a reviewable table out.
+This job is a little different. The loss run skill pulls *fields*. This one pulls *numbers
 that have to add up*.
 
 A bound program arrives as a stack of binders, each printing a premium, a commission,
@@ -227,9 +226,8 @@ right, and nobody can eyeball whether fifteen binders' line items reconcile.
 
 ![Reviewing amounts](docs/screenshots/invoicing-assistant-output.png)
 
-Every charge comes back as its own editable line, typed — premium, commission, tax, fee,
-surcharge, terrorism — and each binder is checked against the total it prints on its own
-face. `matches printed total` means the extracted lines sum to the carrier's own figure.
+Every charge comes back as its own editable line: premium, commission, tax, fee,
+surcharge, terrorism. Each binder is checked against the total printed. `Matches printed total` means the extracted lines sum to the carrier's own figure.
 That check is the point: it catches a missed fee rather than quietly under-billing.
 
 Three cases it has to survive, all visible above:
@@ -253,13 +251,13 @@ Three cases it has to survive, all visible above:
 </tr>
 </table>
 
-The summary is what gets sent: the client's CN and billing ID from the book, then every
-binder with its premium, commission and charges itemised, then the placement total.
+This is all summarized after clicking *Copy Fields*: the client's CN and billing ID from the book,  every
+binder with its premium, commission and charges itemised, & the placement total.
 Fifteen binders, 1,931,050.00 of premium, 36,721.02 of taxes, fees and surcharges,
-1,967,771.02 billed — reconciled per binder before it is summed. It copies as text or
+1,967,771.02 billed, reconciled per binder before it is summed. It copies as text or
 exports as CSV, and every cell is editable first.
 
-Identity — insured, carrier, policy number, dates — comes from the same extraction
+The insured, carrier, policy number, dates comes from the same extraction
 engine as the loss run request, [`engine/loss_run.py`](engine/loss_run.py). Only the
 money parsing is new here.
 
@@ -271,15 +269,14 @@ The first two skills read documents. This one writes one.
 
 Before the renewal strategy meeting, last year's deck gets rebuilt: same narrative, new
 policy year, current market conditions bolted on. Done by hand it is an hour of
-copy-paste across PowerPoint files, and the copy-paste is where decks break — a slide
-arrives without its chart, or the file opens with a repair prompt.
+tedious copying & pasting across PowerPoint files.
 
 ### Upload and configure
 
 ![Uploading the prior deck](docs/screenshots/rsm-upload-docs.png)
 
 Last year's deck goes in, plus the program graphic if there is one. The old and new
-policy years are stated explicitly — *2025-26* to *2026-27* — because the year appears
+policy years are stated explicitly - *2025-26* to *2026-27* - because the year appears
 throughout the deck and every instance has to move together.
 
 The program graphic is handled differently from everything else: it is injected **as-is**.
@@ -290,9 +287,8 @@ touch it.
 
 ![Selecting market slides](docs/screenshots/rsm-slides.png)
 
-Market commentary is kept as a slide library, filed by line and by quarter — twenty-six
-slides across casualty, property, FINPRO, cyber and marine. You check the ones that
-match the client's programme, and they are appended in the order they appear.
+Instead of chasing team members or looking in messy libraries for updated slides, this step pulls from slides filed by line and by quarter.
+You check the ones that you want in the deck.
 
 The point is that the library is current and the deck is not. Rolling last year's file
 forward keeps the client narrative; picking from the library replaces the market view
@@ -301,8 +297,8 @@ without rebuilding either.
 ### Build and download
 
 The assembled deck comes back as `RSM_<client>_<year>.pptx`, with a slide-by-slide log
-of what was copied and how each slide was classified — diagram, content, market,
-divider, chrome — so a deck that comes out wrong can be traced to the slide that caused
+of what was copied and how each slide was classified: diagram, content, market, &
+divider, so a deck that comes out wrong can be traced to the slide that caused
 it rather than rebuilt from scratch.
 
 ### Under the hood
@@ -310,16 +306,16 @@ it rather than rebuilt from scratch.
 [`engine/rsm.py`](engine/rsm.py) assembles the deck at the ZIP level rather than through
 python-pptx's object model, and the docstring at the top of that file explains why at
 length. In short: there is no correct cross-presentation slide copy API. Every route
-through the Part model fails in one of three ways — duplicate slide part URIs, aliasing
+through the Part model fails in one of three ways: duplicate slide part URIs, aliasing
 that drags the source's transitive relationships along with the slide, or lost
 `customXml` that lives outside `ppt/` and is unreachable from the slide part.
 
-So it works on the bytes. Each slide's XML and its `.rels` are read, every referenced
+It works on the bytes. Each slide's XML and its `.rels` are read, every referenced
 part is renamed to avoid collisions, images, charts, notes and embeddings are copied
 under the new names, the relationship IDs are rewritten to match, and the slide is
 registered in `[Content_Types].xml` and `presentation.xml`.
 
-That is more work than calling a library function, and it is the difference between a
+ALthough its more complex than calling a library function; It's the difference between a
 deck that opens and a deck that opens with a repair prompt.
 
 ---
