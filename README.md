@@ -71,17 +71,16 @@ the tail of the list.
 
 ### The assistant
 
-The bar under the title answers questions against the book — every client, its stage,
-its dates, which tasks are done and which are outstanding, and who is on the team.
+The chat bubble allows the user to perform Q&A against their book.
 
 ![Asking the assistant](docs/screenshots/CoS-chatbot.png)
 
 Asking *"what's left to wrap up in Thornbury's binding process?"* returns the stage, that
 it is three days past its 09/10/2026 due date, the two specific tasks still open, and a
-note that tasks 1–4 are already done — because it is reading the same task state the
+note that tasks 1–4 are already done, because it is reading the same task state the
 portfolio counts.
 
-**Follow-ups build on what came before.** The second question — *"can you draft an email
+**Follow-ups build on what came before.** The second questionL *"can you draft an email
 to the client and the AMS team to resolve these issues?"* — never names Thornbury. It
 does not need to. The conversation is carried forward, so "these issues" resolves to the
 two open tasks from the previous answer, and the assistant splits the work by owner: the
