@@ -17,21 +17,21 @@ The sections below walk through the app as you would actually use it: the dashbo
 then the skills that do real document work. All examples are made using fictional clients
 and fictional data.
 
-1. **[The welcome dashboard](#1-the-welcome-dashboard)** — sign in & understand exactly where each client stands - in a matter of seconds
-2. **[The loss run request](#2-the-loss-run-request)** — read a stack of binders, extract necessary fields, & produce one email per carrier
-3. **[The invoicing assistant](#3-the-invoicing-assistant)** — reconcile premium, commission, taxes and fees
-4. **[The RSM deck builder](#4-the-rsm-deck-builder)** — roll last year's strategy deck forward
+1. **[The welcome dashboard](#1-the-welcome-dashboard)**: sign in & understand exactly where each client stands - in a matter of seconds
+2. **[The loss run request](#2-the-loss-run-request)**: read a stack of binders, extract necessary fields, & produce one email per carrier
+3. **[The invoicing assistant](#3-the-invoicing-assistant)**: reconcile premium, commission, taxes and fees
+4. **[The RSM deck builder](#4-the-rsm-deck-builder)**: roll last year's strategy deck forward
 
 ---
 
 ## 1. The welcome dashboard
 
-Everything starts on one screen: what is in the book, where each account sits, and what
+Everything starts on one screen: what is in your book, where each account sits, and what
 is due next.
 
 ![The welcome dashboard](docs/screenshots/CoS-Welcome.png)
 
-Three things are on this page.
+Three things on this page:
 
 **The stage tabs.** Across the top are the seven stages every renewal moves through, in
 order:
