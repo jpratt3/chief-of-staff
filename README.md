@@ -137,7 +137,7 @@ This turns that into three steps using a human-in-the-loop model.
 
 ![Uploading binders](docs/screenshots/loss-run-upload-binders.png)
 
-One client's binders go in together — PDF, Word, Excel or CSV. There is no per-carrier
+One client's binders go in together: PDF, Word, Excel or CSV. There is no per-carrier
 template to pick and no form to fill in first; the documents are the input.
 
 Each file is scanned for its declarations page and read with layout preserved, so a
@@ -210,6 +210,22 @@ Everything above resolves against two committed reference files rather than hard
 lists: [`docs/Skills/companymap.md`](docs/Skills/companymap.md) for carrier groups and
 their paper, and [`docs/Skills/coverages.md`](docs/Skills/coverages.md) for coverage
 categories.
+
+### Accuracy
+
+The engine is graded by [`engine/eval/run_eval.py`](engine/eval/run_eval.py) against
+hand-checked ground truth: **398 of 400 fields, 99.5%**, across 80 carrier binders at five
+fields each - insured, policy number, carrier, effective date, coverage.
+
+Ground truth accepts a *list* of acceptable answers per field rather than a single string,
+and that decision is what keeps the harness honest. A package policy legitimately names
+four policy numbers. A blended form is legitimately D&O or EPL or Fiduciary. An excess
+layer is legitimately the fronting carrier or the syndicate. Forcing one answer would grade
+the engine against arbitrary choices and tune it toward noise.
+
+Both current misses are the same document: a D&O excess layer where the carrier resolves
+to the fronting company instead of the syndicate, and the effective date comes back empty.
+Excess towers are genuinely ambiguous, which is the case the list format exists for.
 
 ---
 
