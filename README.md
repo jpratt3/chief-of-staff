@@ -47,16 +47,16 @@ order:
 | Post Binding | 0–60 days | Close subjectivities, issue certificates, check and deliver policies |
 
 Each tab opens that stage's task list and the accounts currently sitting in it. A
-client's stage is **derived, not typed** — it is the last stage whose date has passed,
+client's stage is derived based on email activity — it is the last stage whose date has passed,
 and it can be overridden per account when reality disagrees with the derivation.
 
-The left rail is the same work sliced the other way, by portal: Renewal Pipeline, Deck
+The left rail is the same work vertically: Renewal Pipeline, Deck
 Builder, Document Review, Document Generator, System Updates, Meeting Scheduler,
-Invoicing Assistant. The stage answers *when*; the portal answers *what kind of work*.
+Invoicing Assistant. The stage helps the user track *when*; the portal assists in completing repetitive tasks.
 
 ### The renewal portfolio
 
-Below the fold is the whole book on one screen, ordered by renewal date.
+At the bottom of the welcome page, the user can see their whole book on one screen, ordered by renewal date.
 
 ![The renewal portfolio](docs/screenshots/renewal-portfolio.png)
 
